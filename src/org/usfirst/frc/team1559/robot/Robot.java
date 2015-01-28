@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
     Pixy pixy;
     int halfBand = Wiring.PIXY_HALF_BAND;
     PixyController p;
-    Arduino arduino;
+    Arduino eyeCandy;
     Talon leftMotor; //pixy motors?
     Talon rightMotor;//pixy motors?
 	
@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
         p = new PixyController(pixy);
 
         //arduino stuff
-        arduino = new Arduino(0,1,2);
+        eyeCandy = new Arduino(0,1,2);
     }
 
 
@@ -91,7 +91,31 @@ public class Robot extends IterativeRobot {
 //        lifterControls();
 //        arduinoControls();
 //        pixyControls();
-    	
+    	  eyeCandy.Write(0);//0 is Off
+    	  if (joy.getRawButton(1)){
+    		  eyeCandy.Write(1);//1 is Rave     WARNING EYE PROTECTION RECCOMENDED
+    	  }
+    	  else if (joy.getRawButton(2)){
+    		  eyeCandy.Write(2);
+    	  }
+    	  else if (joy.getRawButton(3)){
+    		  eyeCandy.Write(3);
+    	  }
+    	  else if (joy.getRawButton(4)){
+    		  eyeCandy.Write(4);
+    	  }
+    	  else if (joy.getRawButton(5)){
+    		  eyeCandy.Write(5);
+    	  }
+    	  else if (joy.getRawButton(6)){
+    		  eyeCandy.Write(6);
+    	  }
+    	  else if (joy.getRawButton(7)){
+    		  eyeCandy.Write(7);
+    	  }
+    	  else {
+    		  eyeCandy.Write(0);
+    	  }
     	
     }
     
@@ -103,25 +127,25 @@ public class Robot extends IterativeRobot {
     public void arduinoControls(){
 
         if (joy.getRawButton(1)){
-            arduino.Write(1);
+            eyeCandy.Write(1);
         }
         else if (joy.getRawButton(2)){
-            arduino.Write(2);
+            eyeCandy.Write(2);
         }
         else if (joy.getRawButton(3)){
-            arduino.Write(3);
+            eyeCandy.Write(3);
         }
         else if (joy.getRawButton(4)){
-            arduino.Write(4);
+            eyeCandy.Write(4);
         }
         else if(joy.getRawButton(5)){
-            arduino.Write(5);
+            eyeCandy.Write(5);
         }
         else if(joy.getRawButton(6)){
-            arduino.Write(6);
+            eyeCandy.Write(6);
         }
         else {
-            arduino.Write(0);
+            eyeCandy.Write(0);
         }
 
     }
