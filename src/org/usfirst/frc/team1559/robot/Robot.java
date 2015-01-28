@@ -88,9 +88,9 @@ public class Robot extends IterativeRobot {
     		g.reset();
     	}
 
-        lifterControls();
-        arduinoControls();
-        pixyControls();
+//        lifterControls();
+//        arduinoControls();
+//        pixyControls();
     	
     	
     }
