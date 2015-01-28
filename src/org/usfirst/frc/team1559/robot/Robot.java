@@ -23,11 +23,9 @@ public class Robot extends IterativeRobot {
     boolean y;
     boolean z;
     Pixy pixy;
-    int halfBand = Wiring.PIXY_HALF_BAND;
+    int halfBand = Wiring.PIXY_HALF_BAND; //We probably wont need this -Nate
     PixyController p;
     Arduino arduino;
-    Talon leftMotor; //pixy motors?
-    Talon rightMotor;//pixy motors?
 	
     public void robotInit() {
         //drive system
@@ -49,8 +47,6 @@ public class Robot extends IterativeRobot {
 
         //pixy stuff
         pixy = new Pixy();
-        leftMotor = new Talon(6);
-        rightMotor = new Talon(8);
         p = new PixyController(pixy);
 
         //arduino stuff
@@ -69,6 +65,7 @@ public class Robot extends IterativeRobot {
     	if(count > 1000){
     		rd.mecanumDrive_Cartesian(.5, 0, 0, g.getAngle());
     	}
+//    	pixyControls();
     	    	
     }
     
@@ -128,7 +125,8 @@ public class Robot extends IterativeRobot {
 
     public void pixyControls(){
 
-        //put pixy stuff in here, please.
+        //put pixy stuff in here, please. OK CODY
+    	rd.mecanumDrive_Cartesian(p.autoCenter(), 0, 0, g.getAngle());
 
     }
 
