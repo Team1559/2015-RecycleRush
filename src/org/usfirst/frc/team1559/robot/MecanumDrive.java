@@ -71,9 +71,9 @@ public class MecanumDrive {
         wheelSpeeds[3] = xIn + yIn - rotation;
 
         normalize(wheelSpeeds);
-        leftFront.set(wheelSpeeds[0]);
+        leftFront.set(-wheelSpeeds[0]);
         rightFront.set(wheelSpeeds[1]);
-        leftRear.set(wheelSpeeds[2]);
+        leftRear.set(-wheelSpeeds[2]);
         rightRear.set(wheelSpeeds[3]);
 		
 	}
