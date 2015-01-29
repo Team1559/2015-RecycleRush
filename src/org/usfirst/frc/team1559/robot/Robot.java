@@ -18,7 +18,7 @@ public class Robot extends IterativeRobot {
 	Gyro g;
 	int count;
     boolean pressed;
-    Lifter lifter;
+    //Lifter lifter;
     boolean x;
     boolean y;
     boolean z;
@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
     	count = 0;
 
         //lifter stuff
-        lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
+//        lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
         pressed = false;
 
         //pixy stuff
@@ -61,10 +61,8 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousPeriodic() {
-    	
-    	if(count > 1000){
-    		rd.mecanumDrive_Cartesian(.5, 0, 0, g.getAngle());
-    	}
+    		rd.mecanumDrive_Cartesian(0, -.5, -g.getRate(), g.getAngle());
+    		SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	pixyControls();
     	    	
     }
@@ -78,7 +76,7 @@ public class Robot extends IterativeRobot {
 
     public void teleopPeriodic() {
         
-    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+    	rd.mecanumDrive_Cartesian(joy.getRawAxis(0), joy.getRawAxis(1), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
     	
     	if(joy.getRawButton(1)){
@@ -130,26 +128,26 @@ public class Robot extends IterativeRobot {
 
     }
 
-    public void lifterControls(){
-
-        SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
-        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
-        
-        if(joy.getRawButton(10) && !pressed) {
-            lifter.liftTote(1);
-            pressed = true;
-        }
-        else if(joy.getRawButton(11) && !pressed) {
-            lifter.liftTote(2);
-            pressed = true;
-        }
-        else if(joy.getRawButton(7) && !pressed) {
-            lifter.goHome();
-        }
-        else {
-            pressed = false;
-        }
-
-    }
+//    public void lifterControls(){
+//
+//        SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
+//        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
+//        
+//        if(joy.getRawButton(10) && !pressed) {
+//            lifter.liftTote(1);
+//            pressed = true;
+//        }
+//        else if(joy.getRawButton(11) && !pressed) {
+//            lifter.liftTote(2);
+//            pressed = true;
+//        }
+//        else if(joy.getRawButton(7) && !pressed) {
+//            lifter.goHome();
+//        }
+//        else {
+//            pressed = false;
+//        }
+//
+//    }
 
 }
