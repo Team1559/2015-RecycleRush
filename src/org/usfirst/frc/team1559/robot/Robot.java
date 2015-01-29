@@ -62,7 +62,6 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
     		rd.mecanumDrive_Cartesian(0, -.5, -g.getRate(), g.getAngle());
-    		SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	pixyControls();
     	    	
     }
