@@ -48,10 +48,8 @@ public class Robot extends IterativeRobot {
         pressed = false;
 
 //        //pixy stuff
-//        pixy = new Pixy();
-//        leftMotor = new Talon(6);
-//        rightMotor = new Talon(8);
-//        p = new PixyController(pixy);
+        pixy = new Pixy();
+        p = new PixyController(pixy);
 
         //arduino stuff
         arduino = new Arduino(0,1,2);
@@ -71,6 +69,7 @@ public class Robot extends IterativeRobot {
     		rd.mecanumDrive_Cartesian(0, 1, -.023, g.getAngle());
     	}
 //    	In Progress:
+//    	pixyControls();
 //    	//Gather Here
 //    	else if(count<150)
 //    	{
@@ -141,7 +140,8 @@ public class Robot extends IterativeRobot {
 
     public void pixyControls(){
 
-        //put pixy stuff in here, please.
+        //put pixy stuff in here, please. OK CODY
+    	rd.mecanumDrive_Cartesian(p.autoCenter(), 0, -.023, g.getAngle());
 
     }
 
