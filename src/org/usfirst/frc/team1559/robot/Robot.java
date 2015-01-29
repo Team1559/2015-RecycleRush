@@ -28,6 +28,8 @@ public class Robot extends IterativeRobot {
     Arduino arduino;
     Talon leftMotor; //pixy motors?
     Talon rightMotor;//pixy motors?
+    double sonarInch;
+	MaxSonar sonar;
 	
     public void robotInit() {
         //drive system
@@ -42,6 +44,8 @@ public class Robot extends IterativeRobot {
     	rd.setMaxOutput(.5);
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
+    	sonar = new MaxSonar(0);
+    	
 
         //lifter stuff
 //        lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
@@ -67,9 +71,9 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
     	
-    	if(count < 75){ // drives straight
-    		rd.mecanumDrive_Cartesian(0, 1, -.023, g.getAngle());
-    	}
+//    	if(count < 75){ // drives straight
+//    		rd.mecanumDrive_Cartesian(0, 1, -.023, g.getAngle());
+//    	}
 //    	In Progress:
 //    	//Gather Here
 //    	else if(count<150)
@@ -82,7 +86,15 @@ public class Robot extends IterativeRobot {
 //    	}
 //    	else	//	ReSeT aT nExT tOtE
 //    		count = 0;
-    	count++;
+    	if (sonar.getInches()>20)
+    	{
+    		rd.mecanumDrive_Cartesian(-.5, -.5, -.023, g.getAngle());
+    	}
+    	else if (sonar.getInches()<=10)
+    	{
+    		rd.mecanumDrive_Cartesian(.5, -.5, -.023, g.getAngle());
+    	}
+//    	count++;
     }
     
     public void teleopInit(){
