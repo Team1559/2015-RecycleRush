@@ -88,6 +88,7 @@ public class Robot extends IterativeRobot {
 //    		count = 0;
 
     	wallDist = sonar.getInches();
+    	int timesRun = 0;
     	switch(count)
     	{
     	
@@ -113,8 +114,14 @@ public class Robot extends IterativeRobot {
     			count = 4;
     		break;
     	case 4:
-    		// pixy
-    		// second counter
+    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		timesRun++;
+    		if(timesRun == 2){
+    			count = 5;
+    		}
+    		else{
+    			count = 1;
+    		}
     		break;
     	case 5:
     		wallDist = sonar.getInches();
