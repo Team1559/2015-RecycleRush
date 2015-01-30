@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //testing test test
 public class Robot extends IterativeRobot {
@@ -15,10 +14,10 @@ public class Robot extends IterativeRobot {
 	Joystick joy;
 	Talon lf, lr, rf, rr;
 	RobotDrive rd;
+	Lifter lifter;
 	Gyro g;
 	int count;
     boolean pressed;
-//    Lifter lifter;
     boolean x;
     boolean y;
     boolean z;
@@ -41,15 +40,10 @@ public class Robot extends IterativeRobot {
     	rd.setInvertedMotor(MotorType.kFrontLeft, true);
     	rd.setInvertedMotor(MotorType.kRearLeft, true);
     	rd.setMaxOutput(.5);
+    	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
-    	
-    	
-
-        //lifter stuff
-//        lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
-        pressed = false;
 
 //        //pixy stuff
 //        pixy = new Pixy();
@@ -93,7 +87,11 @@ public class Robot extends IterativeRobot {
     	{
     	
     	case 1:
-    		// Pick up Tote
+    		if(timesRun > 0) {
+    			lifter.goHome();
+    		}
+    		lifter.liftTote(1);
+    		count = 2;
     		break;
     	case 2:
     		wallDist = sonar.getInches();
@@ -133,7 +131,8 @@ public class Robot extends IterativeRobot {
     			count = 6;
     		break;
     	case 6:
-    		// Drop Totes
+    		lifter.goHome();
+    		count = 7;
     		break;
     	case 7:
     		rd.mecanumDrive_Cartesian(0, .5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
