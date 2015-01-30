@@ -7,6 +7,7 @@ public class Wiring{
 	public static final int LEFT_REAR_MOTOR_ID = 6;
 	public static final int RIGHT_FRONT_MOTOR_ID = 8;
 	public static final int RIGHT_REAR_MOTOR_ID = 7;
+	public static final double STUPID_CHASSIS_CORRECTION = -.023;
 
 	//analog sensors
 	public static final int GYRO_ID = 1;

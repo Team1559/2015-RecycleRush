@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //testing test test
 public class Robot extends IterativeRobot {
@@ -15,10 +14,10 @@ public class Robot extends IterativeRobot {
 	Joystick joy;
 	Talon lf, lr, rf, rr;
 	RobotDrive rd;
+	Lifter lifter;
 	Gyro g;
 	int count;
     boolean pressed;
-//    Lifter lifter;
     boolean x;
     boolean y;
     boolean z;
@@ -26,8 +25,9 @@ public class Robot extends IterativeRobot {
     int halfBand = Wiring.PIXY_HALF_BAND;
     PixyController p;
     Arduino arduino;
-    Talon leftMotor; //pixy motors?
-    Talon rightMotor;//pixy motors?
+    double sonarInch;
+	MaxSonar sonar;
+	double wallDist;
 	
     public void robotInit() {
         //drive system
@@ -40,12 +40,10 @@ public class Robot extends IterativeRobot {
     	rd.setInvertedMotor(MotorType.kFrontLeft, true);
     	rd.setInvertedMotor(MotorType.kRearLeft, true);
     	rd.setMaxOutput(.5);
+    	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
-
-        //lifter stuff
-//        lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
-        pressed = false;
+    	sonar = new MaxSonar(0);
 
 //        //pixy stuff
         pixy = new Pixy();
@@ -65,23 +63,94 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
     	
-    	if(count < 75){ // drives straight
-    		rd.mecanumDrive_Cartesian(0, 1, -.023, g.getAngle());
-    	}
+//    	if(count < 75){ // drives straight
+//    		rd.mecanumDrive_Cartesian(0, 1, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    	}
 //    	In Progress:
 //    	pixyControls();
 //    	//Gather Here
 //    	else if(count<150)
 //    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, -.023, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
 //    	}
 //    	else if(count<230)
 //    	{
-//    		rd.mecanumDrive_Cartesian(-1, -.5, -.023, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(-1, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
 //    	}
 //    	else	//	ReSeT aT nExT tOtE
 //    		count = 0;
-    	count++;
+
+    	wallDist = sonar.getInches();
+    	int timesRun = 0;
+    	switch(count)
+    	{
+    	
+    	case 1:
+    		if(timesRun > 0) {
+    			lifter.goHome();
+    		}
+    		lifter.liftTote(1);
+    		count = 2;
+    		break;
+    	case 2:
+    		wallDist = sonar.getInches();
+    		if(wallDist>7)
+    		{
+        		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		}
+    		else
+    			count = 3;
+    		break;
+    	case 3:
+    		wallDist = sonar.getInches();
+    		if(wallDist<20)
+    		{
+        		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		}
+    		else
+    			count = 4;
+    		break;
+    	case 4:
+    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		timesRun++;
+    		if(timesRun == 2){
+    			count = 5;
+    		}
+    		else{
+    			count = 1;
+    		}
+    		break;
+    	case 5:
+    		wallDist = sonar.getInches();
+    		if (wallDist<155)
+    		{
+    			rd.mecanumDrive_Cartesian(.5, 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		}
+    		else
+    			count = 6;
+    		break;
+    	case 6:
+    		lifter.goHome();
+    		count = 7;
+    		break;
+    	case 7:
+    		rd.mecanumDrive_Cartesian(0, .5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		count = 8;
+    	case 8:
+    		//Pretty Lights
+    		break;
+    	}
+    	
+    	
+//    	if (sonar.getInches()>20)
+//    	{
+//    		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    	}
+//    	else if (sonar.getInches()<=10)
+//    	{
+//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    	}
+//    	count++;
     }
     
     public void teleopInit(){

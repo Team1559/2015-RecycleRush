@@ -19,7 +19,7 @@ public class PixyController {
 			e.printStackTrace();
 		}
 		try{
-			objRatio = pkt.Height/pkt.Width;
+			objRatio = pkt.Width/pkt.Height;
 		}
 		catch (ArithmeticException a){
 			System.out.println("Object not being seen");
@@ -27,9 +27,9 @@ public class PixyController {
 		}
 		if (pkt != null){
 			if ((ratio-.1) <= (objRatio) && (ratio+.1) >= (objRatio)){
-				if (pkt.X < 70 || pkt.X > 90){
-					error = 80-pkt.X;
-					error = error/160;
+				if (pkt.Y < 40 || pkt.Y > 60){
+					error = 50-pkt.X;
+					error = error/120;
 					error = error/2;
 				}
 				else{
