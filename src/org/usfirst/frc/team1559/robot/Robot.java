@@ -26,10 +26,9 @@ public class Robot extends IterativeRobot {
     int halfBand = Wiring.PIXY_HALF_BAND;
     PixyController p;
     Arduino arduino;
-    Talon leftMotor; //pixy motors?
-    Talon rightMotor;//pixy motors?
     double sonarInch;
 	MaxSonar sonar;
+	double wallDist;
 	
     public void robotInit() {
         //drive system
@@ -45,6 +44,7 @@ public class Robot extends IterativeRobot {
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
+    	
     	
 
         //lifter stuff
@@ -72,28 +72,79 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     	
 //    	if(count < 75){ // drives straight
-//    		rd.mecanumDrive_Cartesian(0, 1, -.023, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(0, 1, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
 //    	}
 //    	In Progress:
 //    	//Gather Here
 //    	else if(count<150)
 //    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, -.023, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
 //    	}
 //    	else if(count<230)
 //    	{
-//    		rd.mecanumDrive_Cartesian(-1, -.5, -.023, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(-1, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
 //    	}
 //    	else	//	ReSeT aT nExT tOtE
 //    		count = 0;
-    	if (sonar.getInches()>20)
+
+    	wallDist = sonar.getInches();
+    	switch(count)
     	{
-    		rd.mecanumDrive_Cartesian(-.5, -.5, -.023, g.getAngle());
+    	
+    	case 1:
+    		// Pick up Tote
+    		break;
+    	case 2:
+    		wallDist = sonar.getInches();
+    		if(wallDist>7)
+    		{
+        		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		}
+    		else
+    			count = 3;
+    		break;
+    	case 3:
+    		wallDist = sonar.getInches();
+    		if(wallDist<20)
+    		{
+        		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		}
+    		else
+    			count = 4;
+    		break;
+    	case 4:
+    		// pixy
+    		// second counter
+    		break;
+    	case 5:
+    		wallDist = sonar.getInches();
+    		if (wallDist<155)
+    		{
+    			rd.mecanumDrive_Cartesian(.5, 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		}
+    		else
+    			count = 6;
+    		break;
+    	case 6:
+    		// Drop Totes
+    		break;
+    	case 7:
+    		rd.mecanumDrive_Cartesian(0, .5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		count = 8;
+    	case 8:
+    		//Pretty Lights
+    		break;
     	}
-    	else if (sonar.getInches()<=10)
-    	{
-    		rd.mecanumDrive_Cartesian(.5, -.5, -.023, g.getAngle());
-    	}
+    	
+    	
+//    	if (sonar.getInches()>20)
+//    	{
+//    		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    	}
+//    	else if (sonar.getInches()<=10)
+//    	{
+//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    	}
 //    	count++;
     }
     
