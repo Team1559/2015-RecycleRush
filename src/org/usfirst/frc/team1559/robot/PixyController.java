@@ -30,7 +30,6 @@ public class PixyController {
 				if (pkt.Y < 90 || pkt.Y > 110){
 					error = 100-pkt.Y;
 					error = error/120;
-					error = error/2;
 				}
 				else{
 					error = 0;
