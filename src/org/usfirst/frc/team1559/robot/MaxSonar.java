@@ -9,11 +9,11 @@ public class MaxSonar {
      public MaxSonar(int channel)
      {
          sensor = new AnalogInput(channel);
-         conversionFactor = 8.4;
+         conversionFactor = 7;
      }
      public double getInches()
      {
-         return ((sensor.getVoltage()*conversionFactor*6));
+         return ((sensor.getVoltage()*conversionFactor*12));
      }
      public double getFeet()
      {
