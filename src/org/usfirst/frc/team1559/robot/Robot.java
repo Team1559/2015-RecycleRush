@@ -28,6 +28,7 @@ public class Robot extends IterativeRobot {
     double sonarInch;
 	MaxSonar sonar;
 	double wallDist;
+	GyroDrive gyroDrive;
 	
     public void robotInit() {
         //drive system
@@ -44,6 +45,7 @@ public class Robot extends IterativeRobot {
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
+    	gyroDrive = new GyroDrive(lf, lr, rf, rr);
 
 //        //pixy stuff
 //        pixy = new Pixy();
@@ -66,17 +68,17 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     	
 //    	if(count < 75){ // drives straight
-//    		rd.mecanumDrive_Cartesian(0, 1, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(0, 1, 0, g.getAngle());
 //    	}
 //    	In Progress:
 //    	//Gather Here
 //    	else if(count<150)
 //    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(.5, -.5, 0, g.getAngle());
 //    	}
 //    	else if(count<230)
 //    	{
-//    		rd.mecanumDrive_Cartesian(-1, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(-1, -.5, 0, g.getAngle());
 //    	}
 //    	else	//	ReSeT aT nExT tOtE
 //    		count = 0;
@@ -97,7 +99,7 @@ public class Robot extends IterativeRobot {
     		wallDist = sonar.getInches();
     		if(wallDist>7)
     		{
-        		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+        		gyroDrive.mecGyroDrive(-.5, -.5, 0, g.getAngle());
     		}
     		else
     			count = 3;
@@ -106,13 +108,13 @@ public class Robot extends IterativeRobot {
     		wallDist = sonar.getInches();
     		if(wallDist<20)
     		{
-        		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    			gyroDrive.mecGyroDrive(.5, -.5, 0, g.getAngle());
     		}
     		else
     			count = 4;
     		break;
     	case 4:
-    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		gyroDrive.mecGyroDrive(p.autoCenter(), 0, 0, g.getAngle());
     		timesRun++;
     		if(timesRun == 2){
     			count = 5;
@@ -125,7 +127,7 @@ public class Robot extends IterativeRobot {
     		wallDist = sonar.getInches();
     		if (wallDist<155)
     		{
-    			rd.mecanumDrive_Cartesian(.5, 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    			gyroDrive.mecGyroDrive(.5, 0, 0, g.getAngle());
     		}
     		else
     			count = 6;
@@ -135,7 +137,7 @@ public class Robot extends IterativeRobot {
     		count = 7;
     		break;
     	case 7:
-    		rd.mecanumDrive_Cartesian(0, .5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+    		gyroDrive.mecGyroDrive(0, .5, 0, g.getAngle());
     		count = 8;
     	case 8:
     		//Pretty Lights
@@ -145,11 +147,11 @@ public class Robot extends IterativeRobot {
     	
 //    	if (sonar.getInches()>20)
 //    	{
-//    		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(-.5, -.5, 0, g.getAngle());
 //    	}
 //    	else if (sonar.getInches()<=10)
 //    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(.5, -.5, 0, g.getAngle());
 //    	}
 //    	count++;
     }
