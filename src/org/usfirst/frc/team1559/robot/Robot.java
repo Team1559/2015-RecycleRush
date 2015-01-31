@@ -141,6 +141,7 @@ public class Robot extends IterativeRobot {
     		count = 8;
     	case 8:
     		//Pretty Lights
+    		arduino.Write(1);
     		break;
     	}
     	
