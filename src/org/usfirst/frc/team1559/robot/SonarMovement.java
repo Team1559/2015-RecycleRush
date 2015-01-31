@@ -13,17 +13,17 @@ public class SonarMovement {
 	final double maxVarMotor = 0.25;
 	final double minVarMotor = -0.50;
 	final double DISTANCEPROP = (maxVarMotor - minVarMotor) / (maxDist - minDist);
-	final double SCALEDDISTANCE = ((distance - 0.5) * DISTANCEPROP) + minVarMotor;
+	final double SCALEDDISTANCE = ((distance - minDist) * DISTANCEPROP) + minVarMotor;
 	Victor leftMotor;
 	Victor rightMotor;
 	int counter = 0;
 	final int delay = 10;
-	SonarStereo stereoSonar;
+	SonarStereo sonarStereo;
 	
-	public SonarMovement(int motorLeft, int motorRight, SonarStereo sonar) {
-		leftMotor = new Victor(motorLeft);
-		rightMotor = new Victor(motorRight);
-		stereoSonar = sonar;
+	public SonarMovement(Victor motorLeft, Victor motorRight, SonarStereo sonarStereo) {
+		leftMotor = motorLeft;
+		rightMotor = motorRight;
+		this.sonarStereo = sonarStereo;
 		
 	}
 
@@ -31,23 +31,19 @@ public class SonarMovement {
 	public int getLocation() { return location; }
 
 	public int decide() {
-
-		if (location > 0) {
-			return LEFTDECISION;
-		}
-
-		else {
-			return RIGHTDECISION;
-		}
+		if (location > 0) return LEFTDECISION;
+		else return RIGHTDECISION;
 	}
 
 	public void respond(int decision) {
 		if (decision == LEFTDECISION) {
 			turnLeft();
 		}
-
 		else if (decision == RIGHTDECISION) {
 			turnRight();
+		}
+		else {
+			System.out.println("Make a decision, yo.");
 		}
 	}
 	
@@ -99,5 +95,29 @@ public class SonarMovement {
 	
 	public void enableTurn() {
 		counter = 0;
+	}
+	
+	public void moveForward() {
+		leftMotor.set(.25);
+		rightMotor.set(.25);
+	}
+	public void stop() {
+		// EXCLUSIVELY FOR TESTING
+		if(sonarStereo.left.getFeet() < 2.5 && sonarStereo.right.getFeet() < 2.5) {
+			leftMotor.set(0);
+			rightMotor.set(0);
+		} else {
+			moveForward();
+		}
+	}
+	
+	public void stopOneSonar() {
+		// EXCLUSIVELY FOR TESTING
+		if(sonarStereo.left.getFeet() < 2.5) {
+			leftMotor.set(0);
+			rightMotor.set(0);
+		} else {
+			moveForward();
+		}
 	}
 }

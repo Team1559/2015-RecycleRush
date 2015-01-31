@@ -3,8 +3,8 @@ package org.usfirst.frc.team1559.robot;
 import edu.wpi.first.wpilibj.DigitalOutput;
 
 public class SonarStereo {
-	private Sonar left;
-	private Sonar right;
+	public Sonar left;
+	public Sonar right;
 	private DigitalOutput pulse;
 	private int counter;
 
