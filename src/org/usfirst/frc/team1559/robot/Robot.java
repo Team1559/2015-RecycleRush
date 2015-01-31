@@ -1,120 +1,58 @@
 
 package org.usfirst.frc.team1559.robot;
 
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //testing test test
 public class Robot extends IterativeRobot {
  
 	Joystick joy;
-	Talon lf, lr, rf, rr;
-	RobotDrive rd;
-	Gyro g;
-	int count;
-    boolean pressed;
-    Lifter lifter;
-    boolean x;
-    boolean y;
-    boolean z;
-    Pixy pixy;
-    int halfBand = Wiring.PIXY_HALF_BAND;
-    PixyController p;
     Arduino eyeCandy;
-    Talon leftMotor; //pixy motors?
-    Talon rightMotor;//pixy motors?
 	
     public void robotInit() {
-        //drive system
-    	joy = new Joystick(Wiring.JOYSTICK_1);
-    	lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); //backwards
-    	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
-    	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
-    	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	rd = new RobotDrive(lf, lr, rf, rr);
-    	rd.setInvertedMotor(MotorType.kFrontLeft, true);
-    	rd.setInvertedMotor(MotorType.kRearLeft, true);
-    	rd.setMaxOutput(.5);
-    	g = new Gyro(Wiring.GYRO_ID);
-    	count = 0;
-
-        //lifter stuff
-        lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
-        pressed = false;
-
-        //pixy stuff
-        pixy = new Pixy();
-        leftMotor = new Talon(6);
-        rightMotor = new Talon(8);
-        p = new PixyController(pixy);
-
-        //arduino stuff
         eyeCandy = new Arduino(0,1,2);
+        joy = new Joystick(Wiring.JOYSTICK_1);
     }
 
 
     public void autonomousInit(){
     	
-    	g.reset();
-    	
     }
     
     public void autonomousPeriodic() {
-    	
-    	if(count > 1000){
-    		rd.mecanumDrive_Cartesian(.5, 0, 0, g.getAngle());
-    	}
     	    	
     }
     
     public void teleopInit(){
-    	
-    	g.reset();
-    	
+
     }
 
 
     public void teleopPeriodic() {
-        
-    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
-//    	System.out.println(g.getAngle());
-    	
-    	if(joy.getRawButton(1)){
-    		g.reset();
-    	}
-
-//        lifterControls();
-//        arduinoControls();
-//        pixyControls();
-    	  eyeCandy.Write(0);//0 is Off
     	  if (joy.getRawButton(1)){
-    		  eyeCandy.Write(1);//1 is Rave     WARNING EYE PROTECTION RECCOMENDED
+    		  eyeCandy.Write(1);//1 is Rave     WARNING EYE PROTECTION RECOMENDED
     	  }
     	  else if (joy.getRawButton(2)){
-    		  eyeCandy.Write(2);
+    		  eyeCandy.Write(2);//2 is Blue Gold Flash
     	  }
     	  else if (joy.getRawButton(3)){
-    		  eyeCandy.Write(3);
+    		  eyeCandy.Write(3);//3 is Synchronized RGB Fade
     	  }
     	  else if (joy.getRawButton(4)){
-    		  eyeCandy.Write(4);
+    		  eyeCandy.Write(4);//4 is Non-Synchronized RGB Fade
     	  }
     	  else if (joy.getRawButton(5)){
-    		  eyeCandy.Write(5);
+    		  eyeCandy.Write(5);//5 is Garbage, Will Probably Change
     	  }
     	  else if (joy.getRawButton(6)){
-    		  eyeCandy.Write(6);
+    		  eyeCandy.Write(6);//6 is Blue Gold Fade
     	  }
     	  else if (joy.getRawButton(7)){
-    		  eyeCandy.Write(7);
+    		  eyeCandy.Write(7);//7 is not Implemented yet...
     	  }
     	  else {
-    		  eyeCandy.Write(0);
+    		  eyeCandy.Write(0);//0 is Off 
     	  }
     	
     }
@@ -149,33 +87,6 @@ public class Robot extends IterativeRobot {
         }
 
     }
-
-    public void pixyControls(){
-
-        //put pixy stuff in here, please.
-
-    }
-
-    public void lifterControls(){
-
-        SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
-        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
-        
-        if(joy.getRawButton(10) && !pressed) {
-            lifter.liftTote(1);
-            pressed = true;
-        }
-        else if(joy.getRawButton(11) && !pressed) {
-            lifter.liftTote(2);
-            pressed = true;
-        }
-        else if(joy.getRawButton(7) && !pressed) {
-            lifter.goHome();
-        }
-        else {
-            pressed = false;
-        }
-
-    }
-
 }
+
+
