@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1559.robot;
 
-
 import edu.wpi.first.wpilibj.DigitalOutput;
 
 public class SonarStereo {
@@ -8,7 +7,6 @@ public class SonarStereo {
 	private Sonar right;
 	private DigitalOutput pulse;
 	private int counter;
-
 
 	/**
 	 * 
@@ -20,7 +18,7 @@ public class SonarStereo {
 	 *            the analog channel of the right sonar
 	 */
 	public SonarStereo(int pulseChannel, int sonarLeft, int sonarRight) {
-		
+
 		pulse = new DigitalOutput(pulseChannel);
 		left = new Sonar(sonarLeft);
 		right = new Sonar(sonarRight);
