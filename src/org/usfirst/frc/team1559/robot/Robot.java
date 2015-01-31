@@ -29,6 +29,8 @@ public class Robot extends IterativeRobot {
     double sonarInch;
 	MaxSonar sonar;
 	double wallDist;
+	int recordCase;
+	boolean pressedRec;
 	
 	Encoder pedX;
 	Encoder pedY;
@@ -50,6 +52,8 @@ public class Robot extends IterativeRobot {
     	sonar = new MaxSonar(0);
     	pedX = new Encoder(1, 2);
     	pedY = new Encoder(3, 4);
+    	recordCase = 0;
+    	pressed = false;
     }
 
 
@@ -89,15 +93,35 @@ public class Robot extends IterativeRobot {
     }
     
 
+    //USE FOR RECORDING AUTONOMOUS
     public void testInit(){
     	
+    	System.out.println("===RECORD/PLAY FUNCTION===");
+    	System.out.println("CONTROLS:");
+    	System.out.println("     4       |BTN / FUNCTION \n"
+    			         + "	 |	     |1   / Start Move \n"
+    					 + " 2 - # - 3   |2   / Stop Move   \n"
+    					 + "     |       |3   / Next Move  \n"
+    					 + "     1       |4   / Stop Recording, Save");
     	
-    	
+    	    	
     }
     
     public void testPeriodic() {
     
-    	
+    	if(joy.getRawButton(1) && !pressedRec){
+    		System.out.println("BTN1: Start Recording move...");
+    		pressedRec = true;
+    	} else if(joy.getRawButton(2) && !pressedRec){
+    		System.out.println("BTN2: Stopped Recording move...");
+    		pressedRec = true;
+    	} else if(joy.getRawButton(3) && !pressedRec){
+    		System.out.println("BTN3: Next Move...");
+    		pressedRec = true;
+    	} else if(joy.getRawButton(3) && !pressedRec){
+    		System.out.println("BTN4: Stopped recording, saving persistence file...");
+    		pressedRec = true;
+    	}
     	
     }
     
@@ -155,5 +179,5 @@ public class Robot extends IterativeRobot {
 //        }
 //
 //    }
-
+    
 }
