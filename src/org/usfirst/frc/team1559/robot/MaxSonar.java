@@ -13,7 +13,7 @@ public class MaxSonar {
      }
      public double getInches()
      {
-         return ((sensor.getVoltage()*conversionFactor/12));
+         return ((sensor.getVoltage()*conversionFactor*6));
      }
      public double getFeet()
      {

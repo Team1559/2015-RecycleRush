@@ -14,7 +14,7 @@ public class Robot extends IterativeRobot {
 	Joystick joy;
 	Talon lf, lr, rf, rr;
 	RobotDrive rd;
-	Lifter lifter;
+//	Lifter lifter;
 	Gyro g;
 	int count;
     boolean pressed;
@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot {
     	rd.setInvertedMotor(MotorType.kFrontLeft, true);
     	rd.setInvertedMotor(MotorType.kRearLeft, true);
     	rd.setMaxOutput(.5);
-    	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
+//    	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
@@ -57,9 +57,10 @@ public class Robot extends IterativeRobot {
     public void autonomousInit(){
     	
     	g.reset();
-    	count = 0;
+    	count = 1;
     	
     }
+    
     
     public void autonomousPeriodic() {
     	
@@ -82,18 +83,19 @@ public class Robot extends IterativeRobot {
 
     	wallDist = sonar.getInches();
     	int timesRun = 0;
+    	System.out.println("Count: "+count);
+    	System.out.println(wallDist);
     	switch(count)
     	{
     	
     	case 1:
     		if(timesRun > 0) {
-    			lifter.goHome();
+//    			lifter.goHome();
     		}
-    		lifter.liftTote(1);
+//    		lifter.liftTote(1);
     		count = 2;
     		break;
     	case 2:
-    		wallDist = sonar.getInches();
     		if(wallDist>7)
     		{
         		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
@@ -103,7 +105,7 @@ public class Robot extends IterativeRobot {
     		break;
     	case 3:
     		wallDist = sonar.getInches();
-    		if(wallDist<20)
+    		if(wallDist<15)
     		{
         		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
     		}
@@ -111,7 +113,7 @@ public class Robot extends IterativeRobot {
     			count = 4;
     		break;
     	case 4:
-    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+//    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
     		timesRun++;
     		if(timesRun == 2){
     			count = 5;
@@ -122,7 +124,7 @@ public class Robot extends IterativeRobot {
     		break;
     	case 5:
     		wallDist = sonar.getInches();
-    		if (wallDist<155)
+    		if (wallDist<20)
     		{
     			rd.mecanumDrive_Cartesian(.5, 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
     		}
@@ -130,7 +132,7 @@ public class Robot extends IterativeRobot {
     			count = 6;
     		break;
     	case 6:
-    		lifter.goHome();
+//    		lifter.goHome();
     		count = 7;
     		break;
     	case 7:
@@ -168,7 +170,8 @@ public class Robot extends IterativeRobot {
     	if(joy.getRawButton(1)){
     		g.reset();
     	}
-
+    	System.out.println(sonar.getInches());
+    	
 //        lifterControls();
 //        arduinoControls();
 //        pixyControls();
