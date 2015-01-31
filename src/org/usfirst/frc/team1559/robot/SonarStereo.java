@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1559.robot;
 
-import java.text.DecimalFormat;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 
@@ -10,7 +9,6 @@ public class SonarStereo {
 	private DigitalOutput pulse;
 	private int counter;
 
-	private DecimalFormat df;
 
 	/**
 	 * 
@@ -22,7 +20,7 @@ public class SonarStereo {
 	 *            the analog channel of the right sonar
 	 */
 	public SonarStereo(int pulseChannel, int sonarLeft, int sonarRight) {
-		df = new DecimalFormat("#.00");
+		
 		pulse = new DigitalOutput(pulseChannel);
 		left = new Sonar(sonarLeft);
 		right = new Sonar(sonarRight);

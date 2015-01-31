@@ -10,11 +10,11 @@ public class Sonar {
 
 	public Sonar(int channel) {
 		sensor = new AnalogInput(channel);
-		conversionFactor = 9.2;
+		conversionFactor = 9.3;
 	}
 
 	public double getInches() {
-		return ((sensor.getVoltage() * conversionFactor * 12));
+		return ((sensor.getVoltage() * conversionFactor / 12));
 	}
 
 	public double getFeet() {
