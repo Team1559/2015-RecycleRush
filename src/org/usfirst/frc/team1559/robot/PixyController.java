@@ -27,8 +27,8 @@ public class PixyController {
 		}
 		if (pkt != null){
 			if ((ratio-.1) <= (objRatio) && (ratio+.1) >= (objRatio)){
-				if (pkt.Y < 40 || pkt.Y > 60){
-					error = 50-pkt.X;
+				if (pkt.Y < 90 || pkt.Y > 110){
+					error = 100-pkt.Y;
 					error = error/120;
 					error = error/2;
 				}
