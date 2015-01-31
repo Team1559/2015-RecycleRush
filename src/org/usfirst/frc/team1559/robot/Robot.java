@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team1559.robot;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -29,6 +30,9 @@ public class Robot extends IterativeRobot {
 	MaxSonar sonar;
 	double wallDist;
 	
+	Encoder pedX;
+	Encoder pedY;
+	
     public void robotInit() {
         //drive system
     	joy = new Joystick(Wiring.JOYSTICK_1);
@@ -44,115 +48,20 @@ public class Robot extends IterativeRobot {
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
-
-//        //pixy stuff
-        pixy = new Pixy();
-        p = new PixyController(pixy);
-
-        //arduino stuff
-        arduino = new Arduino(0,1,2);
+    	pedX = new Encoder(1, 2);
+    	pedY = new Encoder(3, 4);
     }
 
 
     public void autonomousInit(){
+
     	
-    	g.reset();
-    	count = 1;
     	
     }
     
     
     public void autonomousPeriodic() {
-    	
-//    	if(count < 75){ // drives straight
-//    		rd.mecanumDrive_Cartesian(0, 1, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	In Progress:
-//    	pixyControls();
-//    	//Gather Here
-//    	else if(count<150)
-//    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	else if(count<230)
-//    	{
-//    		rd.mecanumDrive_Cartesian(-1, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	else	//	ReSeT aT nExT tOtE
-//    		count = 0;
-
-    	wallDist = sonar.getInches();
-    	int timesRun = 0;
-    	System.out.println("Count: "+count);
-    	System.out.println(wallDist);
-    	switch(count)
-    	{
-    	
-    	case 1:
-    		if(timesRun > 0) {
-//    			lifter.goHome();
-    		}
-//    		lifter.liftTote(1);
-    		count = 2;
-    		break;
-    	case 2:
-    		if(wallDist>7)
-    		{
-        		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-    		}
-    		else
-    			count = 3;
-    		break;
-    	case 3:
-    		wallDist = sonar.getInches();
-    		if(wallDist<15)
-    		{
-        		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-    		}
-    		else
-    			count = 4;
-    		break;
-    	case 4:
-//    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-    		timesRun++;
-    		if(timesRun == 2){
-    			count = 5;
-    		}
-    		else{
-    			count = 1;
-    		}
-    		break;
-    	case 5:
-    		wallDist = sonar.getInches();
-    		if (wallDist<20)
-    		{
-    			rd.mecanumDrive_Cartesian(.5, 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-    		}
-    		else
-    			count = 6;
-    		break;
-    	case 6:
-//    		lifter.goHome();
-    		count = 7;
-    		break;
-    	case 7:
-    		rd.mecanumDrive_Cartesian(0, .5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-    		count = 8;
-    	case 8:
-    		//Pretty Lights
-    		break;
-    	}
-    	
-    	
-//    	if (sonar.getInches()>20)
-//    	{
-//    		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	else if (sonar.getInches()<=10)
-//    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	count++;
+   
     }
     
     public void teleopInit(){
@@ -170,18 +79,26 @@ public class Robot extends IterativeRobot {
     	if(joy.getRawButton(1)){
     		g.reset();
     	}
-    	System.out.println(sonar.getInches());
     	
 //        lifterControls();
 //        arduinoControls();
 //        pixyControls();
     	
+    	System.out.println("PED_X: " + pedX.getDistance() + " PED_Y: " + pedY.getDistance());
     	
     }
     
 
+    public void testInit(){
+    	
+    	
+    	
+    }
+    
     public void testPeriodic() {
     
+    	
+    	
     }
     
     public void arduinoControls(){
