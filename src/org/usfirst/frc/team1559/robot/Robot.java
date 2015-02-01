@@ -1,6 +1,10 @@
 
 package org.usfirst.frc.team1559.robot;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -31,6 +35,9 @@ public class Robot extends IterativeRobot {
 	double wallDist;
 	int recordCase;
 	boolean pressedRec;
+	int positions;
+	FileWriter fw;
+	BufferedWriter bw;
 	
 	Encoder pedX;
 	Encoder pedY;
@@ -54,6 +61,14 @@ public class Robot extends IterativeRobot {
     	pedY = new Encoder(3, 4);
     	recordCase = 0;
     	pressed = false;
+    	positions = 0;
+    	try {
+			fw = new FileWriter("C:/Users/Cody/Documents/Output.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	bw = new BufferedWriter(fw);
     }
 
 
@@ -95,33 +110,117 @@ public class Robot extends IterativeRobot {
 
     //USE FOR RECORDING AUTONOMOUS
     public void testInit(){
-    	
-    	System.out.println("===RECORD/PLAY FUNCTION===");
-    	System.out.println("CONTROLS:");
+
     	System.out.println("     4       |BTN / FUNCTION \n"
-    			         + "	 |	     |1   / Start Move \n"
-    					 + " 2 - # - 3   |2   / Stop Move   \n"
-    					 + "     |       |3   / Next Move  \n"
-    					 + "     1       |4   / Stop Recording, Save");
+    			         + "	 |	     |1   / Record position, Next move \n"
+    					 + " 2 - # - 3   |2   / Gather 1 tote   \n"
+    					 + "     |       |3   / Gather 2 totes  \n"
+    					 + "     1       |4   / Gather 3 totes\n"
+    					 + "             |R1   / Finish");
     	
     	    	
     }
     
     public void testPeriodic() {
     
-    	if(joy.getRawButton(1) && !pressedRec){
-    		System.out.println("BTN1: Start Recording move...");
-    		pressedRec = true;
-    	} else if(joy.getRawButton(2) && !pressedRec){
-    		System.out.println("BTN2: Stopped Recording move...");
-    		pressedRec = true;
-    	} else if(joy.getRawButton(3) && !pressedRec){
-    		System.out.println("BTN3: Next Move...");
-    		pressedRec = true;
-    	} else if(joy.getRawButton(3) && !pressedRec){
-    		System.out.println("BTN4: Stopped recording, saving persistence file...");
-    		pressedRec = true;
+    	if(positions == 0){
+    		System.out.println(">>Place the robot in its initial location for Autonomous, then press\nbutton 1 on the controller...");
+    		if(joy.getRawButton(1)){
+    			pedX.reset();
+        		pedY.reset();
+        		System.out.println("Move the Robot to its next location.");
+        		try {
+					bw.write("<<START>>");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		testInit(); //legal?
+        		positions++;
+    		}
+    	} if(positions > 0) {
+    		if(joy.getRawButton(1) && !pressedRec){
+    			System.out.print("RECORDING POSITION " + positions + "...");
+        		double x = pedX.getDistance();
+        		double y = pedY.getDistance();
+        		pedX.reset();
+        		pedY.reset();
+        		try {
+					bw.write(positions + " [MOVE] X" + x + " Y" + y);
+					bw.newLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		System.out.println("DONE. Move the robot to the next position");
+        		testInit();
+        		positions++;
+        		pressedRec = true;
+        	} else if(joy.getRawButton(2) && !pressedRec){
+        		pedX.reset();
+    			pedY.reset();
+        		System.out.print("Gathering 1 tote...");
+        		System.out.println("Please place the tote on the robot as if it was gathered.");
+        		System.out.println("Gathering operation recorded");
+        		try {
+					bw.write("[GATHER] 1");
+					bw.newLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		testInit();
+        		pressedRec = true;
+        		positions++;
+        	} else if(joy.getRawButton(3) && !pressedRec){
+        		pedX.reset();
+    			pedY.reset();
+        		System.out.print("Gathering 2 totes...");
+        		System.out.println("Please place the tote on the robot as if it was gathered.");
+        		System.out.println("Gathering operation recorded");
+        		try {
+					bw.write("[GATHER] 2");
+					bw.newLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		testInit();
+        		pressedRec = true;
+        		positions++;
+        	} else if(joy.getRawButton(4) && !pressedRec){
+        		pedX.reset();
+    			pedY.reset();
+        		System.out.print("Gathering 3 totes...");
+        		System.out.println("Please place the tote on the robot as if it was gathered.");
+        		System.out.println("Gathering operation recorded");
+        		try {
+					bw.write("[GATHER] 3");
+					bw.newLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		testInit();
+        		pressedRec = true;
+        		positions++;
+        	} else if(joy.getRawButton(5) && !pressedRec){
+        		try {
+        			bw.write("<<STOP>>");
+					fw.close();
+					bw.close();
+					System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+							+ ">>Finished recording positions.");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	} else {
+        		pressedRec = false;
+        	}
     	}
+    	
+    	
     	
     }
     
