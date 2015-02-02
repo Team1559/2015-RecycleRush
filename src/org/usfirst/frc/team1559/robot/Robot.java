@@ -1,7 +1,11 @@
 
 package org.usfirst.frc.team1559.robot;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -37,10 +41,18 @@ public class Robot extends IterativeRobot {
 	boolean pressedRec;
 	int positions;
 	FileWriter fw;
+	int lines;
+	String command;
 	BufferedWriter bw;
+	double moveX;
+	double moveY;
 	
 	Encoder pedX;
 	Encoder pedY;
+	
+	File f;
+	FileReader fr;
+	BufferedReader br;
 	
     public void robotInit() {
         //drive system
@@ -62,6 +74,8 @@ public class Robot extends IterativeRobot {
     	recordCase = 0;
     	pressed = false;
     	positions = 0;
+    	lines = 1;
+    	command = "DEFAULT_VALUE";
     	try {
 			fw = new FileWriter("C:/Users/Cody/Documents/Output.txt");
 		} catch (IOException e) {
@@ -69,6 +83,16 @@ public class Robot extends IterativeRobot {
 			e.printStackTrace();
 		}
     	bw = new BufferedWriter(fw);
+    	moveX = 0.0;
+    	moveY = 0.0;
+    	br = new BufferedReader(fr);
+    	try {
+			fr = new FileReader(f);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	f = new File("C:/Users/Cody/Documents/Output.txt");
     }
 
 
@@ -81,6 +105,30 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
    
+    	try {
+			command = br.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(command.equals("<<START>>")){
+			System.out.println(lines + ". We are at the starting position.");
+		} else if(command.contains("[MOVE]")){
+			//code for decoding x and y values
+		    moveX = Double.valueOf(command.substring(command.indexOf("X")+1, command.indexOf("Y")-1));
+		    moveY = Double.valueOf(command.substring(command.indexOf("Y")+1));
+			System.out.println(lines + ". Move " + x + " inches in x. Move " + y + " inches in Y.");
+		} else if(command.contains("[GATHER]")){
+			int totes;
+			String s = command.substring(command.indexOf((" "))).trim();
+			totes = Integer.valueOf(s);
+			System.out.println(lines + ". Gather " + totes + " tote(s)");
+		} else {
+			System.out.println("STOP");
+		}
+	lines++;
+    	
     }
     
     public void teleopInit(){
