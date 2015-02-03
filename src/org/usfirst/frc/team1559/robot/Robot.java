@@ -67,27 +67,10 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
     	
-//    	if(count < 75){ // drives straight
-//    		rd.mecanumDrive_Cartesian(0, 1, 0, g.getAngle());
-//    	}
-//    	In Progress:
-//    	//Gather Here
-//    	else if(count<150)
-//    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, 0, g.getAngle());
-//    	}
-//    	else if(count<230)
-//    	{
-//    		rd.mecanumDrive_Cartesian(-1, -.5, 0, g.getAngle());
-//    	}
-//    	else	//	ReSeT aT nExT tOtE
-//    		count = 0;
-
     	wallDist = sonar.getInches();
     	int timesRun = 0;
     	switch(count)
     	{
-    	
     	case 1:
     		if(timesRun > 0) {
     			lifter.goHome();
@@ -146,16 +129,6 @@ public class Robot extends IterativeRobot {
     		break;
     	}
     	
-    	
-//    	if (sonar.getInches()>20)
-//    	{
-//    		rd.mecanumDrive_Cartesian(-.5, -.5, 0, g.getAngle());
-//    	}
-//    	else if (sonar.getInches()<=10)
-//    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, 0, g.getAngle());
-//    	}
-//    	count++;
     }
     
     public void teleopInit(){
