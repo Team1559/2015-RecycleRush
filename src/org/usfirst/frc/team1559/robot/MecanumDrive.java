@@ -15,6 +15,7 @@ public class MecanumDrive {
 	double lr;
 	double rf;
 	double rr;
+	double desiredAngle;
 	
 	
 	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr){
@@ -24,6 +25,7 @@ public class MecanumDrive {
 		leftRear = lr;
 		rightFront = rf;
 		rightRear = rr;
+		
 				
 		this.lf = 0.0; //accesses the double values for driving calculations
 		this.lr = 0.0;
