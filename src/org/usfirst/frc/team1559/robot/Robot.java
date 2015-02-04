@@ -22,8 +22,9 @@ public class Robot extends IterativeRobot {
  
 	Joystick joy;
 	Talon lf, lr, rf, rr;
-	RobotDrive rd;
+//	RobotDrive rd;
 //	Lifter lifter;
+	MecanumDrive md;
 	Gyro g;
 	int count;
     boolean pressed;
@@ -64,10 +65,10 @@ public class Robot extends IterativeRobot {
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	rd = new RobotDrive(lf, lr, rf, rr);
-    	rd.setInvertedMotor(MotorType.kFrontLeft, true);
-    	rd.setInvertedMotor(MotorType.kRearLeft, true);
-    	rd.setMaxOutput(.5);
+//    	rd = new RobotDrive(lf, lr, rf, rr);
+//    	rd.setInvertedMotor(MotorType.kFrontLeft, true);
+//    	rd.setInvertedMotor(MotorType.kRearLeft, true);
+//    	rd.setMaxOutput(.5);
 //    	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
@@ -99,6 +100,8 @@ public class Robot extends IterativeRobot {
     	   	
     	//gyro pid
     	desiredAngle = 0.0;
+    	
+    	md = new MecanumDrive(joy, lf, lr, rf, rr, g);
     	
     }
 
@@ -152,7 +155,9 @@ public class Robot extends IterativeRobot {
 
     public void teleopPeriodic() {
         
-    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+//    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+    	
     	
     	if(joy.getRawButton(1)){
     		g.reset();
@@ -312,7 +317,7 @@ public class Robot extends IterativeRobot {
     public void pixyControls(){
 
         //put pixy stuff in here, please. OK CODY
-    	rd.mecanumDrive_Cartesian(p.autoCenter(), 0, -.023, g.getAngle());
+//    	rd.mecanumDrive_Cartesian(p.autoCenter(), 0, -.023, g.getAngle());
 
     }
 
