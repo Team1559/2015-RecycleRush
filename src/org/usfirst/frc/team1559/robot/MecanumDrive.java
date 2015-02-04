@@ -19,6 +19,7 @@ public class MecanumDrive {
 	double rr;
 	double desiredAngle;
 	double correctionAngle;
+	double maxSpeed;
 	
 	
 	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr, Gyro i){
@@ -38,6 +39,8 @@ public class MecanumDrive {
 		resetGyro();
 		desiredAngle = g.getAngle();
 		correctionAngle = 0.0;
+		
+		maxSpeed = .5;
 		
 	}	
 	
@@ -77,10 +80,10 @@ public class MecanumDrive {
         wheelSpeeds[3] = xIn + yIn - rotation;
 
         normalize(wheelSpeeds);
-        leftFront.set(-wheelSpeeds[0]);
-        rightFront.set(wheelSpeeds[1]);
-        leftRear.set(-wheelSpeeds[2]);
-        rightRear.set(wheelSpeeds[3]);
+        leftFront.set(-wheelSpeeds[0] * maxSpeed);
+        rightFront.set(wheelSpeeds[1] * maxSpeed);
+        leftRear.set(-wheelSpeeds[2] * maxSpeed);
+        rightRear.set(wheelSpeeds[3] * maxSpeed);
 		
 	}
 	
