@@ -47,6 +47,8 @@ public class Robot extends IterativeRobot {
 	double moveX;
 	double moveY;
 	
+	double desiredAngle;
+	
 	Encoder pedX;
 	Encoder pedY;
 	
@@ -95,6 +97,9 @@ public class Robot extends IterativeRobot {
     	moveX = 0.0;
     	moveY = 0.0;
     	   	
+    	//gyro pid
+    	desiredAngle = 0.0;
+    	
     }
 
 
@@ -139,11 +144,15 @@ public class Robot extends IterativeRobot {
     	
     }
 
+    public void correction(){
+    	
+    	
+    	
+    }
 
     public void teleopPeriodic() {
         
     	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
-//    	System.out.println(g.getAngle());
     	
     	if(joy.getRawButton(1)){
     		g.reset();

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1559.robot;
 
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
@@ -9,51 +10,54 @@ public class MecanumDrive {
 	Talon leftFront, leftRear;
 	Talon rightFront, rightRear;
 	Joystick joy;
+	Gyro g;
 	
 	//use these to set
 	double lf;
 	double lr;
 	double rf;
 	double rr;
+	double desiredAngle;
+	double correctionAngle;
 	
 	
-	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr){
+	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr, Gyro i){
 		
 		joy = j;
 		leftFront = lf;
 		leftRear = lr;
 		rightFront = rf;
 		rightRear = rr;
+		g = i;
 				
 		this.lf = 0.0; //accesses the double values for driving calculations
 		this.lr = 0.0;
 		this.rf = 0.0;
 		this.rr = 0.0;
+		
+		resetGyro();
+		desiredAngle = g.getAngle();
+		correctionAngle = 0.0;
+		
+	}	
+	
+	public void resetGyro(){
+		
+		g.reset();
+		
 	}
 	
-	/*
-	 * Use for autonomous mode, or directly moving the chassis
-	 * 
-	 * Parameters:
-	 * double speed:
-	 * 		scaled speed between -1.0 and 1.0
-	 * 		i.e. 1.0 is max forward
-	 * 			-1.0 is max reverse
-	 * 
-	 * double angle:
-	 * 		angle between -360 and 360. Used for translating at an angle
-	 * 		i.e. 45 moves the chassis at a 45 degree angle, maintaining orientation
-	 * 			
-	 * double distance:
-	 * 		distance in inches, actual distance is measured by pedometer unit -?
-	 * 
-	 * boolean closedLoop:
-	 * 		should be true most of the time, checks Gyro angle against desired angle
-	 * 		TRUE: do check
-	 * 		FALSE: you don't speak English, don't check
-	 */
-	
 	public void drive(double x, double y, double rotation, double gyroAngle){
+		
+		desiredAngle += rotation;
+		
+		if(desiredAngle > gyroAngle+1){
+			correctionAngle-=0.01;
+		} else if(desiredAngle < gyroAngle-1){
+			correctionAngle+=0.01;
+		}
+		
+		rotation += correctionAngle;
 		
 		double xIn = x;
         double yIn = y;
