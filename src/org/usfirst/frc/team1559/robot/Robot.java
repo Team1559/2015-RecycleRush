@@ -56,6 +56,7 @@ public class Robot extends IterativeRobot {
 	
     public void robotInit() {
         //drive system
+    	
     	joy = new Joystick(Wiring.JOYSTICK_1);
     	lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); //backwards
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
@@ -73,26 +74,27 @@ public class Robot extends IterativeRobot {
     	pedY = new Encoder(3, 4);
     	recordCase = 0;
     	pressed = false;
+    	
+    	//file reading
+    	f = new File("/home/lvuser/Output.txt");
     	positions = 0;
     	lines = 1;
     	command = "DEFAULT_VALUE";
     	try {
-			fw = new FileWriter("C:/Users/Cody/Documents/Output.txt");
+    		if(!f.exists()){
+    			f.createNewFile();
+    		}
+			fw = new FileWriter(f);
+			fr = new FileReader(f);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	bw = new BufferedWriter(fw);
+    	br = new BufferedReader(fr);
     	moveX = 0.0;
     	moveY = 0.0;
-    	br = new BufferedReader(fr);
-    	try {
-			fr = new FileReader(f);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	f = new File("C:/Users/Cody/Documents/Output.txt");
+    	   	
     }
 
 
