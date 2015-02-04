@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 public class GyroDrive extends RobotDrive {
 	Gyro g;
 	Joystick joy;
+	double desire;
 	public GyroDrive(SpeedController frontLeftMotor, SpeedController rearLeftMotor,
             SpeedController frontRightMotor, SpeedController rearRightMotor){
 		super(frontLeftMotor,  rearLeftMotor, frontRightMotor,  rearRightMotor);
@@ -14,9 +15,18 @@ public class GyroDrive extends RobotDrive {
 		joy = new Joystick(0);
 		
 	}
+	
 	public void mecGyroDrive(double x, double y, double initRotation, double gyroAngle){
-		double rotation = (-g.getAngle()*.03);
-		super.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
+		if (initRotation == 0)
+		{
+			double rotation = ((-g.getAngle() + desire)*.03);
+			super.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
+		}
+		else
+		{
+			desire = g.getAngle();
+			super.mecanumDrive_Cartesian(x, y, initRotation, gyroAngle);
+		}
 		
 	}
 }

@@ -140,7 +140,7 @@ public class Robot extends IterativeRobot {
 
     public void teleopPeriodic() {
         
-    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+    	gyroDrive.mecGyroDrive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
     	
     	if(joy.getRawButton(1)){
