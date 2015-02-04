@@ -55,6 +55,8 @@ public class MecanumDrive {
 			correctionAngle-=0.01;
 		} else if(desiredAngle < gyroAngle-1){
 			correctionAngle+=0.01;
+		} else {
+			correctionAngle = 0.0;
 		}
 		
 		rotation += correctionAngle;
