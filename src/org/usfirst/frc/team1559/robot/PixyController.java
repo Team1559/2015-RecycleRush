@@ -26,7 +26,7 @@ public class PixyController {
 			return 0;
 		}
 		if (pkt != null){
-			if ((ratio-.1) <= (objRatio) && (ratio+.1) >= (objRatio)){
+//			if ((ratio-.1) <= (objRatio) && (ratio+.1) >= (objRatio)){
 				if (pkt.Y < 90 || pkt.Y > 110){
 					error = 100-pkt.Y;
 					error = error/120;
@@ -34,13 +34,13 @@ public class PixyController {
 				else{
 					error = 0;
 				}
-			}
-			else if((objRatio) > (ratio+0.1)){
-				error = 0;
-			}
-			else{
-				error = -error;
-			}
+			//}
+//			else if((objRatio) > (ratio+0.1)){
+//				error = 0;
+//			}
+//			else{
+//				error = -error;
+//			}
 		}
 		else{
 			error = error - 0.05;
