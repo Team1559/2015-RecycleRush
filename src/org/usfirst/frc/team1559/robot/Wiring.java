@@ -1,4 +1,5 @@
 package org.usfirst.frc.team1559.robot;
+
 public class Wiring{
 	
 	//driving
@@ -18,4 +19,10 @@ public class Wiring{
 
 	//pixy
 	public static final int PIXY_HALF_BAND = 3;
+	
+	//BCDSwitch
+	public static final int BCD_SWITCH_1_WIRE = 10;
+	public static final int BCD_SWITCH_2_WIRE = 11;
+	public static final int BCD_SWITCH_4_WIRE = 12;
+	public static final int BCD_SWITCH_8_WIRE = 13;
 }
