@@ -32,7 +32,7 @@ public class Lifter extends CANJaguar
 	
 	public void goHome() // Call in periodic
 	{
-		if(getReverseLimitOK()) {
+		if(getForwardLimitOK()) {
 			move(DOWN);
 		}
 		else {
@@ -48,9 +48,9 @@ public class Lifter extends CANJaguar
 	public void move(int direction) {
 		switch(direction) {
 		case UP:
-			set(1);
+			set(-.7);
 		case DOWN:
-			set(-1);
+			set(.7);
 		}
 	}
 	

@@ -4,6 +4,7 @@ package org.usfirst.frc.team1559.robot;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Talon;
@@ -12,10 +13,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //testing test test
 public class Robot extends IterativeRobot {
  
-	Joystick joy;
+	Joystick joy, joy2;
 	Talon lf, lr, rf, rr;
 	RobotDrive rd;
-//	Lifter lifter;
+	Lifter lifter;
 	Gyro g;
 	int count;
     boolean pressed;
@@ -35,6 +36,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         //drive system
     	joy = new Joystick(Wiring.JOYSTICK_1);
+    	joy2 = new Joystick(1);
     	lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); //backwards
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
@@ -43,7 +45,7 @@ public class Robot extends IterativeRobot {
     	rd.setInvertedMotor(MotorType.kFrontLeft, true);
     	rd.setInvertedMotor(MotorType.kRearLeft, true);
     	rd.setMaxOutput(.5);
-//    	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
+    	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
@@ -179,7 +181,7 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putDouble("Feets", sonar.getFeet());
     	SmartDashboard.putDouble("Inches", sonar.getInches());
     	
-//        lifterControls();
+        lifterControls();
 //        arduinoControls();
     	
     	
@@ -187,7 +189,7 @@ public class Robot extends IterativeRobot {
     
 
     public void testPeriodic() {
-    
+      lifter.set(joy2.getAxis(AxisType.kY));
     }
     
     public void arduinoControls(){
@@ -224,26 +226,28 @@ public class Robot extends IterativeRobot {
 
     }
 
-//    public void lifterControls(){
-//
-//        SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
-//        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
-//        
-//        if(joy.getRawButton(10) && !pressed) {
-//            lifter.liftTote(1);
-//            pressed = true;
-//        }
-//        else if(joy.getRawButton(11) && !pressed) {
-//            lifter.liftTote(2);
-//            pressed = true;
-//        }
-//        else if(joy.getRawButton(7) && !pressed) {
-//            lifter.goHome();
-//        }
-//        else {
-//            pressed = false;
-//        }
-//
-//    }
+    public void lifterControls(){
 
+        SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
+        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
+        
+        if(joy.getRawButton(4) && !pressed) {
+            lifter.liftTote(1);
+            pressed = true;
+        }
+        else if(joy.getRawButton(3) && !pressed) {
+            lifter.liftTote(2);
+            pressed = true;
+        }
+        else if(joy.getRawButton(5) && !pressed) {
+            lifter.liftTote(3);
+            pressed = true;
+        }
+        else if(joy.getRawButton(2) && !pressed) {
+            lifter.goHome();
+        }
+        else {
+            pressed = false;
+        }
+    }
 }
