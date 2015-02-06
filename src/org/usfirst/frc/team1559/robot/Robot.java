@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //testing test test
 public class Robot extends IterativeRobot {
  
+	Wings wing;
 	Joystick joy;
 	Talon lf, lr, rf, rr;
 	RobotDrive rd;
@@ -55,6 +56,9 @@ public class Robot extends IterativeRobot {
 
         //arduino stuff
         arduino = new Arduino(0,1,2);
+        
+        //WingyStuff
+        wing = new Wings();
     }
 
 
@@ -92,11 +96,27 @@ public class Robot extends IterativeRobot {
 //        arduinoControls();
 //        pixyControls();
     	
+    	wingsControl();
     	
     }
     
 
-    public void testPeriodic() {
+    private void wingsControl() {
+		
+    	if (joy.getRawButton(3))
+    	{
+    		wing.latch();
+    	}
+    	
+    	if (!joy.getRawButton(3))
+    	{
+    		wing.release();
+    	}
+		
+	}
+
+
+	public void testPeriodic() {
     
     }
     
