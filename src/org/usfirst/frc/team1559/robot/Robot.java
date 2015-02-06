@@ -57,6 +57,8 @@ public class Robot extends IterativeRobot {
 	FileReader fr;
 	BufferedReader br;
 	
+	boolean ready;
+	
     public void robotInit() {
         //drive system
     	
@@ -97,6 +99,7 @@ public class Robot extends IterativeRobot {
     	br = new BufferedReader(fr);
     	moveX = 0.0;
     	moveY = 0.0;
+    	ready = true;
     	   	
     	//gyro pid
     	desiredAngle = 0.0;
@@ -115,30 +118,36 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
    
-    	try {
-			command = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if(command.equals("<<START>>")){
-			System.out.println(lines + ". We are at the starting position.");
-		} else if(command.contains("[MOVE]")){
-			//code for decoding x and y values
-		    moveX = Double.valueOf(command.substring(command.indexOf("X")+1, command.indexOf("Y")-1));
-		    moveY = Double.valueOf(command.substring(command.indexOf("Y")+1));
-			System.out.println(lines + ". Move " + x + " inches in x. Move " + y + " inches in Y.");
-		} else if(command.contains("[GATHER]")){
-			int totes;
-			String s = command.substring(command.indexOf((" "))).trim();
-			totes = Integer.valueOf(s);
-			System.out.println(lines + ". Gather " + totes + " tote(s)");
-		} else {
-			System.out.println("STOP");
-		}
-	lines++;
-    	
+    	if(ready){
+	    	try {
+	    		ready = false;
+				command = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(command.equals("<<START>>")){
+				System.out.println(lines + ". We are at the starting position.");
+			} else if(command.contains("[MOVE]")){
+				//code for decoding x and y values
+			    moveX = Double.valueOf(command.substring(command.indexOf("X")+1, command.indexOf("Y")-1));
+			    moveY = Double.valueOf(command.substring(command.indexOf("Y")+1));
+	//			System.out.println(lines + ". Move " + x + " inches in x. Move " + y + " inches in Y.");
+			    pedX.reset();
+			    pedY.reset();
+			} else if(command.contains("[GATHER]")){
+				int totes;
+				String s = command.substring(command.indexOf((" "))).trim();
+				totes = Integer.valueOf(s);
+				System.out.println(lines + ". Gather " + totes + " tote(s)");
+			} else {
+				System.out.println("STOP");
+			}
+			lines++;
+    	} else {
+    		
+    	}
     }
     
     public void teleopInit(){
