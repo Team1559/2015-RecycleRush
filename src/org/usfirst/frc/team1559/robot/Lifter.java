@@ -7,26 +7,27 @@ public class Lifter extends CANJaguar
 	int toteHeight = 0;
 	ControlMode m_controlMode;
 	double homePos;
-	final int UP = 0, DOWN = 1;
+	final int UP = 1, DOWN = 2;
 	boolean hardLimit = false;
 	
 	public Lifter(int deviceNumber)
 	{
 		super(deviceNumber);
-		setPercentMode(CANJaguar.kQuadEncoder, 360);
+		setPercentMode(CANJaguar.kQuadEncoder, 360); //Use voltage and encoder
 		configNeutralMode(CANJaguar.NeutralMode.Brake);
 		enableControl();
 		configLimitMode(LimitMode.SoftPositionLimits);
 	}
+	double tgtHeight;
 	public void setToteHeight(int numTotes) // 1 TOTE = 1'
 	{
 		hardLimit = false;
-		double tgtHeight = 0;
+		tgtHeight = 0;
 		tgtHeight = (numTotes * 25) + getHome();
 		
 		if (getPosition() > tgtHeight){
 			configSoftPositionLimits(tgtHeight, tgtHeight);
-			move(DOWN);
+			set(.7);
 			System.out.println("Going down");
 		}
 		else{
@@ -45,9 +46,10 @@ public class Lifter extends CANJaguar
 	
 	public void goHome() // Call in periodic
 	{
-		//hardLimit = true;
+		
 		disableSoftPositionLimits();
 		move(DOWN);
+		hardLimit = true;
 	}
 	
 	public void stop() {
@@ -67,7 +69,7 @@ public class Lifter extends CANJaguar
 	
 	public void setHome() {
 		homePos = getPosition();
-		hardLimit = true;
+//		hardLimit = true;
 	}
 	
 	public double getHome() {

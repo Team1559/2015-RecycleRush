@@ -182,13 +182,14 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
 //    	SmartDashboard.putDouble("Feets", sonar.getFeet());
 //    	SmartDashboard.putDouble("Inches", sonar.getInches());
-//    	SmartDashboard.putNumber("Target Height", lifter.tgtHeight);
+    	SmartDashboard.putNumber("Target Height", lifter.tgtHeight);
 		SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition());
 		SmartDashboard.putNumber("Home Pos.", lifter.getHome());
         lifterControls();
         if(!lifter.getForwardLimitOK() && lifter.hardLimit){
         	lifter.setHome();
         	lifter.hardLimit = false;
+        	System.out.println("this is impossible");
         }
 //        arduinoControls();
     	
