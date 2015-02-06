@@ -20,6 +20,7 @@ public class Lifter extends CANJaguar
 	
 	public void setToteHeight(int numTotes) // 1 TOTE = 1'
 	{
+		disableSoftPositionLimits();
 		double tgtHeight = numTotes * 25;
 		if (getPosition() > tgtHeight){
 			configForwardLimit(tgtHeight);
@@ -41,6 +42,7 @@ public class Lifter extends CANJaguar
 	
 	public void goHome() // Call in periodic
 	{
+		disableSoftPositionLimits();
 //		if (getForwardLimitOK()){
 			move(DOWN);
 //		}
