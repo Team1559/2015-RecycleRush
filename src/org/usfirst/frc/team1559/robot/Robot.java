@@ -182,10 +182,14 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
 //    	SmartDashboard.putDouble("Feets", sonar.getFeet());
 //    	SmartDashboard.putDouble("Inches", sonar.getInches());
-    	
-
-    	
+        SmartDashboard.putNumber("Relative Pos.", lifter.getRelative());//lifter.getPosition() - lifter.getHome());
+        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
+		SmartDashboard.putBoolean("BottomLimit", lifter.getForwardLimitOK());
+		SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition());
         lifterControls();
+        if(!lifter.getForwardLimitOK()){
+        	lifter.setHome();
+        }
 //        arduinoControls();
     	
     	
@@ -196,31 +200,59 @@ public class Robot extends IterativeRobot {
         lifter.set(joy2.getAxis(AxisType.kY));
         SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
         SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
-    }
-    
-    public void arduinoControls(){
-
-        if (joy.getRawButton(1)){
-            arduino.Write(1);
-        }
-        else if (joy.getRawButton(2)){
-            arduino.Write(2);
-        }
-        else if (joy.getRawButton(3)){
-            arduino.Write(3);
-        }
-        else if (joy.getRawButton(4)){
-            arduino.Write(4);
-        }
-        else if(joy.getRawButton(5)){
-            arduino.Write(5);
-        }
-        else if(joy.getRawButton(6)){
-            arduino.Write(6);
-        }
-        else {
-            arduino.Write(0);
-        }
+//        if(joy.getRawButton(4))
+//        { 
+//        	if(!pressed){
+//            setToteHeight(1);
+//            pressed = true;
+//            }
+//        	pressed = true;
+//        } else if(joy.getRawButton(3)) {
+//        	if(!pressed){
+//	            setToteHeight(2);
+//	            pressed = true;
+//        	}
+//        	pressed = true;
+//        } else if(joy.getRawButton(5)) {
+//        	if (!pressed){
+//	            setToteHeight(3);
+//	            pressed = true;
+//        	}
+//        	pressed = true;
+//        } else if(joy.getRawButton(2)) {
+//        	if (!pressed){
+//	            lifter.goHome();
+//	            pressed = true;
+//        	}
+//        	pressed = true;
+//        } else {
+//            pressed = false;
+//        }
+//    }
+//    
+//    public void arduinoControls(){
+//
+//        if (joy.getRawButton(1)){
+//            arduino.Write(1);
+//        }
+//        else if (joy.getRawButton(2)){
+//            arduino.Write(2);
+//        }
+//        else if (joy.getRawButton(3)){
+//            arduino.Write(3);
+//        }
+//        else if (joy.getRawButton(4)){
+//            arduino.Write(4);
+//        }
+//        else if(joy.getRawButton(5)){
+//            arduino.Write(5);
+//        }
+//        else if(joy.getRawButton(6)){
+//            arduino.Write(6);
+//        }
+//        else {
+//            arduino.Write(0);
+//        }
 
     }
 
@@ -236,20 +268,49 @@ public class Robot extends IterativeRobot {
 
 
         
-        if(joy.getRawButton(4) && !pressed) {
+        if(joy.getRawButton(4))
+        { 
+        	if(!pressed){
             lifter.setToteHeight(1);
             pressed = true;
-        } else if(joy.getRawButton(3) && !pressed) {
-            lifter.setToteHeight(2);
-            pressed = true;
-        } else if(joy.getRawButton(5) && !pressed) {
-            lifter.setToteHeight(3);
-            pressed = true;
-        } else if(joy.getRawButton(2) && !pressed) {
-            lifter.goHome();
-            pressed = true;
+            }
+        	pressed = true;
+        } else if(joy.getRawButton(3)) {
+        	if(!pressed){
+	            lifter.setToteHeight(2);
+	            pressed = true;
+        	}
+        	pressed = true;
+        } else if(joy.getRawButton(5)) {
+        	if (!pressed){
+	            lifter.setToteHeight(3);
+	            pressed = true;
+        	}
+        	pressed = true;
+        } else if(joy.getRawButton(2)) {
+        	if (!pressed){
+	            lifter.goHome();
+	            pressed = true;
+        	}
+        	pressed = true;
         } else {
             pressed = false;
         }
     }
+//    public void setToteHeight(int numTotes) // 1 TOTE = 1'
+//	{
+//		double Herrow = (numTotes * 25) + lifter.getRelative();
+//		
+//		if (lifter.getRelative() > Herrow){
+//			lifter.configForwardLimit(Herrow);
+//			lifter.move(lifter.DOWN);
+//			System.out.println("Going down");
+//		}
+//		else{
+//			lifter.configReverseLimit(Herrow);
+//			lifter.move(lifter.UP);
+//			System.out.println("Going up");
+//			System.out.println(Herrow);
+//		}
+//	}
 }

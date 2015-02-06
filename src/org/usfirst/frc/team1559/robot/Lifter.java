@@ -17,20 +17,21 @@ public class Lifter extends CANJaguar
 		enableControl();
 		configLimitMode(LimitMode.SoftPositionLimits);
 	}
-	
+
 	public void setToteHeight(int numTotes) // 1 TOTE = 1'
 	{
-		disableSoftPositionLimits();
-		double tgtHeight = numTotes * 25;
+		double tgtHeight = (numTotes * 25) + getPosition();
+		
 		if (getPosition() > tgtHeight){
-			configForwardLimit(tgtHeight);
+			configSoftPositionLimits(tgtHeight, tgtHeight);
 			move(DOWN);
 			System.out.println("Going down");
 		}
 		else{
-			configReverseLimit(tgtHeight);
+			configSoftPositionLimits(tgtHeight, tgtHeight);
 			move(UP);
 			System.out.println("Going up");
+			System.out.println(tgtHeight);
 		}
 	}
 	
@@ -43,14 +44,7 @@ public class Lifter extends CANJaguar
 	public void goHome() // Call in periodic
 	{
 		disableSoftPositionLimits();
-//		if (getForwardLimitOK()){
-			move(DOWN);
-//		}
-//		else{
-//		    stop();
-//			setHome();
-			enableControl();
-//		}
+		move(DOWN);
 	}
 	
 	public void stop() {
@@ -74,5 +68,8 @@ public class Lifter extends CANJaguar
 	
 	public double getHome() {
 		return homePos;
+	}
+	public double getRelative(){
+		return getPosition() - getHome();
 	}
 }
