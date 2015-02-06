@@ -13,15 +13,24 @@ public class Lifter extends CANJaguar
 	{
 		super(deviceNumber);
 		setPercentMode(CANJaguar.kQuadEncoder, 360);
-		enableControl();
 		configNeutralMode(CANJaguar.NeutralMode.Brake);
+		enableControl();
 		configLimitMode(LimitMode.SoftPositionLimits);
 	}
 	
-	public void liftTote(double height) // 1 TOTE = 2'
+	public void setToteHeight(int numTotes) // 1 TOTE = 1'
 	{
-		configForwardLimit(getPosition() + (height * 25));
-    	move(UP);
+		double tgtHeight = numTotes * 25;
+		if (getPosition() > tgtHeight){
+			configForwardLimit(tgtHeight);
+			move(DOWN);
+			System.out.println("Going down");
+		}
+		else{
+			configReverseLimit(tgtHeight);
+			move(UP);
+			System.out.println("Going up");
+		}
 	}
 	
 	public void liftCan(double height) // 1 CAN = 2'5"
@@ -32,13 +41,14 @@ public class Lifter extends CANJaguar
 	
 	public void goHome() // Call in periodic
 	{
-		if(getForwardLimitOK()) {
+//		if (getForwardLimitOK()){
 			move(DOWN);
-		}
-		else {
-			stop();
-			setHome();
-		}
+//		}
+//		else{
+//		    stop();
+//			setHome();
+			enableControl();
+//		}
 	}
 	
 	public void stop() {
@@ -49,8 +59,10 @@ public class Lifter extends CANJaguar
 		switch(direction) {
 		case UP:
 			set(-.7);
+			break;
 		case DOWN:
 			set(.7);
+			break;
 		}
 	}
 	

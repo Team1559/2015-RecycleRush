@@ -58,6 +58,8 @@ public class Robot extends IterativeRobot {
         //arduino stuff
         arduino = new Arduino(0,1,2);
     }
+    public void disabledInit(){
+    }
 
 
     public void autonomousInit(){
@@ -171,15 +173,17 @@ public class Robot extends IterativeRobot {
 
     public void teleopPeriodic() {
         
-    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+//    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
     	
-    	if(joy.getRawButton(1)){
-    		g.reset();
-    	}
-    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
-    	SmartDashboard.putDouble("Feets", sonar.getFeet());
-    	SmartDashboard.putDouble("Inches", sonar.getInches());
+//    	if(joy.getRawButton(1)){
+//    		g.reset();
+//    	}
+//    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
+//    	SmartDashboard.putDouble("Feets", sonar.getFeet());
+//    	SmartDashboard.putDouble("Inches", sonar.getInches());
+    	
+
     	
         lifterControls();
 //        arduinoControls();
@@ -189,7 +193,9 @@ public class Robot extends IterativeRobot {
     
 
     public void testPeriodic() {
-      lifter.set(joy2.getAxis(AxisType.kY));
+        lifter.set(joy2.getAxis(AxisType.kY));
+        SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
+        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
     }
     
     public void arduinoControls(){
@@ -228,25 +234,21 @@ public class Robot extends IterativeRobot {
 
     public void lifterControls(){
 
-        SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
-        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
+
         
         if(joy.getRawButton(4) && !pressed) {
-            lifter.liftTote(1);
+            lifter.setToteHeight(1);
             pressed = true;
-        }
-        else if(joy.getRawButton(3) && !pressed) {
-            lifter.liftTote(2);
+        } else if(joy.getRawButton(3) && !pressed) {
+            lifter.setToteHeight(2);
             pressed = true;
-        }
-        else if(joy.getRawButton(5) && !pressed) {
-            lifter.liftTote(3);
+        } else if(joy.getRawButton(5) && !pressed) {
+            lifter.setToteHeight(3);
             pressed = true;
-        }
-        else if(joy.getRawButton(2) && !pressed) {
+        } else if(joy.getRawButton(2) && !pressed) {
             lifter.goHome();
-        }
-        else {
+            pressed = true;
+        } else {
             pressed = false;
         }
     }
