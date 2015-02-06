@@ -113,7 +113,7 @@ public class SonarMovement {
 	
 	public void stopOneSonar() {
 		// EXCLUSIVELY FOR TESTING
-		if(sonarStereo.left.getFeet() < 2.5) {
+		if(sonarStereo.left.getFeet() < 2.5 && sonarStereo.right.getFeet() < 2.5 ) {
 			leftMotor.set(0);
 			rightMotor.set(0);
 		} else {
