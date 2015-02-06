@@ -156,7 +156,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
-    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4));
     	
     	
     	if(joy.getRawButton(1)){

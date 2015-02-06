@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MecanumDrive {
 
@@ -18,8 +19,14 @@ public class MecanumDrive {
 	double rf;
 	double rr;
 	double desiredAngle;
+	double gyroAngle;
 	double correctionAngle;
 	double maxSpeed;
+	
+	double kP, kI, kD;
+	double i;
+	double prevAngle;
+	
 	
 	
 	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr, Gyro i){
@@ -42,12 +49,67 @@ public class MecanumDrive {
 		
 		maxSpeed = .5;
 		
+		smartInit();
+		prevAngle = g.getAngle();
+		
+		kP = .2;
+		kI = .2;
+		kD = .2;
+		
 	}	
 	
 	public void resetGyro(){
 		
 		g.reset();
 		
+	}
+	
+	public void smartInit(){
+		
+		SmartDashboard.putDouble("kP", kP);
+		SmartDashboard.putDouble("kI", kI);
+		SmartDashboard.putDouble("kD", kD);
+		
+	}
+	
+	public void smartGet(){
+		
+		kP = SmartDashboard.getDouble("kP");
+		kI = SmartDashboard.getDouble("kI");
+		kD = SmartDashboard.getDouble("kD");
+		
+	}
+	
+	public double wrap(double r){
+		return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;
+	}
+	
+	public void drivePID(double x, double y, double rotation){
+		
+		smartGet();
+		
+		gyroAngle = g.getAngle();
+		
+		if(Math.abs(rotation) > .02){
+			desiredAngle = gyroAngle;
+		} else {
+			double p = wrap(gyroAngle);
+			i += wrap(gyroAngle) * .01;
+			double d = g.getRate();
+			rotation = (kP * p) + (kI * i) + (kD * d);
+		}
+		
+		double xIn = x;
+        double yIn = y;
+        
+		double wheelSpeeds[] = new double[4];
+        wheelSpeeds[0] = xIn + yIn + rotation;
+        wheelSpeeds[1] = -xIn + yIn - rotation;
+        wheelSpeeds[2] = -xIn + yIn + rotation;
+        wheelSpeeds[3] = xIn + yIn - rotation;
+		normalize(wheelSpeeds);
+		
+		i = g.getAngle();
 	}
 	
 	public void drive(double x, double y, double rotation, double gyroAngle){
