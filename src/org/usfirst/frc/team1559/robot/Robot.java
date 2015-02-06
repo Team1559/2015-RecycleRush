@@ -182,13 +182,13 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
 //    	SmartDashboard.putDouble("Feets", sonar.getFeet());
 //    	SmartDashboard.putDouble("Inches", sonar.getInches());
-        SmartDashboard.putNumber("Relative Pos.", lifter.getRelative());//lifter.getPosition() - lifter.getHome());
-        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
-		SmartDashboard.putBoolean("BottomLimit", lifter.getForwardLimitOK());
+//    	SmartDashboard.putNumber("Target Height", lifter.tgtHeight);
 		SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition());
+		SmartDashboard.putNumber("Home Pos.", lifter.getHome());
         lifterControls();
-        if(!lifter.getForwardLimitOK()){
+        if(!lifter.getForwardLimitOK() && lifter.hardLimit){
         	lifter.setHome();
+        	lifter.hardLimit = false;
         }
 //        arduinoControls();
     	
@@ -200,59 +200,6 @@ public class Robot extends IterativeRobot {
         lifter.set(joy2.getAxis(AxisType.kY));
         SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
         SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
-//        if(joy.getRawButton(4))
-//        { 
-//        	if(!pressed){
-//            setToteHeight(1);
-//            pressed = true;
-//            }
-//        	pressed = true;
-//        } else if(joy.getRawButton(3)) {
-//        	if(!pressed){
-//	            setToteHeight(2);
-//	            pressed = true;
-//        	}
-//        	pressed = true;
-//        } else if(joy.getRawButton(5)) {
-//        	if (!pressed){
-//	            setToteHeight(3);
-//	            pressed = true;
-//        	}
-//        	pressed = true;
-//        } else if(joy.getRawButton(2)) {
-//        	if (!pressed){
-//	            lifter.goHome();
-//	            pressed = true;
-//        	}
-//        	pressed = true;
-//        } else {
-//            pressed = false;
-//        }
-//    }
-//    
-//    public void arduinoControls(){
-//
-//        if (joy.getRawButton(1)){
-//            arduino.Write(1);
-//        }
-//        else if (joy.getRawButton(2)){
-//            arduino.Write(2);
-//        }
-//        else if (joy.getRawButton(3)){
-//            arduino.Write(3);
-//        }
-//        else if (joy.getRawButton(4)){
-//            arduino.Write(4);
-//        }
-//        else if(joy.getRawButton(5)){
-//            arduino.Write(5);
-//        }
-//        else if(joy.getRawButton(6)){
-//            arduino.Write(6);
-//        }
-//        else {
-//            arduino.Write(0);
-//        }
 
     }
 
