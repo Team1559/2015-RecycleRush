@@ -96,7 +96,7 @@ public class MecanumDrive {
 			double p = wrap(gyroAngle);
 			i += wrap(gyroAngle) * .01;
 			double d = g.getRate();
-			rotation = (kP * p) + (kI * i) + (kD * d);
+			rotation = ((kP * p)/360) + ((kI * i)/360) + ((kD * d)/360);
 		}
 		
 		double xIn = x;
