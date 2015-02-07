@@ -32,6 +32,7 @@ public class Robot extends IterativeRobot {
 	MaxSonar sonar;
 	double wallDist;
 	int timesRun = 0;
+	int state = 0;
 	
     public void robotInit() {
         //drive system
@@ -50,7 +51,7 @@ public class Robot extends IterativeRobot {
     	count = 0;
     	sonar = new MaxSonar(0);
 
-//        //pixy stuff
+        //pixy stuff
         pixy = new Pixy();
         p = new PixyController(pixy);
         pp = new PixyPacket();
@@ -71,23 +72,6 @@ public class Robot extends IterativeRobot {
     
     
     public void autonomousPeriodic() {
-    	
-//    	if(count < 75){ // drives straight
-//    		rd.mecanumDrive_Cartesian(0, 1, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	In Progress:
-//    	pixyControls();
-//    	//Gather Here
-//    	else if(count<150)
-//    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	else if(count<230)
-//    	{
-//    		rd.mecanumDrive_Cartesian(-1, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	else	//	ReSeT aT nExT tOtE
-//    		count = 0;
 
     	wallDist = sonar.getInches();
     	int toWall = 60;
@@ -151,17 +135,6 @@ public class Robot extends IterativeRobot {
     		//Pretty Lights
     		break;
     	}
-    	
-    	
-//    	if (sonar.getInches()>20)
-//    	{
-//    		rd.mecanumDrive_Cartesian(-.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	else if (sonar.getInches()<=10)
-//    	{
-//    		rd.mecanumDrive_Cartesian(.5, -.5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    	}
-//    	count++;
     }
     
     public void teleopInit(){
@@ -187,9 +160,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Home Pos.", lifter.getHome());
         lifterControls();
         if(!lifter.getForwardLimitOK() && lifter.hardLimit){
-        	lifter.setHome();
-        	lifter.hardLimit = false;
-        	System.out.println("this is impossible");
+        	if (lifter.getSpeed() == 0)
+        		lifter.setHome();
         }
 //        arduinoControls();
     	
@@ -214,51 +186,34 @@ public class Robot extends IterativeRobot {
 
     public void lifterControls(){
 
-
+//    	if (lifter.getPosition()<=lifter.tgtHeight-.5 && lifter.getPosition()>=lifter.tgtHeight+.5)
+//    		lifter.configForwardLimit(lifter.tgtHeight);
         
         if(joy.getRawButton(4))
         { 
         	if(!pressed){
+        		state--;
             lifter.setToteHeight(1);
-            pressed = true;
             }
         	pressed = true;
         } else if(joy.getRawButton(3)) {
         	if(!pressed){
 	            lifter.setToteHeight(2);
-	            pressed = true;
         	}
         	pressed = true;
         } else if(joy.getRawButton(5)) {
         	if (!pressed){
+        		state++;
 	            lifter.setToteHeight(3);
-	            pressed = true;
         	}
         	pressed = true;
         } else if(joy.getRawButton(2)) {
         	if (!pressed){
 	            lifter.goHome();
-	            pressed = true;
         	}
         	pressed = true;
         } else {
             pressed = false;
         }
     }
-//    public void setToteHeight(int numTotes) // 1 TOTE = 1'
-//	{
-//		double Herrow = (numTotes * 25) + lifter.getRelative();
-//		
-//		if (lifter.getRelative() > Herrow){
-//			lifter.configForwardLimit(Herrow);
-//			lifter.move(lifter.DOWN);
-//			System.out.println("Going down");
-//		}
-//		else{
-//			lifter.configReverseLimit(Herrow);
-//			lifter.move(lifter.UP);
-//			System.out.println("Going up");
-//			System.out.println(Herrow);
-//		}
-//	}
 }
