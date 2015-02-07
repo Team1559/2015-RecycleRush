@@ -33,6 +33,7 @@ public class Robot extends IterativeRobot {
 	double wallDist;
 	int timesRun = 0;
 	int state = 0;
+	Wings wing;
 	
     public void robotInit() {
         //drive system
@@ -50,7 +51,8 @@ public class Robot extends IterativeRobot {
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
-
+    	wing = new Wings();
+    	
         //pixy stuff
         pixy = new Pixy();
         p = new PixyController(pixy);
@@ -164,7 +166,7 @@ public class Robot extends IterativeRobot {
         		lifter.setHome();
         }
 //        arduinoControls();
-    	
+    	wing.wingsControl();
     	
     }
     
@@ -192,19 +194,24 @@ public class Robot extends IterativeRobot {
         if(joy.getRawButton(4))
         { 
         	if(!pressed){
-        		state--;
-            lifter.setToteHeight(1);
+        		if (lifter.getRelative()>lifter.tgtHeight1)
+        			lifter.moveDown(1);
+        		else
+        			lifter.moveUp(1);
             }
         	pressed = true;
         } else if(joy.getRawButton(3)) {
         	if(!pressed){
-	            lifter.setToteHeight(2);
+        		if (lifter.getRelative()>lifter.tgtHeight2)
+        			lifter.moveDown(2);
+        		else
+        			lifter.moveUp(2);
         	}
         	pressed = true;
         } else if(joy.getRawButton(5)) {
         	if (!pressed){
         		state++;
-	            lifter.setToteHeight(3);
+        		lifter.moveUp(3);
         	}
         	pressed = true;
         } else if(joy.getRawButton(2)) {
@@ -216,4 +223,32 @@ public class Robot extends IterativeRobot {
             pressed = false;
         }
     }
-}
+    	// Hide all this as backup
+//    	if(joy.getRawButton(4))
+//        { 
+//        	if(!pressed){
+//        		state--;
+//            lifter.setToteHeight(1);
+//            }
+//        	pressed = true;
+//        } else if(joy.getRawButton(3)) {
+//        	if(!pressed){
+//	            lifter.setToteHeight(2);
+//        	}
+//        	pressed = true;
+//        } else if(joy.getRawButton(5)) {
+//        	if (!pressed){
+//        		state++;
+//	            lifter.setToteHeight(3);
+//        	}
+//        	pressed = true;
+//        } else if(joy.getRawButton(2)) {
+//        	if (!pressed){
+//	            lifter.goHome();
+//        	}
+//        	pressed = true;
+//        } else {
+//            pressed = false;
+//        }
+//    }
+	}
