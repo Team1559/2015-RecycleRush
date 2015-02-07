@@ -96,24 +96,14 @@ public class Robot extends IterativeRobot {
 //        arduinoControls();
 //        pixyControls();
     	
-    	wingsControl();
+    	wing.wingsControl();
     	
     }
     
 
-    private void wingsControl() {
+    
 		
-    	if (joy.getRawButton(3))
-    	{
-    		wing.latch();
-    	}
-    	
-    	if (!joy.getRawButton(3))
-    	{
-    		wing.release();
-    	}
-		
-	}
+	
 
 
 	public void testPeriodic() {
