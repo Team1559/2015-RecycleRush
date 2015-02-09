@@ -1,59 +1,130 @@
 package org.usfirst.frc.team1559.robot;
 
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MecanumDrive {
 
 	Talon leftFront, leftRear;
 	Talon rightFront, rightRear;
 	Joystick joy;
+	Gyro g;
 	
 	//use these to set
 	double lf;
 	double lr;
 	double rf;
 	double rr;
+	double desiredAngle;
+	double gyroAngle;
+	double correctionAngle;
+	double maxSpeed;
+	
+	double kP, kI, kD;
+	double i;
+	double prevAngle;
 	
 	
-	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr){
+	
+	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr, Gyro i){
 		
 		joy = j;
 		leftFront = lf;
 		leftRear = lr;
 		rightFront = rf;
 		rightRear = rr;
+		g = i;
 				
 		this.lf = 0.0; //accesses the double values for driving calculations
 		this.lr = 0.0;
 		this.rf = 0.0;
 		this.rr = 0.0;
+		
+		resetGyro();
+		desiredAngle = g.getAngle();
+		correctionAngle = 0.0;
+		
+		maxSpeed = .5;
+		
+		smartInit();
+		prevAngle = g.getAngle();
+		
+		kP = .2;
+		kI = .2;
+		kD = .2;
+		
+	}	
+	
+	public void resetGyro(){
+		
+		g.reset();
+		
 	}
 	
-	/*
-	 * Use for autonomous mode, or directly moving the chassis
-	 * 
-	 * Parameters:
-	 * double speed:
-	 * 		scaled speed between -1.0 and 1.0
-	 * 		i.e. 1.0 is max forward
-	 * 			-1.0 is max reverse
-	 * 
-	 * double angle:
-	 * 		angle between -360 and 360. Used for translating at an angle
-	 * 		i.e. 45 moves the chassis at a 45 degree angle, maintaining orientation
-	 * 			
-	 * double distance:
-	 * 		distance in inches, actual distance is measured by pedometer unit -?
-	 * 
-	 * boolean closedLoop:
-	 * 		should be true most of the time, checks Gyro angle against desired angle
-	 * 		TRUE: do check
-	 * 		FALSE: you don't speak English, don't check
-	 */
+	public void smartInit(){
+		
+		SmartDashboard.putDouble("kP", kP);
+		SmartDashboard.putDouble("kI", kI);
+		SmartDashboard.putDouble("kD", kD);
+		
+	}
+	
+	public void smartGet(){
+		
+		kP = SmartDashboard.getDouble("kP");
+		kI = SmartDashboard.getDouble("kI");
+		kD = SmartDashboard.getDouble("kD");
+		
+	}
+	
+	public double wrap(double r){
+		return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;
+	}
+	
+	public void drivePID(double x, double y, double rotation){
+		
+		smartGet();
+		
+		gyroAngle = g.getAngle();
+		
+		if(Math.abs(rotation) > .02){
+			desiredAngle = gyroAngle;
+		} else {
+			double p = wrap(gyroAngle);
+			i += wrap(gyroAngle) * .01;
+			double d = g.getRate();
+			rotation = ((kP * p)/360) + ((kI * i)/360) + ((kD * d)/360);
+		}
+		
+		double xIn = x;
+        double yIn = y;
+        
+		double wheelSpeeds[] = new double[4];
+        wheelSpeeds[0] = xIn + yIn + rotation;
+        wheelSpeeds[1] = -xIn + yIn - rotation;
+        wheelSpeeds[2] = -xIn + yIn + rotation;
+        wheelSpeeds[3] = xIn + yIn - rotation;
+		normalize(wheelSpeeds);
+		
+		i = g.getAngle();
+	}
 	
 	public void drive(double x, double y, double rotation, double gyroAngle){
+		
+		desiredAngle += rotation;
+		
+		if(desiredAngle > gyroAngle+1){
+			correctionAngle-=0.01;
+		} else if(desiredAngle < gyroAngle-1){
+			correctionAngle+=0.01;
+		} else {
+			correctionAngle = 0.0;
+		}
+		
+		rotation += correctionAngle;
 		
 		double xIn = x;
         double yIn = y;
@@ -71,10 +142,10 @@ public class MecanumDrive {
         wheelSpeeds[3] = xIn + yIn - rotation;
 
         normalize(wheelSpeeds);
-        leftFront.set(-wheelSpeeds[0]);
-        rightFront.set(wheelSpeeds[1]);
-        leftRear.set(-wheelSpeeds[2]);
-        rightRear.set(wheelSpeeds[3]);
+        leftFront.set(-wheelSpeeds[0] * maxSpeed);
+        rightFront.set(wheelSpeeds[1] * maxSpeed);
+        leftRear.set(-wheelSpeeds[2] * maxSpeed);
+        rightRear.set(wheelSpeeds[3] * maxSpeed);
 		
 	}
 	
