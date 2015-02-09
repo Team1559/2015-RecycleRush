@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team1559.robot;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -28,7 +29,9 @@ public class Robot extends IterativeRobot {
     double sonarInch;
 	MaxSonar sonar;
 	double wallDist;
+	double irInitOutput;
 	GyroDrive gyroDrive;
+	AnalogInput irSensor; //Detects if crate is in position for lifting
 	
     public void robotInit() {
         //drive system
@@ -42,10 +45,11 @@ public class Robot extends IterativeRobot {
     	rd.setInvertedMotor(MotorType.kRearLeft, true);
     	rd.setMaxOutput(.5);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
-    	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
+    	irSensor = new AnalogInput(4);
     	gyroDrive = new GyroDrive(lf, lr, rf, rr);
+    	g = gyroDrive.gyro;
 
 //        //pixy stuff
 //        pixy = new Pixy();
@@ -62,21 +66,28 @@ public class Robot extends IterativeRobot {
     	
     	g.reset();
     	count = 0;
+    	irInitOutput = irSensor.getAverageVoltage();
     	
     }
     
     public void autonomousPeriodic() {
     	
     	wallDist = sonar.getInches();
+    	System.out.println(irInitOutput);
+    	System.out.println(irSensor.getVoltage());
     	int timesRun = 0;
+    	count = 1;
     	switch(count)
     	{
     	case 1:
     		if(timesRun > 0) {
     			lifter.goHome();
     		}
-    		lifter.liftTote(1);
-    		count = 2;
+        	if (irInitOutput + 2 < irSensor.getAverageVoltage()){ //Check for crate
+        		lifter.liftTote(1);
+        		System.out.println("Method check works");
+        		count = 2;
+        	}
     		break;
     	case 2:
     		wallDist = sonar.getInches();
@@ -116,7 +127,7 @@ public class Robot extends IterativeRobot {
     			count = 6;
     		break;
     	case 6:
-    		lifter.goHome();
+//    		lifter.goHome();
     		count = 7;
     		break;
     	case 7:
