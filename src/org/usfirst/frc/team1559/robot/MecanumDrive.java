@@ -112,7 +112,7 @@ public class MecanumDrive {
 		i = g.getAngle();
 	}
 	
-	public void drive(double x, double y, double rotation, double gyroAngle){
+	public void drive(double x, double y, double rotation){
 		
 		desiredAngle += rotation;
 		
