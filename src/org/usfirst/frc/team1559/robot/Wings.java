@@ -4,21 +4,23 @@ import edu.wpi.first.wpilibj.Servo;
 
 public class Wings {
 	Servo servo;
+	double angle = 0.0;
 	
 	public Wings()
 	{
 		servo = new Servo(0);
+		angle = servo.getAngle();
 	}
 	
 	public void latch()
 	{
-		 servo.setAngle(60);
+		 servo.setAngle(angle + 60);
     	
 	}
 	
 	public void release()
 	{
-		 servo.setAngle(0);
+		 servo.setAngle(angle);
     	
 	}
 }
