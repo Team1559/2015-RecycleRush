@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team1559.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,7 +16,7 @@ public class Robot extends IterativeRobot {
  
 	Joystick joy, joy2;
 	Talon lf, lr, rf, rr;
-	MecanumDrive md;
+//	MecanumDrive md;
 	Lifter lifter;
 	Gyro g;
 	int count;
@@ -34,6 +35,7 @@ public class Robot extends IterativeRobot {
 	int timesRun = 0;
 	int state = 0;
 	Wings wing;
+	Compressor c;
 	
     public void robotInit() {
         //drive system
@@ -43,12 +45,14 @@ public class Robot extends IterativeRobot {
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	md = new MecanumDrive(joy, lf, lr, rf, rr, g);
+//    	md = new MecanumDrive(joy, lf, lr, rf, rr, g);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
     	wing = new Wings();
+    	c = new Compressor();
+    	c.start();
     	
         //pixy stuff
         pixy = new Pixy();
@@ -147,7 +151,7 @@ public class Robot extends IterativeRobot {
         
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4));
+//    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4));
     	
     	
 //    	if(joy.getRawButton(1)){
@@ -160,13 +164,20 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition());
 		SmartDashboard.putNumber("Home Pos.", lifter.getHome());
 		
-        lifterControls();
-        if(!lifter.getForwardLimitOK() && lifter.hardLimit){
+        if(!lifter.getReverseLimitOK() && lifter.hardLimit){
         	if (lifter.getSpeed() == 0)
         		lifter.setHome();
         }
+        if (lifter.movingDown)
+        {
+        	if (lifter.getPosition()<= lifter.tgtHeight)
+        	{
+        		lifter.stop();
+        	}
+        }
 //        arduinoControls();
-    	wing.wingsControl();
+//    	wing.wingsControl();
+        lifterControls();
     	
     }
     
@@ -194,7 +205,7 @@ public class Robot extends IterativeRobot {
         if(joy.getRawButton(4))
         { 
         	if(!pressed){
-        		if (lifter.getRelative()>lifter.tgtHeight1)
+        		if (lifter.getPosition()>lifter.tgtHeight1)
         			lifter.moveDown(1);
         		else
         			lifter.moveUp(1);
@@ -202,7 +213,7 @@ public class Robot extends IterativeRobot {
         	pressed = true;
         } else if(joy.getRawButton(3)) {
         	if(!pressed){
-        		if (lifter.getRelative()>lifter.tgtHeight2)
+        		if (lifter.getPosition()>lifter.tgtHeight2)
         			lifter.moveDown(2);
         		else
         			lifter.moveUp(2);

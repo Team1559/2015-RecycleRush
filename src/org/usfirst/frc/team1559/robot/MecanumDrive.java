@@ -60,7 +60,7 @@ public class MecanumDrive {
 	
 	public void resetGyro(){
 		
-		g.reset();
+//		g.reset();
 		
 	}
 	
