@@ -11,7 +11,7 @@ public class Robot extends IterativeRobot {
     Arduino eyeCandy;
 	
     public void robotInit() {
-        eyeCandy = new Arduino(0,1,2);
+        eyeCandy = new Arduino(4);
         joy = new Joystick(Wiring.JOYSTICK_1);
     }
 
@@ -31,28 +31,28 @@ public class Robot extends IterativeRobot {
 
     public void teleopPeriodic() {
     	  if (joy.getRawButton(1)){
-    		  eyeCandy.Write(1);//1 is Rave     WARNING EYE PROTECTION RECOMENDED
+    		  eyeCandy.writeSequence(1);//1 is Rave     WARNING EYE PROTECTION RECOMENDED
     	  }
     	  else if (joy.getRawButton(2)){
-    		  eyeCandy.Write(2);//2 is Blue Gold Flash
+    		  eyeCandy.writeSequence(2);//2 is Blue Gold Flash
     	  }
     	  else if (joy.getRawButton(3)){
-    		  eyeCandy.Write(3);//3 is Synchronized RGB Fade
+    		  eyeCandy.writeSequence(3);//3 is Synchronized RGB Fade
     	  }
     	  else if (joy.getRawButton(4)){
-    		  eyeCandy.Write(4);//4 is Non-Synchronized RGB Fade
+    		  eyeCandy.writeSequence(4);//4 is Non-Synchronized RGB Fade
     	  }
     	  else if (joy.getRawButton(5)){
-    		  eyeCandy.Write(5);//5 is Garbage, Will Probably Change
+    		  eyeCandy.writeSequence(5);//5 is Garbage, Will Probably Change
     	  }
     	  else if (joy.getRawButton(6)){
-    		  eyeCandy.Write(6);//6 is Blue Gold Fade
+    		  eyeCandy.writeSequence(6);//6 is Blue Gold Fade
     	  }
     	  else if (joy.getRawButton(7)){
-    		  eyeCandy.Write(7);//7 is not Implemented yet...
+    		  eyeCandy.writeSequence(7);//7 is not Implemented yet...
     	  }
     	  else {
-    		  eyeCandy.Write(0);//0 is Off 
+    		  eyeCandy.writeSequence(0);//0 is Off 
     	  }
     	
     }
@@ -65,25 +65,25 @@ public class Robot extends IterativeRobot {
     public void arduinoControls(){
 
         if (joy.getRawButton(1)){
-            eyeCandy.Write(1);
+            eyeCandy.writeSequence(1);
         }
         else if (joy.getRawButton(2)){
-            eyeCandy.Write(2);
+            eyeCandy.writeSequence(2);
         }
         else if (joy.getRawButton(3)){
-            eyeCandy.Write(3);
+            eyeCandy.writeSequence(3);
         }
         else if (joy.getRawButton(4)){
-            eyeCandy.Write(4);
+            eyeCandy.writeSequence(4);
         }
         else if(joy.getRawButton(5)){
-            eyeCandy.Write(5);
+            eyeCandy.writeSequence(5);
         }
         else if(joy.getRawButton(6)){
-            eyeCandy.Write(6);
+            eyeCandy.writeSequence(6);
         }
         else {
-            eyeCandy.Write(0);
+            eyeCandy.writeSequence(0);
         }
 
     }

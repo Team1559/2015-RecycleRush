@@ -1,24 +1,36 @@
 package org.usfirst.frc.team1559.robot;
-import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.I2C;
 
 public class Arduino {
-	DigitalOutput commPort1;
-	DigitalOutput commPort2;
-	DigitalOutput commPort3;
+	I2C arduino;
+	byte[] data;
+	int address;
+	int value1 = 0;
+	int value2 = 0;
+	int value3 = 0;
 
-	public Arduino (int port1,int port2,int port3){
-		commPort1 = new DigitalOutput(port1);
-		commPort2 = new DigitalOutput(port2);
-		commPort3 = new DigitalOutput(port3);
+	public Arduino (int address_){
+		arduino = new I2C(I2C.Port.kMXP,address_);
+		address_ = address;
+		data = new byte[3];
 	}
-	public void Write(int val){
-		if (val < 8){
-			commPort3.set((val & 1 << 2) != 0);
-			commPort2.set((val & 1 << 1) != 0);
-			commPort1.set((val & 1 << 0) != 0);
-		}
-		else {
-			System.out.println("Lolz, passed in value greater than 7");
-		}
+	private void Write(int val1, int val2, int val3){
+		data[0] = (byte) val1;
+		data[1] = (byte) val2;
+		data[2] = (byte) val3;
+		arduino.writeBulk(data);
+	}
+	public void writeSequence(int sequence){
+		sequence = value1;
+		Write(value1,value2,value3);
+	}
+	public void writeElevatorPos(int elevatorPos){
+		elevatorPos = value2;
+		Write(value1,value2,value3);
+	}
+	public void writeAlliance(int alliance){
+		alliance = value3;
+		Write(value1,value2,value3);
 	}
 }
+
