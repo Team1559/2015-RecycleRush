@@ -192,6 +192,7 @@ public class Robot extends IterativeRobot {
         	{
         		lifter.stop();
         	}
+        	
         }
 		
 //        arduinoControls();
@@ -203,21 +204,28 @@ public class Robot extends IterativeRobot {
     
     public void gathererControls(){
     	
-    	if(joy.getRawButton(11)){    		
-    		rightGatherer.set(-.25);
-    		leftGatherer.set(.25);
-    		in.set(true);
-    		out.set(false);
-    	} else if(joy.getRawButton(10)){
-    		rightGatherer.set(.5);
-    		leftGatherer.set(-.5);
-    		in.set(true);
-    		out.set(false);
+    	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
+	    	if(joy.getRawButton(11)){    		
+	    		rightGatherer.set(-.25);
+	    		leftGatherer.set(.25);
+	    		in.set(true);
+	    		out.set(false);
+	    	} else if(joy.getRawButton(10)){
+	    		rightGatherer.set(.5);
+	    		leftGatherer.set(-.5);
+	    		in.set(true);
+	    		out.set(false);
+	    	} else {
+	    		rightGatherer.set(0);
+	    		leftGatherer.set(0);
+	    		in.set(false);
+	    		out.set(true);
+	    	}
     	} else {
+    		out.set(true);
+    		in.set(false);
     		rightGatherer.set(0);
     		leftGatherer.set(0);
-    		in.set(false);
-    		out.set(true);
     	}
     	
     }
