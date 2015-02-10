@@ -17,6 +17,8 @@ public class Wiring{
 	//lifter
 	public static final int LIFTER_JAGUAR_VALUE = 15;
 	public static final double TOTE_HEIGHT = 32.0;
+	public static final double DRIVE_HEIGHT = 8.74;
+	public static final double GATHERER_HEIGHT = 11.54;
 
 	//pixy
 	public static final int PIXY_HALF_BAND = 3;

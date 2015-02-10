@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,6 +17,10 @@ public class Robot extends IterativeRobot {
  
 	Joystick joy, joy2;
 	Talon lf, lr, rf, rr;
+	Talon rightGatherer;
+	Talon leftGatherer;
+	Solenoid in;
+	Solenoid out;
 //	MecanumDrive md;
 	Lifter lifter;
 	Gyro g;
@@ -55,6 +60,11 @@ public class Robot extends IterativeRobot {
     	wing = new Wings();
     	c = new Compressor();
     	c.start();
+    	
+    	leftGatherer = new Talon(4);
+    	rightGatherer = new Talon(5);
+    	in = new Solenoid(0);
+    	out = new Solenoid(1);
     	
         //pixy stuff
         pixy = new Pixy();
@@ -186,11 +196,32 @@ public class Robot extends IterativeRobot {
 		
 //        arduinoControls();
         wingControls();
-//        lifterControls();
+        lifterControls();
+        gathererControls();
     	
     }
     
-
+    public void gathererControls(){
+    	
+    	if(joy.getRawButton(11)){    		
+    		rightGatherer.set(-.25);
+    		leftGatherer.set(.25);
+    		in.set(true);
+    		out.set(false);
+    	} else if(joy.getRawButton(10)){
+    		rightGatherer.set(.5);
+    		leftGatherer.set(-.5);
+    		in.set(true);
+    		out.set(false);
+    	} else {
+    		rightGatherer.set(0);
+    		leftGatherer.set(0);
+    		in.set(false);
+    		out.set(true);
+    	}
+    	
+    }
+    
     public void wingControls(){
     	
     	if(joy.getRawButton(7)){

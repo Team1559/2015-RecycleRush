@@ -23,6 +23,12 @@ public class Lifter extends CANJaguar
 		configLimitMode(LimitMode.SoftPositionLimits);
 	}
 	
+	public void moveToPosition(double rotations){
+		
+		
+		
+	}
+	
 	public void moveDown(int toteLevel) // 1 TOTE = 1'
 	{
 		hardLimit = false;
@@ -66,10 +72,10 @@ public class Lifter extends CANJaguar
 	public void move(int direction) {
 		switch(direction) {
 		case UP:
-			set(.7);
+			set(1);
 			break;
 		case DOWN:
-			set(-.7);
+			set(-1);
 			break;
 		}
 	}

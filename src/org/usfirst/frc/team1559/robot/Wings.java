@@ -16,11 +16,11 @@ public class Wings {
 
 	public void latch() {
 		left.setAngle(0);
-		right.setAngle(60);
+		right.setAngle(105);
 	}
 
 	public void release() {
 		left.setAngle(60);
-		right.setAngle(0);
+		right.setAngle(45);
 	}
 }
