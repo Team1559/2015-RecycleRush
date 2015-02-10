@@ -10,17 +10,17 @@ public class Wings {
 	Servo right;
 
 	public Wings() {
-		left = new Servo(2);
-		right = new Servo(3);
+		left = new Servo(3);
+		right = new Servo(2);
 	}
 
 	public void latch() {
-		left.setAngle(60);
+		left.setAngle(0);
 		right.setAngle(60);
 	}
 
 	public void release() {
-		left.setAngle(0);
+		left.setAngle(60);
 		right.setAngle(0);
 	}
 }
