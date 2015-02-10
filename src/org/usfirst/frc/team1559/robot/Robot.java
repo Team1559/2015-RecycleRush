@@ -36,6 +36,7 @@ public class Robot extends IterativeRobot {
 	int state = 0;
 	Wings wing;
 	Compressor c;
+	boolean firstHome;
 	
     public void robotInit() {
         //drive system
@@ -47,6 +48,7 @@ public class Robot extends IterativeRobot {
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
 //    	md = new MecanumDrive(joy, lf, lr, rf, rr, g);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
+    	firstHome = true;
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(0);
@@ -160,14 +162,19 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
 //    	SmartDashboard.putDouble("Feets", sonar.getFeet());
 //    	SmartDashboard.putDouble("Inches", sonar.getInches());
-    	SmartDashboard.putNumber("Target Height", lifter.tgtHeight);
-		SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition());
-		SmartDashboard.putNumber("Home Pos.", lifter.getHome());
+//    	System.out.println("Target Height " + lifter.tgtHeight);
+//		System.out.println("Encoder Pos." +  lifter.getPosition());
+//		System.out.println("Home Pos. " + lifter.getHome());
 		
-        if(!lifter.getReverseLimitOK() && lifter.hardLimit){
-        	if (lifter.getSpeed() == 0)
-        		lifter.setHome();
-        }
+		if(firstHome){
+	        if(!lifter.getReverseLimitOK() && lifter.hardLimit){
+	        	if (lifter.getSpeed() == 0){
+	        		lifter.setHome();
+	        		firstHome = false;
+	        	}	        	
+	        }
+    	}
+		
         if (lifter.movingDown)
         {
         	if (lifter.getPosition()<= lifter.tgtHeight)
@@ -175,6 +182,7 @@ public class Robot extends IterativeRobot {
         		lifter.stop();
         	}
         }
+		
 //        arduinoControls();
 //    	wing.wingsControl();
         lifterControls();
@@ -184,9 +192,8 @@ public class Robot extends IterativeRobot {
 
     public void testPeriodic() {
         lifter.set(joy2.getAxis(AxisType.kY));
-        SmartDashboard.putNumber("Encoder Pos.", lifter.getPosition() - lifter.getHome());
-        SmartDashboard.putNumber("Encoder Spd.", lifter.getSpeed());
-
+        System.out.println("Encoder Pos. " + (lifter.getPosition() - lifter.getHome()));
+//        System.out.println("Encoder Spd." + lifter.getSpeed());
     }
 
     public void pixyControls(){
