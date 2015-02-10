@@ -3,6 +3,7 @@ public class Wiring{
 	
 	//driving
 	public static final int JOYSTICK_1 = 0;
+	public static final int JOYSTICK_2 = 1;
 	public static final int LEFT_FRONT_MOTOR_ID = 9;
 	public static final int LEFT_REAR_MOTOR_ID = 6;
 	public static final int RIGHT_FRONT_MOTOR_ID = 8;

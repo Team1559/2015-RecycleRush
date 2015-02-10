@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         //drive system
     	joy = new Joystick(Wiring.JOYSTICK_1);
-    	joy2 = new Joystick(1);
+    	joy2 = new Joystick(Wiring.JOYSTICK_2);
     	lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); //backwards
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
@@ -65,6 +65,7 @@ public class Robot extends IterativeRobot {
         arduino = new Arduino(0,1,2);
     }
     public void disabledInit(){
+    	
     }
 
 
@@ -184,12 +185,22 @@ public class Robot extends IterativeRobot {
         }
 		
 //        arduinoControls();
-//    	wing.wingsControl();
-        lifterControls();
+        wingControls();
+//        lifterControls();
     	
     }
     
 
+    public void wingControls(){
+    	
+    	if(joy.getRawButton(7)){
+    		wing.latch();
+    	} else {
+    		wing.release();
+    	}
+    	
+    }
+    
     public void testPeriodic() {
         lifter.set(joy2.getAxis(AxisType.kY));
         System.out.println("Encoder Pos. " + (lifter.getPosition() - lifter.getHome()));
