@@ -42,6 +42,7 @@ public class Robot extends IterativeRobot {
 	Wings wing;
 	Compressor c;
 	boolean firstHome;
+	Pedometer ped;
 	
     public void robotInit() {
         //drive system
@@ -70,6 +71,8 @@ public class Robot extends IterativeRobot {
         pixy = new Pixy();
         p = new PixyController(pixy);
         pp = new PixyPacket();
+        
+        ped = new Pedometer();
 
         //arduino stuff
         arduino = new Arduino(0,1,2);
@@ -169,6 +172,8 @@ public class Robot extends IterativeRobot {
 //    	System.out.println(g.getAngle());
     	md.drive(joy2.getX(), joy2.getY(), joy2.getRawAxis(4), g.getAngle());
     	
+    	System.out.println("X " + ped.getX());
+    	System.out.println("Y " + ped.getY());
     	
     	if(joy2.getRawButton(XBoxController.BUTTON_A)){
     		g.reset();
@@ -197,7 +202,6 @@ public class Robot extends IterativeRobot {
         	}
         	
         }
-		System.out.println("GYRO" + g.getAngle());
 //        arduinoControls();
         wingControls();
         lifterControls();
