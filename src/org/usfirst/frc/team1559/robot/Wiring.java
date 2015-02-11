@@ -12,7 +12,7 @@ public class Wiring{
 	public static final double STUPID_CHASSIS_SIDEWAYS = -.05;
 
 	//analog sensors
-	public static final int GYRO_ID = 1;
+	public static final int GYRO_ID = 0;
 
 	//lifter
 	public static final int LIFTER_JAGUAR_VALUE = 15;

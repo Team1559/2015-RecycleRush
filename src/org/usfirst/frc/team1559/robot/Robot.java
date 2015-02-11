@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
     	firstHome = true;
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
-    	sonar = new MaxSonar(0);
+    	sonar = new MaxSonar(1);
     	wing = new Wings();
     	c = new Compressor();
     	c.start();
@@ -194,7 +194,7 @@ public class Robot extends IterativeRobot {
         	}
         	
         }
-		
+		System.out.println("GYRO" + g.getAngle());
 //        arduinoControls();
         wingControls();
         lifterControls();
