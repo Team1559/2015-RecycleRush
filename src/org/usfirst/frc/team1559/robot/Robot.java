@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
 	Talon leftGatherer;
 	Solenoid in;
 	Solenoid out;
-//	MecanumDrive md;
+	MecanumDrive md;
 	Lifter lifter;
 	Gyro g;
 	int count;
@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-//    	md = new MecanumDrive(joy, lf, lr, rf, rr, g);
+    	md = new MecanumDrive(joy, lf, lr, rf, rr, g);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	firstHome = true;
     	g = new Gyro(Wiring.GYRO_ID);
@@ -164,12 +164,12 @@ public class Robot extends IterativeRobot {
         
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-//    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4));
+    	md.drive(joy2.getX(), joy2.getY(), joy2.getRawAxis(4));
     	
     	
-//    	if(joy.getRawButton(1)){
-//    		g.reset();
-//    	}
+    	if(joy2.getRawButton(1)){
+    		g.reset();
+    	}
 //    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
 //    	SmartDashboard.putDouble("Feets", sonar.getFeet());
 //    	SmartDashboard.putDouble("Inches", sonar.getInches());
@@ -205,12 +205,12 @@ public class Robot extends IterativeRobot {
     public void gathererControls(){
     	
     	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
-	    	if(joy.getRawButton(11)){    		
+	    	if(joy2.getRawButton(6)){    		
 	    		rightGatherer.set(-.25);
 	    		leftGatherer.set(.25);
 	    		in.set(true);
 	    		out.set(false);
-	    	} else if(joy.getRawButton(10)){
+	    	} else if(joy2.getRawButton(5)){
 	    		rightGatherer.set(.5);
 	    		leftGatherer.set(-.5);
 	    		in.set(true);

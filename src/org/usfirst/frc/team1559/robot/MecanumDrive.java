@@ -44,13 +44,13 @@ public class MecanumDrive {
 		this.rr = 0.0;
 		
 		resetGyro();
-		desiredAngle = g.getAngle();
+//		desiredAngle = g.getAngle();
 		correctionAngle = 0.0;
 		
 		maxSpeed = .5;
 		
 		smartInit();
-		prevAngle = g.getAngle();
+//		prevAngle = g.getAngle();
 		
 		kP = .2;
 		kI = .2;
@@ -113,18 +113,18 @@ public class MecanumDrive {
 	}
 	
 	public void drive(double x, double y, double rotation){
-		
-		desiredAngle += rotation;
-		
-		if(desiredAngle > gyroAngle+1){
-			correctionAngle-=0.01;
-		} else if(desiredAngle < gyroAngle-1){
-			correctionAngle+=0.01;
-		} else {
-			correctionAngle = 0.0;
-		}
-		
-		rotation += correctionAngle;
+//		
+//		desiredAngle += rotation;
+//		
+//		if(desiredAngle > gyroAngle+1){
+//			correctionAngle-=0.01;
+//		} else if(desiredAngle < gyroAngle-1){
+//			correctionAngle+=0.01;
+//		} else {
+//			correctionAngle = 0.0;
+//		}
+//		
+//		rotation += correctionAngle;
 		
 		double xIn = x;
         double yIn = y;
