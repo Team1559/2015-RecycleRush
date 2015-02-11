@@ -89,6 +89,8 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
     	md.drive(p.autoCenter(), 0, 0, g.getAngle());
+    	SmartDashboard.putDouble("Error for Pixy", p.error);
+    	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
 //
 //    	wallDist = sonar.getInches();
 //    	int toWall = 60;
