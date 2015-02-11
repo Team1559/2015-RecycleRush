@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
     PixyPacket pp;
     int halfBand = Wiring.PIXY_HALF_BAND;
     PixyController p;
-    Arduino arduino;
+//    Arduino arduino;
     double sonarInch;
 	MaxSonar sonar;
 	double wallDist;
@@ -70,12 +70,12 @@ public class Robot extends IterativeRobot {
         //pixy stuff
         pixy = new Pixy();
         p = new PixyController(pixy);
-        pp = new PixyPacket();
+        pp = p.pkt;
         
         ped = new Pedometer();
 
         //arduino stuff
-        arduino = new Arduino(0,1,2);
+//        arduino = new Arduino(0,1,2);
     }
     public void disabledInit(){
     	
@@ -91,9 +91,11 @@ public class Robot extends IterativeRobot {
     
     
     public void autonomousPeriodic() {
-    	md.drive(p.autoCenter(), 0, 0, g.getAngle());
+    	md.drive(p.autoCenter(), -p.autoCenter(), 0, g.getAngle());
     	SmartDashboard.putDouble("Error for Pixy", p.error);
     	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
+    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
+//    	SmartDashboard.putDouble("Crate center", pp.X);
 //
 //    	wallDist = sonar.getInches();
 //    	int toWall = 60;

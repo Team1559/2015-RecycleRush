@@ -34,6 +34,7 @@ public class Pixy {
 			
 		}
 		if(rawData.length < 32){
+			System.out.println("byte array length is broken");
 			return null;
 		}
 		for (int i = 0; i <= 16; i++) {
