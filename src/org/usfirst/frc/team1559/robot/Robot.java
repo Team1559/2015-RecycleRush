@@ -88,6 +88,7 @@ public class Robot extends IterativeRobot {
     
     
     public void autonomousPeriodic() {
+    	md.drive(p.autoCenter(), 0, 0, g.getAngle());
 //
 //    	wallDist = sonar.getInches();
 //    	int toWall = 60;
@@ -164,7 +165,7 @@ public class Robot extends IterativeRobot {
         
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-    	md.drive(joy2.getX(), joy2.getY(), joy2.getRawAxis(4));
+    	md.drive(joy2.getX(), joy2.getY(), joy2.getRawAxis(4), g.getAngle());
     	
     	
     	if(joy2.getRawButton(XBoxController.BUTTON_A)){

@@ -19,22 +19,21 @@ public class PixyController {
 			e.printStackTrace();
 		}
 		if (pkt != null){
-			if ((ratio-.1) <= (objRatio) && (ratio+.1) >= (objRatio)){
-				if (pkt.Y < 40 || pkt.Y > 60){
-					error = 50-pkt.X;
-					error = error/120;
-					error = error/2;
+//			if ((ratio-.1) <= (objRatio) && (ratio+.1) >= (objRatio)){
+				if (pkt.X < 70 || pkt.X > 90){
+					error = 80-pkt.X;
+					error = error/160;
 				}
 				else{
 					error = 0;
 				}
-			}
-			else if((objRatio) > (ratio+0.1)){
-				error = 0;
-			}
-		    else{
-				error = -error;
-			}
+//			}
+//			else if((objRatio) > (ratio+0.1)){
+//				error = 0;
+//			}
+//		    else{
+//				error = 0;
+//			}
 		}
 		else{
 			error = error - 0.05;

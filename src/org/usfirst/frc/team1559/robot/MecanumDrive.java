@@ -11,7 +11,7 @@ public class MecanumDrive {
 	Talon leftFront, leftRear;
 	Talon rightFront, rightRear;
 	Joystick joy;
-	Gyro g;
+//	Gyro g;
 	
 	//use these to set
 	double lf;
@@ -29,14 +29,14 @@ public class MecanumDrive {
 	
 	
 	
-	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr, Gyro i){
+	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr, Gyro gy){
 		
 		joy = j;
 		leftFront = lf;
 		leftRear = lr;
 		rightFront = rf;
 		rightRear = rr;
-		g = i;
+//		g = gy;
 				
 		this.lf = 0.0; //accesses the double values for driving calculations
 		this.lr = 0.0;
@@ -84,18 +84,18 @@ public class MecanumDrive {
 		return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;
 	}
 	
-	public void drivePID(double x, double y, double rotation){
+	public void drivePID(double x, double y, double rotation, double gAngle, double gyroRate){
 		
 		smartGet();
 		
-		gyroAngle = g.getAngle();
+		gyroAngle = gAngle;
 		
 		if(Math.abs(rotation) > .02){
 			desiredAngle = gyroAngle;
 		} else {
 			double p = wrap(gyroAngle);
 			i += wrap(gyroAngle) * .01;
-			double d = g.getRate();
+			double d = gyroRate;
 			rotation = ((kP * p)/360) + ((kI * i)/360) + ((kD * d)/360);
 		}
 		
@@ -109,10 +109,10 @@ public class MecanumDrive {
         wheelSpeeds[3] = xIn + yIn - rotation;
 		normalize(wheelSpeeds);
 		
-		i = g.getAngle();
+		i = gAngle;
 	}
 	
-	public void drive(double x, double y, double rotation){
+	public void drive(double x, double y, double rotation, double gAngle){
 //		
 //		desiredAngle += rotation;
 //		
@@ -125,6 +125,8 @@ public class MecanumDrive {
 //		}
 //		
 //		rotation += correctionAngle;
+		
+		gyroAngle = gAngle;
 		
 		double xIn = x;
         double yIn = y;
