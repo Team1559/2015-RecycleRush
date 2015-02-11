@@ -167,7 +167,7 @@ public class Robot extends IterativeRobot {
     	md.drive(joy2.getX(), joy2.getY(), joy2.getRawAxis(4));
     	
     	
-    	if(joy2.getRawButton(1)){
+    	if(joy2.getRawButton(XBoxController.BUTTON_A)){
     		g.reset();
     	}
 //    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
@@ -205,12 +205,12 @@ public class Robot extends IterativeRobot {
     public void gathererControls(){
     	
     	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
-	    	if(joy2.getRawButton(6)){    		
+	    	if(joy2.getRawButton(XBoxController.BUTTON_RB)){    		
 	    		rightGatherer.set(-.25);
 	    		leftGatherer.set(.25);
 	    		in.set(true);
 	    		out.set(false);
-	    	} else if(joy2.getRawButton(5)){
+	    	} else if(joy2.getRawButton(XBoxController.BUTTON_LB)){
 	    		rightGatherer.set(.5);
 	    		leftGatherer.set(-.5);
 	    		in.set(true);
