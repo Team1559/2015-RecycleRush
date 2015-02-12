@@ -49,12 +49,12 @@ public class MecanumDrive {
 		
 		maxSpeed = .5;
 		
-		smartInit();
 //		prevAngle = g.getAngle();
 		
 		kP = .2;
-		kI = .2;
-		kD = .2;
+		kI = 0;//.2;
+		kD = 0;//.2;
+		smartInit();
 		
 	}	
 	
@@ -66,37 +66,48 @@ public class MecanumDrive {
 	
 	public void smartInit(){
 		
-		SmartDashboard.putDouble("kP", kP);
-		SmartDashboard.putDouble("kI", kI);
-		SmartDashboard.putDouble("kD", kD);
+		SmartDashboard.putDouble("kP", kP*1000);
+		SmartDashboard.putDouble("kI", kI*1000);
+		SmartDashboard.putDouble("kD", kD*1000);
 		
 	}
 	
 	public void smartGet(){
 		
-		kP = SmartDashboard.getDouble("kP");
-		kI = SmartDashboard.getDouble("kI");
-		kD = SmartDashboard.getDouble("kD");
+		kP = SmartDashboard.getDouble("kP")/1000;
+		kI = SmartDashboard.getDouble("kI")/1000;
+		kD = SmartDashboard.getDouble("kD")/1000;
 		
 	}
 	
+	
 	public double wrap(double r){
-		return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;
+		//return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;
+		return (r > 180) ? wrap(r - 360) : (r <= -180) ? wrap(r + 360) : r;
+		//looks like the gyro is +-180, so I copied the code from last year, and modified it for angles instead of radians
 	}
 	
 	public void drivePID(double x, double y, double rotation, double gAngle, double gyroRate){
 		
 		smartGet();
+		System.out.println(kP);
+		
+		if(joy.getPOV(0) != -1){
+			desiredAngle = joy.getPOV(0);
+		}
 		
 		gyroAngle = gAngle;
 		
-		if(Math.abs(rotation) > .02){
+		if(Math.abs(rotation) > 2){
 			desiredAngle = gyroAngle;
 		} else {
-			double p = wrap(gyroAngle);
+			double delta = gyroAngle - desiredAngle;
+			SmartDashboard.putDouble("Delta Angle", delta);
+			double p = wrap(delta);
+			SmartDashboard.putDouble("Rap Angle", p);
 			i += wrap(gyroAngle) * .01;
 			double d = gyroRate;
-			rotation = ((kP * p)/360) + ((kI * i)/360) + ((kD * d)/360);
+			rotation = (kP * p) + (kI * i) + (kD * d);
 		}
 		
 		double xIn = x;
@@ -110,6 +121,11 @@ public class MecanumDrive {
 		normalize(wheelSpeeds);
 		
 		i = gAngle;
+		
+		leftFront.set(-wheelSpeeds[0] * maxSpeed);
+        rightFront.set(wheelSpeeds[1] * maxSpeed);
+        leftRear.set(-wheelSpeeds[2] * maxSpeed);
+        rightRear.set(wheelSpeeds[3] * maxSpeed);
 	}
 	
 	public void drive(double x, double y, double rotation, double gAngle){
