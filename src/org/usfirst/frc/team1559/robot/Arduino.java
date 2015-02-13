@@ -14,22 +14,25 @@ public class Arduino {
 		address_ = address;
 		data = new byte[3];
 	}
-	private void Write(int val1, int val2, int val3){
+	public void Write(int val1, int val2, int val3){
 		data[0] = (byte) val1;
 		data[1] = (byte) val2;
 		data[2] = (byte) val3;
 		arduino.writeBulk(data);
 	}
 	public void writeSequence(int sequence){
-		sequence = value1;
+		value1 = sequence;
 		Write(value1,value2,value3);
 	}
 	public void writeElevatorPos(int elevatorPos){
-		elevatorPos = value2;
+		value2 = elevatorPos;
 		Write(value1,value2,value3);
 	}
 	public void writeAlliance(int alliance){
-		alliance = value3;
+		value3 = alliance;
+		Write(value1,value2,value3);
+	}
+	public void update(){
 		Write(value1,value2,value3);
 	}
 }
