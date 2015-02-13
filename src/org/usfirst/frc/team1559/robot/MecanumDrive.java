@@ -51,8 +51,8 @@ public class MecanumDrive {
 		
 //		prevAngle = g.getAngle();
 		
-		kP = .2;
-		kI = 0;//.2;
+		kP = 30/1000;
+		kI = 10/1000;//.2;
 		kD = 0;//.2;
 		smartInit();
 		
@@ -89,11 +89,14 @@ public class MecanumDrive {
 	
 	public void drivePID(double x, double y, double rotation, double gAngle, double gyroRate){
 		
+		double wrappedGyro = wrap(gAngle);
+		
 		smartGet();
 		System.out.println(kP);
 		
 		if(joy.getPOV(0) != -1){
 			desiredAngle = joy.getPOV(0);
+			System.out.println("GOT A POV");
 		}
 		
 		gyroAngle = gAngle;
@@ -101,13 +104,14 @@ public class MecanumDrive {
 		if(Math.abs(rotation) > 2){
 			desiredAngle = gyroAngle;
 		} else {
-			double delta = gyroAngle - desiredAngle;
-			SmartDashboard.putDouble("Delta Angle", delta);
-			double p = wrap(delta);
-			SmartDashboard.putDouble("Rap Angle", p);
-			i += wrap(gyroAngle) * .01;
+			
+			double delta = wrappedGyro - desiredAngle;
+			SmartDashboard.putDouble("un-Delta Angle", delta);
+			delta = wrap(delta);
+			SmartDashboard.putDouble("Adjusted Delta", delta);
+			i += delta * .01;
 			double d = gyroRate;
-			rotation = (kP * p) + (kI * i) + (kD * d);
+			rotation = (kP * -delta) + (kI * i) + (kD * d);
 		}
 		
 		double xIn = x;

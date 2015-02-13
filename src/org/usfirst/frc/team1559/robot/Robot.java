@@ -172,13 +172,12 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-//    	md.drivePID(joy2.getX(), joy2.getY(), joy2.getRawAxis(4), g.getAngle(), g.getRate());
-    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
-    	
+//    	md.drivePID(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle(), g.getRate());
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
 //    	
-    	if(joy2.getRawButton(XBoxController.BUTTON_A)){
+    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+    	if(joy.getRawButton(XBoxController.BUTTON_A)){
     		g.reset();
     	}
 //    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
