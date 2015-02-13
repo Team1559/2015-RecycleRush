@@ -87,7 +87,7 @@ public class MecanumDrive {
 		//looks like the gyro is +-180, so I copied the code from last year, and modified it for angles instead of radians
 	}
 	
-	public void drivePID(double x, double y, double rotation, double gAngle, double gyroRate){
+	public void drivePID(double x, double y, double rotationClockwise, double gAngle, double gyroRate){
 		
 		double wrappedGyro = wrap(gAngle);
 		
@@ -101,7 +101,7 @@ public class MecanumDrive {
 		
 		gyroAngle = gAngle;
 		
-		if(Math.abs(rotation) > 2){
+		if(Math.abs(rotationClockwise) > 2){
 			desiredAngle = gyroAngle;
 		} else {
 			
@@ -111,17 +111,17 @@ public class MecanumDrive {
 			SmartDashboard.putDouble("Adjusted Delta", delta);
 			i += delta * .01;
 			double d = gyroRate;
-			rotation = (kP * -delta) + (kI * i) + (kD * d);
+			rotationClockwise = (kP * -delta) + (kI * i) + (kD * d);
 		}
 		
 		double xIn = x;
         double yIn = y;
         
 		double wheelSpeeds[] = new double[4];
-        wheelSpeeds[0] = xIn + yIn + rotation;
-        wheelSpeeds[1] = -xIn + yIn - rotation;
-        wheelSpeeds[2] = -xIn + yIn + rotation;
-        wheelSpeeds[3] = xIn + yIn - rotation;
+        wheelSpeeds[0] = xIn + yIn + rotationClockwise;
+        wheelSpeeds[1] = -xIn + yIn - rotationClockwise;
+        wheelSpeeds[2] = -xIn + yIn + rotationClockwise;
+        wheelSpeeds[3] = xIn + yIn - rotationClockwise;
 		normalize(wheelSpeeds);
 		
 		i = gAngle;
