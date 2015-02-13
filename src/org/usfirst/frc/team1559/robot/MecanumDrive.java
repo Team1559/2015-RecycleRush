@@ -107,7 +107,7 @@ public class MecanumDrive {
 			
 			double delta = wrappedGyro - desiredAngle;
 			SmartDashboard.putDouble("un-Delta Angle", delta);
-			delta = wrap(delta);
+			delta = -wrap(delta);
 			SmartDashboard.putDouble("Adjusted Delta", delta);
 			i += delta * .01;
 			double d = gyroRate;
