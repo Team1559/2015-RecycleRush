@@ -1,14 +1,15 @@
 package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.Gyro;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Talon;
 
 public class SonarMovement {
     
-    Victor leftMotor, rightMotor;
+    Talon leftFront, rightFront, leftBack, rightBack;
     final double MAXDISTANCE = 4;
     final int NO = 0, LEFT = 1, RIGHT = 2;
     SonarStereo sonarStereo;
+    MecanumDrive drive;
 
     Gyro gyro;
     int turnStage;
@@ -16,9 +17,8 @@ public class SonarMovement {
     final int TIME_LIMIT = 75;
     boolean decisionMade = false;
     
-    public SonarMovement(Victor left, Victor right, SonarStereo sonarStereo, Gyro gyro) {
-        leftMotor = left;
-        rightMotor = right;
+    public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack, Talon rightBack, SonarStereo sonarStereo, Gyro gyro) {
+    	drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
         this.gyro = gyro;
         this.sonarStereo = sonarStereo;
         turnStage = 0;
@@ -78,7 +78,7 @@ public class SonarMovement {
             case 1:
                 System.out.println("Stage 1: Turn outward"); // Gyro-based
                 turnLeft();
-                if(gyro.getAngle() <= -30)
+                if(gyro.getAngle() <= -45)
                     turnStage = 2;
                 break;
             case 2:
@@ -94,7 +94,7 @@ public class SonarMovement {
             case 3:
                 System.out.println("Stage 3: Turn back"); // Gyro-based
                 turnRight();
-                if(gyro.getAngle() >= 25)
+                if(gyro.getAngle() >= 45)
                     turnStage = 4;
                 break;
             case 4:
@@ -135,7 +135,7 @@ public class SonarMovement {
             case 1:
                 System.out.println("Stage 1: Turn outward"); // Gyro-based
                 turnRight();
-                if(gyro.getAngle() >= 30)
+                if(gyro.getAngle() >= 45)
                     turnStage = 2;
                 break;
             case 2:
@@ -151,7 +151,7 @@ public class SonarMovement {
             case 3:
                 System.out.println("Stage 3: Turn back"); // Gyro-based
                 turnLeft();
-                if(gyro.getAngle() <= -25)
+                if(gyro.getAngle() <= -45)
                     turnStage = 4;
                 break;
             case 4:
@@ -181,28 +181,25 @@ public class SonarMovement {
         }
     }
     
-    public void moveForward() {
-        setLeft(.265);
-        setRight(.25);
+    public void moveForward() { //actually moving sideways
+    	drive.drive(.25, .0, 0, 0);            
     }
 
-    public void turnLeft() {
-        setLeft(-.30);
-        setRight(.40);
+    public void turnLeft() { //actually going forwawrdsish
+        drive.drive(0, .25, 0, 0);
     }
     
-    public void turnRight() {
-        setLeft(.40);
-        setRight(-.20);
+    public void turnRight() { //actually going backwardsish
+        drive.drive(-.25, 0, 0, 0);
     }
     
-    public void setLeft(double speed) {
-        leftMotor.set(speed);
-    }
-    
-    public void setRight(double speed) {
-        rightMotor.set(-speed);
-    }
+//    public void setLeft(double speed) {
+//        leftMotor.set(speed);
+//    }
+//    
+//    public void setRight(double speed) {
+//        rightMotor.set(-speed);
+//    }
     
     public void disable() {
         gyro.reset();

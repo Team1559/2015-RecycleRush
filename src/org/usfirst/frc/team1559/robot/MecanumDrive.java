@@ -17,9 +17,8 @@ public class MecanumDrive {
 	double rr;
 	
 	
-	public MecanumDrive(Joystick j, Talon lf, Talon lr, Talon  rf, Talon rr){
+	public MecanumDrive(Talon lf, Talon lr, Talon  rf, Talon rr){
 		
-		joy = j;
 		leftFront = lf;
 		leftRear = lr;
 		rightFront = rf;
