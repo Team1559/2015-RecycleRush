@@ -1,6 +1,11 @@
 
 package org.usfirst.frc.team1559.robot;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -44,6 +49,14 @@ public class Robot extends IterativeRobot {
 	boolean firstHome;
 	Pedometer ped;
 	
+	//record / playback functions
+	File f;
+	FileReader fr;
+	BufferedReader br;
+	String command;
+	int lines;
+	
+	
     public void robotInit() {
         //drive system
     	joy = new Joystick(Wiring.JOYSTICK_1);
@@ -76,6 +89,21 @@ public class Robot extends IterativeRobot {
 
         //arduino stuff
 //        arduino = new Arduino(0,1,2);
+        
+        //record/playback stuff
+        //sorry about the nasty try-catch
+        f = new File("/home/lvuser/Output.txt");
+        try {
+			fr = new FileReader(f);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        br = new BufferedReader(fr);
+        
+        lines = 0;
+        command = "DEFAULT";
+        //it's ok the nasty try-catch is gone
     }
     public void disabledInit(){
     	
@@ -95,6 +123,9 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putDouble("Error for Pixy", p.error);
     	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
     	SmartDashboard.putDouble("Gyro angle", g.getAngle());
+    	
+    	playback();
+    	
 //    	SmartDashboard.putDouble("Crate center", pp.X);
 //
 //    	wallDist = sonar.getInches();
@@ -159,6 +190,29 @@ public class Robot extends IterativeRobot {
 //    		//Pretty Lights
 //    		break;
 //    	}
+    }
+    
+    public void playback(){
+    	
+    	command = br.readLine();
+		
+		if(command.equals("<<START>>")){
+			System.out.println(lines + ". We are at the starting position.");
+		} else if(command.contains("[MOVE]")){
+			//code for decoding x and y values
+		    x = Double.valueOf(command.substring(command.indexOf("X")+1, command.indexOf("Y")-1));
+		    y = Double.valueOf(command.substring(command.indexOf("Y")+1));
+			System.out.println(lines + ". Move " + x + " inches in x. Move " + y + " inches in Y.");
+		} else if(command.contains("[GATHER]")){
+			int totes;
+			String s = command.substring(command.indexOf((" "))).trim();
+			totes = Integer.valueOf(s);
+			System.out.println(lines + ". Gather " + totes + " tote(s)");
+		} else {
+			System.out.println("STOP");
+		}
+	lines++;
+    
     }
     
     public void teleopInit(){
