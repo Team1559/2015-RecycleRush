@@ -23,8 +23,6 @@ public class Robot extends IterativeRobot {
  
 	Joystick pilot, copilot;
 	Talon lf, lr, rf, rr;
-	Talon rightGatherer;
-	Talon leftGatherer;
 	Solenoid in;
 	Solenoid out;
 	MecanumDrive md;
@@ -79,9 +77,6 @@ public class Robot extends IterativeRobot {
     	c = new Compressor();
     	c.start();
     	gather = new Gatherer();
-    	
-    	leftGatherer = new Talon(Wiring.LEFT_GATHER_MOTOR);
-    	rightGatherer = new Talon(Wiring.RIGHT_GATHER_MOTOR);
     	in = new Solenoid(Wiring.GATHER_ARMS_IN);
     	out = new Solenoid(Wiring.GATHER_ARMS_OUT);
     	
@@ -141,7 +136,7 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
     	SmartDashboard.putDouble("Gyro angle", g.getAngle());
     	
-    	playback();
+    	//playback();
     	
     	switch (count){
     	case 1:
@@ -405,26 +400,14 @@ public class Robot extends IterativeRobot {
     	
     	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
 	    	if(pilot.getRawButton(XBoxController.BUTTON_RB)){    		
-	    		rightGatherer.set(-.5);
-	    		leftGatherer.set(.5);
-	    		in.set(true);
-	    		out.set(false);
+	    		gather.gatherIn();
 	    	} else if(pilot.getRawButton(XBoxController.BUTTON_LB)){
-	    		rightGatherer.set(.75);
-	    		leftGatherer.set(-.75);
-	    		in.set(true);
-	    		out.set(false);
+	    		gather.gatherOut();
 	    	} else {
-	    		rightGatherer.set(0);
-	    		leftGatherer.set(0);
-	    		in.set(false);
-	    		out.set(true);
+	    		gather.stopGather();
 	    	}
     	} else {
-    		out.set(true);
-    		in.set(false);
-    		rightGatherer.set(0);
-    		leftGatherer.set(0);
+    		gather.stopGather();
     	}
     	
     }
@@ -471,7 +454,7 @@ public class Robot extends IterativeRobot {
         	
         }
     	
-        if(copilot.getRawButton(4))
+        if(copilot.getRawButton(7))
         { 
         	if(!pressed){
         		if (lifter.getPosition()>lifter.tgtHeight1)
@@ -480,7 +463,7 @@ public class Robot extends IterativeRobot {
         			lifter.moveUp(1);
             }
         	pressed = true;
-        } else if(copilot.getRawButton(3)) {
+        } else if(copilot.getRawButton(9)) {
         	if(!pressed){
         		if (lifter.getPosition()>lifter.tgtHeight2)
         			lifter.moveDown(2);
@@ -488,13 +471,14 @@ public class Robot extends IterativeRobot {
         			lifter.moveUp(2);
         	}
         	pressed = true;
-        } else if(copilot.getRawButton(5)) {
+        } else if(copilot.getRawButton(11)) {
         	if (!pressed){
         		state++;
-        		lifter.moveUp(3);
+//        		lifter.moveUp(3);
+        		lifter.set(lifter.UP);
         	}
         	pressed = true;
-        } else if(copilot.getRawButton(2)) {
+        } else if(copilot.getRawButton(5)) {
         	if (!pressed){
 	            lifter.goHome();
         	}
