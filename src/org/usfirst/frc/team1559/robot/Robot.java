@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -27,7 +28,6 @@ public class Robot extends IterativeRobot {
 	Solenoid out;
 	MecanumDrive md;
 	Lifter lifter;
-	Gyro g;
 	int count;
     boolean pressed;
     Pixy pixy;
@@ -36,6 +36,7 @@ public class Robot extends IterativeRobot {
     PixyController p;
 //    Arduino arduino;
     double sonarInch;
+    IRSensor irSensor;
 	MaxSonar sonar;
 	double wallDist;
 	int timesRun = 0;
@@ -59,6 +60,7 @@ public class Robot extends IterativeRobot {
 	double yComp;
 	double autoSpeed = Wiring.AUTO_SPEED;
 	Gatherer gather;
+	
     public void robotInit() {
         //drive system
     	pilot = new Joystick(Wiring.JOYSTICK_1);
@@ -67,10 +69,9 @@ public class Robot extends IterativeRobot {
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	md = new MecanumDrive(pilot, lf, lr, rf, rr, g);
+    	md = new MecanumDrive(pilot, lf, lr, rf, rr);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	firstHome = true;
-    	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
     	sonar = new MaxSonar(Wiring.SONAR_ID);
     	wing = new Wings();
@@ -79,6 +80,8 @@ public class Robot extends IterativeRobot {
     	gather = new Gatherer();
     	in = new Solenoid(Wiring.GATHER_ARMS_IN);
     	out = new Solenoid(Wiring.GATHER_ARMS_OUT);
+    	
+    	irSensor = new IRSensor();
     	
         //pixy stuff
         pixy = new Pixy();
@@ -123,7 +126,6 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit(){
     	
-    	g.reset();
     	count = 1;
     	
     }
@@ -134,7 +136,7 @@ public class Robot extends IterativeRobot {
 //    	md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
     	SmartDashboard.putDouble("Error for Pixy", p.error);
     	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
-    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
+//    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
     	
     	//playback();
     	
@@ -282,7 +284,7 @@ public class Robot extends IterativeRobot {
 					yComp = 0;
 				}
 				
-				md.drive(xComp, yComp, 0, g.getAngle());
+//				md.drive(xComp, yComp, 0, g.getAngle());
 				if((xComp >= x) && (yComp >= y)){
 					done = true;
 					ped.reset();
@@ -302,7 +304,7 @@ public class Robot extends IterativeRobot {
 					yComp = 0;
 				}
 				
-				md.drive(xComp, yComp, 0, g.getAngle());
+//				md.drive(xComp, yComp, 0, g.getAngle());
 				if((xComp >= x) && (yComp >= y)){
 					done = true;
 					ped.reset();
@@ -322,7 +324,7 @@ public class Robot extends IterativeRobot {
 					yComp = 0;
 				}
 				
-				md.drive(xComp, yComp, 0, g.getAngle());
+//				md.drive(xComp, yComp, 0, g.getAngle());
 				if((xComp >= x) && (yComp >= y)){
 					done = true;
 					ped.reset();
@@ -342,7 +344,7 @@ public class Robot extends IterativeRobot {
 					yComp = 0;
 				}
 				
-				md.drive(xComp, yComp, 0, g.getAngle());
+//				md.drive(xComp, yComp, 0, g.getAngle());
 				if((xComp >= x) && (yComp >= y)){
 					done = true;
 					ped.reset();
@@ -376,19 +378,21 @@ public class Robot extends IterativeRobot {
 
 
     public void teleopPeriodic() {
-    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
+//    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-    	md.drivePID(pilot.getX(), pilot.getY(), pilot.getRawAxis(4), g.getAngle(), g.getRate());
+    	md.drivePID(pilot.getX(), pilot.getY(), pilot.getRawAxis(4));
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
 //    	
     	//md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
     	if(pilot.getRawButton(XBoxController.BUTTON_A)){
-    		g.reset();
+    		md.resetGyro();
     	}
 	
 		
+    	SmartDashboard.putDouble("IRSENSOR VALUE", irSensor.getVoltage());
+    	
 //        arduinoControls();
         wingControls();
         lifterControls();
@@ -479,7 +483,7 @@ public class Robot extends IterativeRobot {
         		lifter.set(lifter.UP);
         	}
         	pressed = true;
-        } else if(copilot.getRawButton(5)) {
+        } else if(copilot.getRawButton(6)) {
         	if (!pressed){
 	            lifter.goHome();
         	}
