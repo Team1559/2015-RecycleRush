@@ -116,6 +116,7 @@ public class MecanumDrive {
 		
 		if(Math.abs(rotationClockwise) > .1){
 			desiredAngle = wrappedGyro;
+			i = 0;
 		} else {
 			SmartDashboard.putDouble("Desired", desiredAngle);
 			double delta = wrappedGyro - desiredAngle;
