@@ -18,17 +18,12 @@ public class SonarMovement {
 	boolean decisionMade = false;
 	Encoder pedometerX;
 	Encoder pedometerY;
-	double lol = 1;
-	double n3rd = 1;
 
 	public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack,
 			Talon rightBack, SonarStereo sonarStereo, Encoder pedometerX, Encoder pedometerY) {
 		drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
 		this.sonarStereo = sonarStereo;
 		sequence = 0;
-		pedometerX = new Encoder(0, 0);
-		pedometerY = new Encoder(0, 0);
-
 	}
 
 	public boolean isDetecting() {
