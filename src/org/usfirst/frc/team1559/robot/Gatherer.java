@@ -22,8 +22,8 @@ public class Gatherer {
 	
 	public void gatherIn(){
 		
-		rightGather.set(-.5);
-		leftGather.set(.5);
+		rightGather.set(-.6);
+		leftGather.set(.6);
 		in.set(true);
 		out.set(false);
 		

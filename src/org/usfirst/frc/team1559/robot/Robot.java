@@ -385,6 +385,8 @@ public class Robot extends IterativeRobot {
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
 //    	
+    	SmartDashboard.putDouble("Lifter Current", lifter.getOutputCurrent());
+    	
     	//md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
     	if(pilot.getRawButton(XBoxController.BUTTON_A)){
     		md.resetGyro();
@@ -393,7 +395,8 @@ public class Robot extends IterativeRobot {
 		
     	SmartDashboard.putDouble("IRSENSOR VALUE", irSensor.getVoltage());
     	
-//        arduinoControls();
+//        arduinoControls()
+    	
         wingControls();
         lifterControls();
         gathererControls();
@@ -458,7 +461,7 @@ public class Robot extends IterativeRobot {
         	
         }
     	
-        if(copilot.getRawButton(7))
+        if(copilot.getRawButton(7) || copilot.getRawButton(8))
         { 
         	if(!pressed){
         		if (lifter.getPosition()>lifter.tgtHeight1)
@@ -467,7 +470,7 @@ public class Robot extends IterativeRobot {
         			lifter.moveUp(1);
             }
         	pressed = true;
-        } else if(copilot.getRawButton(9)) {
+        } else if(copilot.getRawButton(9) || copilot.getRawButton(10)) {
         	if(!pressed){
         		if (lifter.getPosition()>lifter.tgtHeight2)
         			lifter.moveDown(2);
@@ -475,7 +478,7 @@ public class Robot extends IterativeRobot {
         			lifter.moveUp(2);
         	}
         	pressed = true;
-        } else if(copilot.getRawButton(11)) {
+        } else if(copilot.getRawButton(11) || copilot.getRawButton(12)) {
         	if (!pressed){
         		state++;
 //        		lifter.moveUp(3);
@@ -483,7 +486,7 @@ public class Robot extends IterativeRobot {
         		lifter.set(lifter.UP);
         	}
         	pressed = true;
-        } else if(copilot.getRawButton(6)) {
+        } else if(copilot.getRawButton(5) || copilot.getRawButton(6)) {
         	if (!pressed){
 	            lifter.goHome();
         	}
