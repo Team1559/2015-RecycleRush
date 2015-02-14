@@ -10,6 +10,7 @@ public class Wiring{
 	public static final int RIGHT_REAR_MOTOR_ID = 7;
 	public static final double STUPID_CHASSIS_CORRECTION = -.023;
 	public static final double STUPID_CHASSIS_SIDEWAYS = -.05;
+	public static final double AUTO_SPEED = 1;
 
 	//sensors
 	public static final int GYRO_ID = 0;

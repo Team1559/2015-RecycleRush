@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Gyro;
@@ -31,9 +32,6 @@ public class Robot extends IterativeRobot {
 	Gyro g;
 	int count;
     boolean pressed;
-    boolean x;
-    boolean y;
-    boolean z;
     Pixy pixy;
     PixyPacket pp;
     int halfBand = Wiring.PIXY_HALF_BAND;
@@ -55,7 +53,13 @@ public class Robot extends IterativeRobot {
 	BufferedReader br;
 	String command;
 	int lines;
-	
+	double x;
+	double y;
+	int lifterLevel;
+	boolean done;
+	double xComp;
+	double yComp;
+	double autoSpeed = Wiring.AUTO_SPEED;
 	
     public void robotInit() {
         //drive system
@@ -103,7 +107,15 @@ public class Robot extends IterativeRobot {
         
         lines = 0;
         command = "DEFAULT";
+        x = 0.0;
+        y = 0.0;
         //it's ok the nasty try-catch is gone
+        done = true;
+        
+        lifterLevel = 0;
+        xComp = 0.0;
+        yComp = 0.0;
+        
     }
     public void disabledInit(){
     	
@@ -193,8 +205,16 @@ public class Robot extends IterativeRobot {
     }
     
     public void playback(){
-    	
-    	command = br.readLine();
+    	//ew
+    	if(done){
+	    	try {
+				command = br.readLine();
+				done = false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}//end ew
+    	}
 		
 		if(command.equals("<<START>>")){
 			System.out.println(lines + ". We are at the starting position.");
@@ -203,16 +223,107 @@ public class Robot extends IterativeRobot {
 		    x = Double.valueOf(command.substring(command.indexOf("X")+1, command.indexOf("Y")-1));
 		    y = Double.valueOf(command.substring(command.indexOf("Y")+1));
 			System.out.println(lines + ". Move " + x + " inches in x. Move " + y + " inches in Y.");
+			
+			if((x > 0) && (y > 0)){
+				
+				if((ped.getX() < x)){
+					xComp = autoSpeed * 1;
+				} else {
+					xComp = 0;
+				}
+				
+				if(ped.getY() < y){
+					yComp = autoSpeed * 1;
+				} else {
+					yComp = 0;
+				}
+				
+				md.drive(xComp, yComp, 0, g.getAngle());
+				if((xComp >= x) && (yComp >= y)){
+					done = true;
+					ped.reset();
+				}
+				
+			} else if((x < 0) && (y > 0)){
+				
+				if((ped.getX() > x)){
+					xComp = autoSpeed * -1;
+				} else {
+					xComp = 0;
+				}
+				
+				if(ped.getY() < y){
+					yComp = autoSpeed * 1;
+				} else {
+					yComp = 0;
+				}
+				
+				md.drive(xComp, yComp, 0, g.getAngle());
+				if((xComp >= x) && (yComp >= y)){
+					done = true;
+					ped.reset();
+				}
+				
+			} else if((x > 0) && (y < 0)){
+				
+				if((ped.getX() < x)){
+					xComp = autoSpeed * 1;
+				} else {
+					xComp = 0;
+				}
+				
+				if(ped.getY() > y){
+					yComp = autoSpeed * -1;
+				} else {
+					yComp = 0;
+				}
+				
+				md.drive(xComp, yComp, 0, g.getAngle());
+				if((xComp >= x) && (yComp >= y)){
+					done = true;
+					ped.reset();
+				}
+				
+			} else if((x < 0) && (y > 0)){
+				
+				if((ped.getX() > x)){
+					xComp = autoSpeed * -1;
+				} else {
+					xComp = 0;
+				}
+				
+				if(ped.getY() < y){
+					yComp = autoSpeed * 1;
+				} else {
+					yComp = 0;
+				}
+				
+				md.drive(xComp, yComp, 0, g.getAngle());
+				if((xComp >= x) && (yComp >= y)){
+					done = true;
+					ped.reset();
+				}
+				
+			}
+			
 		} else if(command.contains("[GATHER]")){
 			int totes;
 			String s = command.substring(command.indexOf((" "))).trim();
 			totes = Integer.valueOf(s);
 			System.out.println(lines + ". Gather " + totes + " tote(s)");
+			if(lifterLevel > totes){			
+				lifter.moveDown(totes);		
+				lifterLevel --;
+				done = true;
+			} else {			
+				lifter.moveUp(totes);
+				lifterLevel++;
+				done = true;
+			}
 		} else {
 			System.out.println("STOP");
 		}
-	lines++;
-    
+		lines++;
     }
     
     public void teleopInit(){
@@ -298,6 +409,7 @@ public class Robot extends IterativeRobot {
 	        	if (lifter.getSpeed() == 0){
 	        		lifter.setHome();
 	        		firstHome = false;
+	        		lifterLevel = 0;
 	        	}	        	
 	        }
     	}

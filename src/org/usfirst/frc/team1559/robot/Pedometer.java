@@ -27,4 +27,11 @@ public class Pedometer {
 		return d;
 	}
 	
+	public void reset(){
+		
+		x.reset();
+		y.reset();
+		
+	}
+	
 }
