@@ -57,15 +57,15 @@ public class Robot extends IterativeRobot {
     	firstHome = true;
     	g = new Gyro(Wiring.GYRO_ID);
     	count = 0;
-    	sonar = new MaxSonar(1);
+    	sonar = new MaxSonar(Wiring.SONAR_ID);
     	wing = new Wings();
     	c = new Compressor();
     	c.start();
     	
-    	leftGatherer = new Talon(4);
-    	rightGatherer = new Talon(5);
-    	in = new Solenoid(0);
-    	out = new Solenoid(1);
+    	leftGatherer = new Talon(Wiring.LEFT_GATHER_MOTOR);
+    	rightGatherer = new Talon(Wiring.RIGHT_GATHER_MOTOR);
+    	in = new Solenoid(Wiring.GATHER_ARMS_IN);
+    	out = new Solenoid(Wiring.GATHER_ARMS_OUT);
     	
         //pixy stuff
         pixy = new Pixy();
@@ -180,30 +180,8 @@ public class Robot extends IterativeRobot {
     	if(joy.getRawButton(XBoxController.BUTTON_A)){
     		g.reset();
     	}
-//    	SmartDashboard.putDouble("Voltage", sonar.getVoltage());    
-//    	SmartDashboard.putDouble("Feets", sonar.getFeet());
-//    	SmartDashboard.putDouble("Inches", sonar.getInches());
-//    	System.out.println("Target Height " + lifter.tgtHeight);
-//		System.out.println("Encoder Pos." +  lifter.getPosition());
-//		System.out.println("Home Pos. " + lifter.getHome());
+	
 		
-		if(firstHome){
-	        if(!lifter.getReverseLimitOK() && lifter.hardLimit){
-	        	if (lifter.getSpeed() == 0){
-	        		lifter.setHome();
-	        		firstHome = false;
-	        	}	        	
-	        }
-    	}
-		
-        if (lifter.movingDown)
-        {
-        	if (lifter.getPosition()<= lifter.tgtHeight)
-        	{
-        		lifter.stop();
-        	}
-        	
-        }
 //        arduinoControls();
         wingControls();
         lifterControls();
@@ -255,19 +233,30 @@ public class Robot extends IterativeRobot {
 //        System.out.println("Encoder Spd." + lifter.getSpeed());
     }
 
-    public void pixyControls(){
-
-        //put pixy stuff in here, please. OK CODY
-//    	rd.mecanumDrive_Cartesian(p.autoCenter(), 0, -.023, g.getAngle());
-    	
-
-    }
 
     public void lifterControls(){
 
 //    	if (lifter.getPosition()<=lifter.tgtHeight-.5 && lifter.getPosition()>=lifter.tgtHeight+.5)
 //    		lifter.configForwardLimit(lifter.tgtHeight);
         
+    	if(firstHome){
+	        if(!lifter.getReverseLimitOK() && lifter.hardLimit){
+	        	if (lifter.getSpeed() == 0){
+	        		lifter.setHome();
+	        		firstHome = false;
+	        	}	        	
+	        }
+    	}
+		
+        if (lifter.movingDown)
+        {
+        	if (lifter.getPosition()<= lifter.tgtHeight)
+        	{
+        		lifter.stop();
+        	}
+        	
+        }
+    	
         if(joy.getRawButton(4))
         { 
         	if(!pressed){
