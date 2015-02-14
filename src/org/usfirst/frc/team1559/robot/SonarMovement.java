@@ -62,8 +62,7 @@ public class SonarMovement {
 			leftSequence();
 			break;
 		case RIGHT:
-			leftSequence(); //////////// DANGER DANGER THERE IS INCOMPLETE CODE IN THE VICINITY
-			//////////////////ITS OVER HERE ^^
+			rightSequence();
 			break;
 		default:
 			moveForward();
@@ -79,8 +78,46 @@ public class SonarMovement {
 			sequence = 1;
 			break;
 		case 1:
-			System.out.println("Stage 1: Go out");
+			System.out.println("Stage 1: Go out (left)");
 			diagLeft();
+			if (getYFeet() <= -LEGDISTANCE)
+				sequence = 2;
+			break;
+		case 2:
+			System.out.println("Stage 2: Forward");
+			forwardDistance = distanceFromObject - LEGDISTANCE;
+			resetPedometers();
+			moveForward();
+			if (getXFeet() >= forwardDistance)
+				sequence = 3;
+			break;
+		case 3:
+			System.out.println("Stage 3: Go back (right)");
+			diagRight();
+			if (getYFeet() >= 0)
+				sequence = 4;
+			break;
+		case 4:
+			System.out.println("Stage 4: Preparing for another obstacle");
+			resetPedometers();
+			sequence = 0;
+		default:
+			System.out.println("Stage -1: You broke it");
+			sequence = 0;
+			break;
+		}
+	}
+	
+	public void rightSequence() {
+		switch (sequence) {
+		case 0:
+			System.out.println("Stage 0: Setup");
+			resetPedometers();
+			sequence = 1;
+			break;
+		case 1:
+			System.out.println("Stage 1: Go out (right)");
+			diagRight();
 			if (getYFeet() >= LEGDISTANCE)
 				sequence = 2;
 			break;
@@ -93,8 +130,8 @@ public class SonarMovement {
 				sequence = 3;
 			break;
 		case 3:
-			System.out.println("Stage 3: Go back");
-			diagRight();
+			System.out.println("Stage 3: Go back (left)");
+			diagLeft();
 			if (getYFeet() <= 0)
 				sequence = 4;
 			break;
@@ -121,8 +158,9 @@ public class SonarMovement {
 		drive.drive(.25, -.25, 0, 0);
 	}
 
-	public void disable() {
+	public void disable() { // periodic
 		sequence = 0;
+		resetPedometers();
 		decisionMade = false;
 	}
 
