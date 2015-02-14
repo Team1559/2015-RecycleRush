@@ -475,6 +475,7 @@ public class Robot extends IterativeRobot {
         	if (!pressed){
         		state++;
 //        		lifter.moveUp(3);
+        		lifter.disableSoftPositionLimits();
         		lifter.set(lifter.UP);
         	}
         	pressed = true;

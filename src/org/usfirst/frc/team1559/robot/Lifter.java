@@ -46,6 +46,7 @@ public class Lifter extends CANJaguar
 		move(UP);
 		System.out.println("Going up");
 		System.out.println(tgtHeight);
+		
 	}
 	
 	public void liftCan(double height) // 1 CAN = 2'5"
