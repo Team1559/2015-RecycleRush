@@ -1,218 +1,165 @@
 package org.usfirst.frc.team1559.robot;
 
-import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 
 public class SonarMovement {
-    
-    Talon leftFront, rightFront, leftBack, rightBack;
-    final double MAXDISTANCE = 4;
-    final int NO = 0, LEFT = 1, RIGHT = 2;
-    SonarStereo sonarStereo;
-    MecanumDrive drive;
 
-    Gyro gyro;
-    int turnStage;
-    int timer;
-    final int TIME_LIMIT = 75;
-    boolean decisionMade = false;
-    
-    public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack, Talon rightBack, SonarStereo sonarStereo, Gyro gyro) {
-    	drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
-        this.gyro = gyro;
-        this.sonarStereo = sonarStereo;
-        turnStage = 0;
-        timer = 0;
-    }
+	Talon leftFront, rightFront, leftBack, rightBack;
+	final double MAXDISTANCE = 7.5;
+	double distanceFromObject = 0.0;
+	final double DIAGDISTANCE = 6.0;
+	final double LEGDISTANCE = DIAGDISTANCE * Math.sqrt(2);
+	double forwardDistance; // temp
+	final int NO = 0, LEFT = 1, RIGHT = 2;
+	SonarStereo sonarStereo;
+	MecanumDrive drive;
+	int sequence;
+	boolean decisionMade = false;
+	Encoder pedometerX;
+	Encoder pedometerY;
+	double lol = 1;
+	double n3rd = 1;
 
-    public double gyroReading() {
-        return gyro.getAngle();
-    }
+	public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack,
+			Talon rightBack, SonarStereo sonarStereo) {
+		drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
+		this.sonarStereo = sonarStereo;
+		sequence = 0;
+		pedometerX = new Encoder(0, 0);
+		pedometerY = new Encoder(0, 0);
 
-    public boolean isDetecting() {
-        return sonarStereo.right.getFeet() < MAXDISTANCE || sonarStereo.left.getFeet() < MAXDISTANCE;
-    }
-    
-    public int decide() {
-        if (isDetecting()) {
-            if (sonarStereo.right.getFeet() < sonarStereo.left.getFeet()) {
-                System.out.println("Left!");
-                decisionMade = true;
-                return LEFT;
-            } else {
-                System.out.println("Right!");
-                decisionMade = true;
-                return RIGHT;
-            }
-        } else {
-            System.out.println("No decision");
-            return NO;
-        }
-    }
-    
-    public void react(int decision) {
-        switch (decision) {
-        case NO:
-            moveForward();
-            break;
-        case LEFT:
-            leftSequence();
-            break;
-        case RIGHT:
-            rightSequence();
-            break;
-        default:
-            moveForward();
-            break;
-        }
-    }
-    
-    public void leftSequence() {
-        System.out.println(gyroReading());
-        switch(turnStage) {
-            case 0:
-                System.out.println("Stage 0: Setup");
-                gyro.reset();
-                turnStage = 1;
-                break;
-            case 1:
-                System.out.println("Stage 1: Turn outward"); // Gyro-based
-                turnLeft();
-                if(gyro.getAngle() <= -45)
-                    turnStage = 2;
-                break;
-            case 2:
-                System.out.println("Stage 2: Forward"); // Time-based
-                timer++;
-                if(timer <= TIME_LIMIT) {
-                    moveForward();
-                } else {
-                    turnStage = 3;
-                    timer = 0;
-                }
-                break;
-            case 3:
-                System.out.println("Stage 3: Turn back"); // Gyro-based
-                turnRight();
-                if(gyro.getAngle() >= 45)
-                    turnStage = 4;
-                break;
-            case 4:
-                System.out.println("Stage 4: Forward again"); // Time-based
-                timer++;
-                if(timer <= TIME_LIMIT) {
-                    moveForward();
-                } else {
-                    turnStage = 5;
-                    timer = 0;
-                }
-                break;
-            case 5:
-                System.out.println("Stage 5: Re-adjust"); // Gyro-based
-                turnLeft();
-                if(gyro.getAngle() <= 0)
-                    turnStage = 6;
-                break;
-            case 6:
-                System.out.println("Stage 6: Preparing for another obstacle");
-                timer = 0;
-                decisionMade = false;
-                gyro.reset();
-                turnStage = 0;
-            default:
-                break;
-        }
-    }
-    
-    public void rightSequence() {
-        System.out.println(gyroReading());
-        switch(turnStage) {
-            case 0:
-                System.out.println("Stage 0: Setup");
-                gyro.reset();
-                turnStage = 1;
-                break;
-            case 1:
-                System.out.println("Stage 1: Turn outward"); // Gyro-based
-                turnRight();
-                if(gyro.getAngle() >= 45)
-                    turnStage = 2;
-                break;
-            case 2:
-                System.out.println("Stage 2: Forward"); // Time-based
-                timer++;
-                if(timer <= TIME_LIMIT) {
-                    moveForward();
-                } else {
-                    turnStage = 3;
-                    timer = 0;
-                }
-                break;
-            case 3:
-                System.out.println("Stage 3: Turn back"); // Gyro-based
-                turnLeft();
-                if(gyro.getAngle() <= -45)
-                    turnStage = 4;
-                break;
-            case 4:
-                System.out.println("Stage 4: Forward again"); // Time-based
-                timer++;
-                if(timer <= TIME_LIMIT) {
-                    moveForward();
-                } else {
-                    turnStage = 5;
-                    timer = 0;
-                }
-                break;
-            case 5:
-                System.out.println("Stage 5: Re-adjust"); // Gyro-based
-                turnRight();
-                if(gyro.getAngle() >= 0)
-                    turnStage = 6;
-                break;
-            case 6:
-                System.out.println("Stage 6: Preparing for another obstacle");
-                timer = 0;
-                decisionMade = false;
-                gyro.reset();
-                turnStage = 0;
-            default:
-                break;
-        }
-    }
-    
-    public void moveForward() { //actually moving sideways
-    	drive.drive(.25, .0, 0, 0);            
-    }
+	}
 
-    public void turnLeft() { //actually going forwawrdsish
-        drive.drive(0, .25, 0, 0);
-    }
-    
-    public void turnRight() { //actually going backwardsish
-        drive.drive(-.25, 0, 0, 0);
-    }
-    
-//    public void setLeft(double speed) {
-//        leftMotor.set(speed);
-//    }
-//    
-//    public void setRight(double speed) {
-//        rightMotor.set(-speed);
-//    }
-    
-    public void disable() {
-        gyro.reset();
-        turnStage = 0;
-        timer = 0;
-        decisionMade = false;
-    }
-    
-    public double getDistance() { // Gets lesser distance
-        if(sonarStereo.left.getFeet() > sonarStereo.right.getFeet()) {
-            return sonarStereo.right.getFeet();
-        } else {
-            return sonarStereo.left.getFeet();
-        }
-    }
+	public boolean isDetecting() {
+		return sonarStereo.right.getFeet() < MAXDISTANCE
+				|| sonarStereo.left.getFeet() < MAXDISTANCE;
+	}
+
+	public int decide() {
+		if (isDetecting()) {
+			if (sonarStereo.right.getFeet() < sonarStereo.left.getFeet()) {
+				System.out.println("Left!");
+				decisionMade = true;
+				return LEFT;
+			} else {
+				System.out.println("Right!");
+				decisionMade = true;
+				return RIGHT;
+			}
+		} else {
+			System.out.println("No decision");
+			return NO;
+		}
+	}
+
+	public void react(int decision) {
+		switch (decision) {
+		case NO:
+			moveForward();
+			break;
+		case LEFT:
+			leftSequence();
+			break;
+		case RIGHT:
+			leftSequence(); //////////// DANGER DANGER THERE IS INCOMPLETE CODE IN THE VICINITY
+			//////////////////ITS OVER HERE ^^
+			break;
+		default:
+			moveForward();
+			break;
+		}
+	}
+
+	public void leftSequence() {
+		switch (sequence) {
+		case 0:
+			System.out.println("Stage 0: Setup");
+			resetPedometers();
+			sequence = 1;
+			break;
+		case 1:
+			System.out.println("Stage 1: Go out");
+			diagLeft();
+			if (getYFeet() >= LEGDISTANCE)
+				sequence = 2;
+			break;
+		case 2:
+			System.out.println("Stage 2: Forward");
+			forwardDistance = distanceFromObject - LEGDISTANCE;
+			resetPedometers();
+			moveForward();
+			if (getXFeet() >= forwardDistance)
+				sequence = 3;
+			break;
+		case 3:
+			System.out.println("Stage 3: Go back");
+			diagRight();
+			if (getYFeet() <= 0)
+				sequence = 4;
+			break;
+		case 4:
+			System.out.println("Stage 4: Preparing for another obstacle");
+			resetPedometers();
+			sequence = 0;
+		default:
+			System.out.println("Stage -1: You broke it");
+			sequence = 0;
+			break;
+		}
+	}
+
+	public void moveForward() { // actually moving sideways
+		drive.drive(.25, .0, 0, 0);
+	}
+
+	public void diagLeft() { // actually going forwardsish
+		drive.drive(.25, .25, 0, 0);
+	}
+
+	public void diagRight() { // actually going backwardsish
+		drive.drive(.25, -.25, 0, 0);
+	}
+
+	public void disable() {
+		sequence = 0;
+		decisionMade = false;
+	}
+
+	public double getDistance() { // Gets lesser distance
+		if (sonarStereo.left.getFeet() > sonarStereo.right.getFeet()) {
+			return sonarStereo.right.getFeet();
+		} else {
+			return sonarStereo.left.getFeet();
+		}
+	}
+
+	public double diagonalDistance() { // diagonal distance needed to travel
+		return Math.sqrt(2) * getDistance();
+	}
+
+	public double xDistance() {
+		return pedometerX.get(); // add pedometer distance
+	}
+
+	public double yDistance() {
+		return pedometerY.get();
+	}
+
+	public void resetPedometers() {
+		pedometerX.reset();
+		pedometerY.reset();
+	}
+
+	public double getXFeet() {
+		return pedometerX.get() / 2700;
+	}
+
+	public double getYFeet() {
+		return pedometerY.get() / 2700;
+	}
+
+	public double distanceTraveled() {
+		return Math.sqrt(Math.pow(xDistance(), 2) + Math.pow(yDistance(), 2));
+	}
 }
