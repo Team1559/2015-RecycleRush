@@ -9,7 +9,7 @@ public class SonarStereo {
 	private int counter;
 
 	/**
-	 * 
+	 * S
 	 * @param pulseChannel
 	 *            Digital output to trigger sonar chain
 	 * @param sonarLeft
