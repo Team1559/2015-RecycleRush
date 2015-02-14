@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 	double xComp;
 	double yComp;
 	double autoSpeed = Wiring.AUTO_SPEED;
-	
+	Gatherer gather;
     public void robotInit() {
         //drive system
     	pilot = new Joystick(Wiring.JOYSTICK_1);
@@ -78,6 +78,7 @@ public class Robot extends IterativeRobot {
     	wing = new Wings();
     	c = new Compressor();
     	c.start();
+    	gather = new Gatherer();
     	
     	leftGatherer = new Talon(Wiring.LEFT_GATHER_MOTOR);
     	rightGatherer = new Talon(Wiring.RIGHT_GATHER_MOTOR);
@@ -135,12 +136,56 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
     	PixyPacket pkt = pixy.getPacket();
-    	md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
+//    	md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
     	SmartDashboard.putDouble("Error for Pixy", p.error);
     	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
     	SmartDashboard.putDouble("Gyro angle", g.getAngle());
     	
     	playback();
+    	
+    	switch (count){
+    	case 1:
+    		wing.release();
+    		lifter.moveUp(1);
+    		count++;
+    		break;
+    	case 2:
+    		gather.gatherIn();
+    		try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		gather.stopGather(); //need ir to stop
+    		count++;
+    		break;
+    	case 3:
+    		lifter.goHome();
+    		try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		wing.latch();
+    		try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		lifter.moveUp(1);
+    		count++;
+    		break;
+    	case 4:
+    		
+    		
+    		break;
+    		
+    	}
+    	
+    	
     	
 //    	SmartDashboard.putDouble("Crate center", pp.X);
 //
@@ -331,8 +376,6 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopInit(){
-    	
-    	g.reset();
     	
     }
 

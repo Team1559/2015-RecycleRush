@@ -19,4 +19,32 @@ public class Gatherer {
 		
 	}
 	
+	
+	public void gatherIn(){
+		
+		rightGather.set(-.5);
+		leftGather.set(.5);
+		in.set(true);
+		out.set(false);
+		
+	}
+	
+	public void gatherOut(){
+		
+		rightGather.set(.75);
+		leftGather.set(-.75);
+		in.set(true);
+		out.set(false);
+		
+	}
+	
+	public void stopGather(){
+		
+		rightGather.set(0);
+		leftGather.set(0);
+		in.set(false);
+		out.set(true);
+		
+	}
+	
 }
