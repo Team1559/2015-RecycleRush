@@ -1,9 +1,9 @@
 package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Talon;
+
 
 public class Robot extends IterativeRobot {
 	
@@ -11,7 +11,8 @@ public class Robot extends IterativeRobot {
 	SonarStereo ssonar = new SonarStereo(1, 2, 3);
 	Talon leftFront, rightFront, leftBack, rightBack;
 	SonarMovement move;
-	Gyro gyro;
+	Encoder pedometerX;
+	Encoder pedometerY;
   	int decision;
 	
 	public void robotInit() {
@@ -21,8 +22,9 @@ public class Robot extends IterativeRobot {
 		rightFront = new Talon(8);
 		leftBack = new Talon(6);
 		rightBack = new Talon(7);
-		gyro = new Gyro(0);
-		move = new SonarMovement(leftFront, rightFront, leftBack, rightBack, ssonar);
+		pedometerX = new Encoder(0, 1);
+		pedometerY = new Encoder(2, 3);
+		move = new SonarMovement(leftFront, rightFront, leftBack, rightBack, ssonar, pedometerX, pedometerY);
 	}
 
 	public void autonomousInit() {
