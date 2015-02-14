@@ -3,7 +3,6 @@ package org.usfirst.frc.team1559.robot;
 
 public class PixyController {
 	Pixy pixy;
-	PixyPacket pkt;
 	double error;
 	double objRatio = 0;
 	public final double ratio = 109/80;
@@ -12,13 +11,9 @@ public class PixyController {
 		pixy = new Pixy();
 	}
 	
-	public double autoCenter(){
-		try{
-			pkt = pixy.readPacket(1);
-		} catch (PixyException e){
-			e.printStackTrace();
-		}
+	public double autoCenter(PixyPacket pkt){
 		if (pkt != null){
+			System.out.println(pkt.X + " " + pkt.Y);
 			try{
 				objRatio = pkt.Height/pkt.Width;
 			} catch (Exception e){
@@ -47,9 +42,6 @@ public class PixyController {
 //		    else{
 //				error = 0;
 //			}
-		}
-		else {
-			error = error - 0.1;
 		}
 		return error;
 	}
