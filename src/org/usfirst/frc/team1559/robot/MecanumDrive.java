@@ -82,13 +82,14 @@ public class MecanumDrive {
 	
 	
 	public double wrap(double r){
-		//return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;		
-		if (Math.abs(r) >= 180) {
-			r = r % 360 - 180;
-			return (r > 180) ? r - 360 : (r <= -180) ? r + 360 : r;
-		} else {
-			return r;
-		}
+		//return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;	
+		return (r > 180) ? wrap(r - 360) : (r <= -180) ? wrap(r + 360) : r;
+//		if (Math.abs(r) >= 180) {
+//			r = r % 360;
+//			return (r > 180) ? r - 360 : r;
+//		} else {
+//			return r;
+//		}
 		
 		//looks like the gyro is +-180, so I copied the code from last year, and modified it for angles instead of radians
 	}
@@ -107,21 +108,21 @@ public class MecanumDrive {
 		
 		gyroAngle = gAngle;
 		
-		if(Math.abs(rotationClockwise) > 2){
-			desiredAngle = gyroAngle;
+		if(Math.abs(rotationClockwise) > .1){
+			desiredAngle = wrappedGyro;
 		} else {
-			
+			SmartDashboard.putDouble("Desired", desiredAngle);
 			double delta = wrappedGyro - desiredAngle;
 			SmartDashboard.putDouble("un-Delta Angle", delta);
 			delta = -wrap(delta);
 			SmartDashboard.putDouble("Adjusted Delta", delta);
 			i += delta * .01;
 			double d = gyroRate;
-			rotationClockwise = (kP * -delta) + (kI * i) + (kD * d);
+			rotationClockwise = (kP * delta) + (kI * i) + (kD * d);
 		}
 		
 		double xIn = x;
-        double yIn = y;
+        double yIn = -y;
         
 		double wheelSpeeds[] = new double[4];
         wheelSpeeds[0] = xIn + yIn + rotationClockwise;

@@ -87,7 +87,6 @@ public class Robot extends IterativeRobot {
         //pixy stuff
         pixy = new Pixy();
         p = new PixyController(pixy);
-        pp = p.pkt;
         
         ped = new Pedometer();
 
@@ -96,10 +95,14 @@ public class Robot extends IterativeRobot {
         
         //record/playback stuff
         //sorry about the nasty try-catch
-        f = new File("/home/lvuser/Output.txt");
+        
         try {
+        	f = new File("/home/lvuser/Output.txt");
+			if(!f.exists()){
+	        	f.createNewFile();
+	        }
 			fr = new FileReader(f);
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -131,7 +134,8 @@ public class Robot extends IterativeRobot {
     
     
     public void autonomousPeriodic() {
-    	md.drive(p.autoCenter(), -p.autoCenter(), 0, g.getAngle());
+    	PixyPacket pkt = pixy.getPacket();
+    	md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
     	SmartDashboard.putDouble("Error for Pixy", p.error);
     	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
     	SmartDashboard.putDouble("Gyro angle", g.getAngle());
@@ -357,14 +361,14 @@ public class Robot extends IterativeRobot {
     public void gathererControls(){
     	
     	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
-	    	if(copilot.getRawButton(XBoxController.BUTTON_RB)){    		
-	    		rightGatherer.set(-.25);
-	    		leftGatherer.set(.25);
+	    	if(pilot.getRawButton(XBoxController.BUTTON_RB)){    		
+	    		rightGatherer.set(-.5);
+	    		leftGatherer.set(.5);
 	    		in.set(true);
 	    		out.set(false);
-	    	} else if(copilot.getRawButton(XBoxController.BUTTON_LB)){
-	    		rightGatherer.set(.5);
-	    		leftGatherer.set(-.5);
+	    	} else if(pilot.getRawButton(XBoxController.BUTTON_LB)){
+	    		rightGatherer.set(.75);
+	    		leftGatherer.set(-.75);
 	    		in.set(true);
 	    		out.set(false);
 	    	} else {
@@ -384,7 +388,7 @@ public class Robot extends IterativeRobot {
     
     public void wingControls(){
     	
-    	if(pilot.getRawButton(7)){
+    	if(pilot.getRawButton(XBoxController.BUTTON_B)){
     		wing.latch();
     	} else {
     		wing.release();
@@ -410,6 +414,7 @@ public class Robot extends IterativeRobot {
 	        		lifter.setHome();
 	        		firstHome = false;
 	        		lifterLevel = 0;
+	        		Wiring.GATHERER_HEIGHT = lifter.getHome()+25;
 	        	}	        	
 	        }
     	}
@@ -423,7 +428,7 @@ public class Robot extends IterativeRobot {
         	
         }
     	
-        if(pilot.getRawButton(4))
+        if(copilot.getRawButton(4))
         { 
         	if(!pressed){
         		if (lifter.getPosition()>lifter.tgtHeight1)
@@ -432,7 +437,7 @@ public class Robot extends IterativeRobot {
         			lifter.moveUp(1);
             }
         	pressed = true;
-        } else if(pilot.getRawButton(3)) {
+        } else if(copilot.getRawButton(3)) {
         	if(!pressed){
         		if (lifter.getPosition()>lifter.tgtHeight2)
         			lifter.moveDown(2);
@@ -440,13 +445,13 @@ public class Robot extends IterativeRobot {
         			lifter.moveUp(2);
         	}
         	pressed = true;
-        } else if(pilot.getRawButton(5)) {
+        } else if(copilot.getRawButton(5)) {
         	if (!pressed){
         		state++;
         		lifter.moveUp(3);
         	}
         	pressed = true;
-        } else if(pilot.getRawButton(2)) {
+        } else if(copilot.getRawButton(2)) {
         	if (!pressed){
 	            lifter.goHome();
         	}

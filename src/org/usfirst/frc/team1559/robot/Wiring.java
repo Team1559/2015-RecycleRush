@@ -20,7 +20,7 @@ public class Wiring{
 	public static final int LIFTER_JAGUAR_VALUE = 15;
 	public static final double TOTE_HEIGHT = 32.0;
 	public static final double DRIVE_HEIGHT = 8.74;
-	public static final double GATHERER_HEIGHT = 25; //11.54
+	public static double GATHERER_HEIGHT = 25; //11.54
 	public static final int LEFT_GATHER_MOTOR = 4;
 	public static final int RIGHT_GATHER_MOTOR = 5;
 	public static final int GATHER_ARMS_IN = 0;
