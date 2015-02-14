@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //testing test test
 public class Robot extends IterativeRobot {
  
-	Joystick joy, joy2;
+	Joystick pilot, copilot;
 	Talon lf, lr, rf, rr;
 	Talon rightGatherer;
 	Talon leftGatherer;
@@ -63,13 +63,13 @@ public class Robot extends IterativeRobot {
 	
     public void robotInit() {
         //drive system
-    	joy = new Joystick(Wiring.JOYSTICK_1);
-    	joy2 = new Joystick(Wiring.JOYSTICK_2);
+    	pilot = new Joystick(Wiring.JOYSTICK_1);
+    	copilot = new Joystick(Wiring.JOYSTICK_2);
     	lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); //backwards
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	md = new MecanumDrive(joy, lf, lr, rf, rr, g);
+    	md = new MecanumDrive(pilot, lf, lr, rf, rr, g);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	firstHome = true;
     	g = new Gyro(Wiring.GYRO_ID);
@@ -337,12 +337,12 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-//    	md.drivePID(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle(), g.getRate());
+    	md.drivePID(pilot.getX(), pilot.getY(), pilot.getRawAxis(4), g.getAngle(), g.getRate());
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
 //    	
-    	md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
-    	if(joy.getRawButton(XBoxController.BUTTON_A)){
+    	//md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
+    	if(pilot.getRawButton(XBoxController.BUTTON_A)){
     		g.reset();
     	}
 	
@@ -357,12 +357,12 @@ public class Robot extends IterativeRobot {
     public void gathererControls(){
     	
     	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
-	    	if(joy2.getRawButton(XBoxController.BUTTON_RB)){    		
+	    	if(copilot.getRawButton(XBoxController.BUTTON_RB)){    		
 	    		rightGatherer.set(-.25);
 	    		leftGatherer.set(.25);
 	    		in.set(true);
 	    		out.set(false);
-	    	} else if(joy2.getRawButton(XBoxController.BUTTON_LB)){
+	    	} else if(copilot.getRawButton(XBoxController.BUTTON_LB)){
 	    		rightGatherer.set(.5);
 	    		leftGatherer.set(-.5);
 	    		in.set(true);
@@ -384,7 +384,7 @@ public class Robot extends IterativeRobot {
     
     public void wingControls(){
     	
-    	if(joy.getRawButton(7)){
+    	if(pilot.getRawButton(7)){
     		wing.latch();
     	} else {
     		wing.release();
@@ -393,7 +393,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void testPeriodic() {
-        lifter.set(joy2.getAxis(AxisType.kY));
+        lifter.set(copilot.getAxis(AxisType.kY));
         System.out.println("Encoder Pos. " + (lifter.getPosition() - lifter.getHome()));
 //        System.out.println("Encoder Spd." + lifter.getSpeed());
     }
@@ -423,7 +423,7 @@ public class Robot extends IterativeRobot {
         	
         }
     	
-        if(joy.getRawButton(4))
+        if(pilot.getRawButton(4))
         { 
         	if(!pressed){
         		if (lifter.getPosition()>lifter.tgtHeight1)
@@ -432,7 +432,7 @@ public class Robot extends IterativeRobot {
         			lifter.moveUp(1);
             }
         	pressed = true;
-        } else if(joy.getRawButton(3)) {
+        } else if(pilot.getRawButton(3)) {
         	if(!pressed){
         		if (lifter.getPosition()>lifter.tgtHeight2)
         			lifter.moveDown(2);
@@ -440,13 +440,13 @@ public class Robot extends IterativeRobot {
         			lifter.moveUp(2);
         	}
         	pressed = true;
-        } else if(joy.getRawButton(5)) {
+        } else if(pilot.getRawButton(5)) {
         	if (!pressed){
         		state++;
         		lifter.moveUp(3);
         	}
         	pressed = true;
-        } else if(joy.getRawButton(2)) {
+        } else if(pilot.getRawButton(2)) {
         	if (!pressed){
 	            lifter.goHome();
         	}

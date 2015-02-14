@@ -82,8 +82,14 @@ public class MecanumDrive {
 	
 	
 	public double wrap(double r){
-		//return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;
-		return (r > 180) ? wrap(r - 360) : (r <= -180) ? wrap(r + 360) : r;
+		//return (r > desiredAngle) ? 360 - (r - desiredAngle) : desiredAngle - r;		
+		if (Math.abs(r) >= 180) {
+			r = r % 360 - 180;
+			return (r > 180) ? r - 360 : (r <= -180) ? r + 360 : r;
+		} else {
+			return r;
+		}
+		
 		//looks like the gyro is +-180, so I copied the code from last year, and modified it for angles instead of radians
 	}
 	
