@@ -130,6 +130,12 @@ public class Robot extends IterativeRobot {
     	
     }
     
+    /* no comment */
+    
+    
+    /////////////////////////////////////well commented
+    //m'comment *tips IDE*
+    //dank meme
     
     public void autonomousPeriodic() {
 //    	PixyPacket pkt = pixy.getPacket();
@@ -370,6 +376,10 @@ public class Robot extends IterativeRobot {
 			System.out.println("STOP");
 		}
 		lines++;
+		
+		// this is a comment
+		// ayy lmao yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee The Pizza is Agressive oh $%^%#$
+		
     }
     
     public void teleopInit(){
