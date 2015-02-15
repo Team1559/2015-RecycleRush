@@ -53,9 +53,9 @@ public class MecanumDrive {
 //		prevAngle = g.getAngle();
 		
 		kP = 30/1000;
-		kI = 10/1000;//.2;
+		kI = 10/1000;
 		kD = 0;//.2;
-		//smartInit();
+		smartInit();
 		
 	}	
 	
@@ -104,7 +104,7 @@ public class MecanumDrive {
 		
 		double wrappedGyro = wrap(g.getAngle());
 		
-		//smartGet();
+		smartGet();
 		System.out.println(kP);
 		
 		if(joy.getPOV(0) != -1){

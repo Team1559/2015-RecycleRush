@@ -480,38 +480,45 @@ public class Robot extends IterativeRobot {
         	
         }
     	
-        if(copilot.getRawButton(7) || copilot.getRawButton(8))
-        { 
-        	if(!pressed){
-        		if (lifter.getPosition()>lifter.tgtHeight1)
-        			lifter.moveDown(1);
-        		else
-        			lifter.moveUp(1);
-            }
-        	pressed = true;
-        } else if(copilot.getRawButton(9) || copilot.getRawButton(10)) {
-        	if(!pressed){
-        		if (lifter.getPosition()>lifter.tgtHeight2)
-        			lifter.moveDown(2);
-        		else
-        			lifter.moveUp(2);
-        	}
-        	pressed = true;
-        } else if(copilot.getRawButton(11) || copilot.getRawButton(12)) {
-        	if (!pressed){
-        		state++;
-//        		lifter.moveUp(3);
-        		lifter.disableSoftPositionLimits();
-        		lifter.set(lifter.UP);
-        	}
-        	pressed = true;
-        } else if(copilot.getRawButton(5) || copilot.getRawButton(6)) {
-        	if (!pressed){
-	            lifter.goHome();
-        	}
-        	pressed = true;
+        if(!copilot.getRawButton(1)){
+	        if(copilot.getRawButton(7) || copilot.getRawButton(8))
+	        { 
+	        	if(!pressed){
+	        		if (lifter.getPosition()>lifter.tgtHeight1)
+	        			lifter.moveDown(1);
+	        		else
+	        			lifter.moveUp(1);
+	            }
+	        	pressed = true;
+	        } else if(copilot.getRawButton(9) || copilot.getRawButton(10)) {
+	        	if(!pressed){
+	        		if (lifter.getPosition()>lifter.tgtHeight2)
+	        			lifter.moveDown(2);
+	        		else
+	        			lifter.moveUp(2);
+	        	}
+	        	pressed = true;
+	        } else if(copilot.getRawButton(11) || copilot.getRawButton(12)) {
+	        	if (!pressed){
+	        		state++;
+	//        		lifter.moveUp(3);
+	        		lifter.disableSoftPositionLimits();
+	        		lifter.set(lifter.UP);
+	        	}
+	        	pressed = true;
+	        } else if(copilot.getRawButton(5) || copilot.getRawButton(6)) {
+	        	if (!pressed){
+		            lifter.goHome();
+	        	}
+	        	pressed = true;
+	        } else {
+	            pressed = false;
+	        }
         } else {
-            pressed = false;
+        	
+        	lifter.disableSoftPositionLimits();
+        	lifter.set(copilot.getRawAxis(1));
+        	
         }
     }
     	// Hide all this as backup
