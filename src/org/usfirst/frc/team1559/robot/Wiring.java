@@ -11,6 +11,7 @@ public class Wiring{
 	public static final double STUPID_CHASSIS_CORRECTION = -.023;
 	public static final double STUPID_CHASSIS_SIDEWAYS = -.05;
 	public static final double AUTO_SPEED = 1;
+	public static final double MAX_SPEED = .625;
 
 	//sensors
 	public static final int GYRO_ID = 0;

@@ -132,122 +132,122 @@ public class Robot extends IterativeRobot {
     
     
     public void autonomousPeriodic() {
-    	PixyPacket pkt = pixy.getPacket();
-//    	md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
-    	SmartDashboard.putDouble("Error for Pixy", p.error);
-    	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
-//    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
-    	
-    	//playback();
-    	
-    	switch (count){
-    	case 1:
-    		wing.release();
-    		lifter.moveUp(1);
-    		count++;
-    		break;
-    	case 2:
-    		gather.gatherIn();
-    		try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		gather.stopGather(); //need ir to stop
-    		count++;
-    		break;
-    	case 3:
-    		lifter.goHome();
-    		try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		wing.latch();
-    		try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		lifter.moveUp(1);
-    		count++;
-    		break;
-    	case 4:
-    		
-    		
-    		break;
-    		
-    	}
-    	
-    	
-    	
-//    	SmartDashboard.putDouble("Crate center", pp.X);
-//
-//    	wallDist = sonar.getInches();
-//    	int toWall = 60;
-//    	System.out.println("Count: "+count);
-//    	System.out.println(wallDist);
-//    	switch(count)
-//    	{
+//    	PixyPacket pkt = pixy.getPacket();
+////    	md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
+//    	SmartDashboard.putDouble("Error for Pixy", p.error);
+//    	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
+////    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	
+//    	//playback();
+//    	
+//    	switch (count){
 //    	case 1:
-//    		if(timesRun > 0) {
-//    			//Drive
-////    			lifter.goHome();
-//    		}
-////    		lifter.liftTote(1);
-//    		count = 2;
+//    		wing.release();
+//    		lifter.moveUp(1);
+//    		count++;
 //    		break;
 //    	case 2:
-//    		if(wallDist>toWall-25)
-//    		{
-//        		rd.mecanumDrive_Cartesian(-.75, -.2, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
-//    		}
-//    		else
-//    			count = 3;
+//    		gather.gatherIn();
+//    		try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//    		gather.stopGather(); //need ir to stop
+//    		count++;
 //    		break;
 //    	case 3:
-//    		wallDist = sonar.getInches();
-//    		if(wallDist<toWall)
-//    		{
-//        		rd.mecanumDrive_Cartesian(.5, -.35, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
-//    		}
-//    		else
-//    			count = 4;
+//    		lifter.goHome();
+//    		try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//    		wing.latch();
+//    		try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//    		lifter.moveUp(1);
+//    		count++;
 //    		break;
 //    	case 4:
-//    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
-//    		if(timesRun == 2){
-//    			count = 5;
-//    		}
-//    		else{
-//    			count = 1;
-//    			timesRun++;
-//    		}
+//    		
+//    		
 //    		break;
-//    	case 5:
-//    		wallDist = sonar.getInches();
-//    		if (wallDist<100)
-//    		{
-//    			rd.mecanumDrive_Cartesian(.5, 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    		}
-//    		else
-//    			count = 6;
-//    		break;
-//    	case 6:
-////    		lifter.goHome();
-//    		count = 7;
-//    		break;
-//    	case 7:
-//    		rd.mecanumDrive_Cartesian(0, .5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-//    		count = 8;
-//    	case 8:
-//    		//Pretty Lights
-//    		break;
+//    		
 //    	}
+//    	
+//    	
+//    	
+////    	SmartDashboard.putDouble("Crate center", pp.X);
+////
+////    	wallDist = sonar.getInches();
+////    	int toWall = 60;
+////    	System.out.println("Count: "+count);
+////    	System.out.println(wallDist);
+////    	switch(count)
+////    	{
+////    	
+////    	case 1:
+////    		if(timesRun > 0) {
+////    			//Drive
+//////    			lifter.goHome();
+////    		}
+//////    		lifter.liftTote(1);
+////    		count = 2;
+////    		break;
+////    	case 2:
+////    		if(wallDist>toWall-25)
+////    		{
+////        		rd.mecanumDrive_Cartesian(-.75, -.2, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
+////    		}
+////    		else
+////    			count = 3;
+////    		break;
+////    	case 3:
+////    		wallDist = sonar.getInches();
+////    		if(wallDist<toWall)
+////    		{
+////        		rd.mecanumDrive_Cartesian(.5, -.35, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
+////    		}
+////    		else
+////    			count = 4;
+////    		break;
+////    	case 4:
+////    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
+////    		if(timesRun == 2){
+////    			count = 5;
+////    		}
+////    		else{
+////    			count = 1;
+////    			timesRun++;
+////    		}
+////    		break;
+////    	case 5:
+////    		wallDist = sonar.getInches();
+////    		if (wallDist<100)
+////    		{
+////    			rd.mecanumDrive_Cartesian(.5, 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+////    		}
+////    		else
+////    			count = 6;
+////    		break;
+////    	case 6:
+//////    		lifter.goHome();
+////    		count = 7;
+////    		break;
+////    	case 7:
+////    		rd.mecanumDrive_Cartesian(0, .5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
+////    		count = 8;
+////    	case 8:
+////    		//Pretty Lights
+////    		break;
+////    	}
     }
     
     public void playback(){
