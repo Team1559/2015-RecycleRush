@@ -131,9 +131,9 @@ public class MecanumDrive {
 		double xIn = x;
         double yIn = -y;
         
-        double rotated[] = rotateVector(xIn, yIn, gyroAngle);
-        xIn = rotated[0];
-        yIn = rotated[1];
+//        double rotated[] = rotateVector(xIn, yIn, gyroAngle);
+//        xIn = rotated[0];
+//        yIn = rotated[1];
         
 		double wheelSpeeds[] = new double[4];
         wheelSpeeds[0] = xIn + yIn + rotationClockwise;
