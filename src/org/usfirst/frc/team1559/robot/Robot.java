@@ -60,6 +60,7 @@ public class Robot extends IterativeRobot {
 	double yComp;
 	double autoSpeed = Wiring.AUTO_SPEED;
 	Gatherer gather;
+	DebounceButton dbb;
 	
     public void robotInit() {
         //drive system
@@ -89,6 +90,7 @@ public class Robot extends IterativeRobot {
         
         ped = new Pedometer();
 
+        dbb = new DebounceButton(copilot, 1);
         //arduino stuff
 //        arduino = new Arduino(0,1,2);
         
@@ -450,7 +452,9 @@ public class Robot extends IterativeRobot {
 
 //    	if (lifter.getPosition()<=lifter.tgtHeight-.5 && lifter.getPosition()>=lifter.tgtHeight+.5)
 //    		lifter.configForwardLimit(lifter.tgtHeight);
-        
+    	if(dbb.getRelease()){
+    		lifter.set(0);
+    	}
     	if(firstHome){
 	        if(!lifter.getReverseLimitOK() && lifter.hardLimit){
 	        	if (lifter.getSpeed() == 0){
@@ -481,6 +485,8 @@ public class Robot extends IterativeRobot {
         }
     	
         if(!copilot.getRawButton(1)){
+        	
+        	
 	        if(copilot.getRawButton(7) || copilot.getRawButton(8))
 	        { 
 	        	if(!pressed){
@@ -514,11 +520,9 @@ public class Robot extends IterativeRobot {
 	        } else {
 	            pressed = false;
 	        }
-        } else {
-        	
+        } else {        	
         	lifter.disableSoftPositionLimits();
-        	lifter.set(copilot.getRawAxis(1));
-        	
+        	lifter.set(copilot.getRawAxis(1));           	        	
         }
     }
     	// Hide all this as backup

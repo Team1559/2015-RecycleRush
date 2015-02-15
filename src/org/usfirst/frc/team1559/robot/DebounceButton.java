@@ -29,5 +29,17 @@ public class DebounceButton {
 		}
 		return false;
 	}
+	
+	public boolean getRelease() {
+		if (!joy.getRawButton(button)) {
+			if (!checkedOnce) {
+				checkedOnce = true;
+				return true;
+			}
+		} else {
+			checkedOnce = false;
+		}
+		return false;
+	}
 
 }
