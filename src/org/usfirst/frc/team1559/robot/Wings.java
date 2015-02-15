@@ -21,6 +21,6 @@ public class Wings {
 
 	public void release() {
 		left.setAngle(60);
-		right.setAngle(45);
+		right.setAngle(35);
 	}
 }
