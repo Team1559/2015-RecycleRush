@@ -460,6 +460,15 @@ public class Robot extends IterativeRobot {
 	        		Wiring.GATHERER_HEIGHT = lifter.getHome()+25;
 	        	}	        	
 	        }
+    	} else {
+    		if(copilot.getRawButton(2)){
+    			if (lifter.getSpeed() == 0){
+	        		lifter.setHome();
+	        		firstHome = false;
+	        		lifterLevel = 0;
+	        		Wiring.GATHERER_HEIGHT = lifter.getHome()+25;
+	        	}	        
+    		}
     	}
 		
         if (lifter.movingDown)
