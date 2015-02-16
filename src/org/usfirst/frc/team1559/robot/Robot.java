@@ -32,11 +32,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-           ssonar.periodic();
-           if(!move.decisionMade)
-                decision = move.decide();
-            move.react(decision);
-        }
+		ssonar.periodic();
+		move.avoid();
+    }
         
 
 	public void teleopInit() {
@@ -58,5 +56,4 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
         move.disable();
 	}
-
 }
