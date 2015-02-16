@@ -16,19 +16,20 @@ public class SonarMovement {
 	MecanumDrive drive;
 	int sequence;
 	boolean decisionMade = false;
-	Encoder pedometerX;
-	Encoder pedometerY;
+	Encoder pedometerX, pedometerY;
 
-	public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack,
-			Talon rightBack, SonarStereo sonarStereo, Encoder pedometerX, Encoder pedometerY) {
+	enum Direction {
+		LEFT, RIGHT;
+	}
+
+	public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack, Talon rightBack, SonarStereo sonarStereo, Encoder pedometerX, Encoder pedometerY) {
 		drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
 		this.sonarStereo = sonarStereo;
 		sequence = 0;
 	}
 
 	public boolean isDetecting() {
-		return sonarStereo.right.getFeet() < MAXDISTANCE
-				|| sonarStereo.left.getFeet() < MAXDISTANCE;
+		return sonarStereo.right.getFeet() < MAXDISTANCE || sonarStereo.left.getFeet() < MAXDISTANCE;
 	}
 
 	public int decide() {
@@ -64,8 +65,59 @@ public class SonarMovement {
 			break;
 		}
 	}
+	
+	public void reactTriangle(int decision) {
+		switch (decision) {
+		case NO:
+			moveForward();
+			break;
+		case LEFT:
+			triangleSequence(Direction.LEFT);
+			break;
+		case RIGHT:
+			triangleSequence(Direction.RIGHT);
+			break;
+		default:
+			moveForward();
+			break;
+		}
+	}
 
-	public void leftSequence() {
+	public void triangleSequence(Direction dir) {
+		if(dir == Direction.LEFT) {
+			switch (sequence) {
+			case 0:
+				System.out.println("Stage 0: Setup");
+				resetPedometers();
+				sequence = 1;
+				break;
+			case 1:
+				System.out.println("Stage 1: Go out (left)");
+				diagLeft();
+				if (getYFeet() <= -LEGDISTANCE) sequence = 2;
+				break;
+			case 2:
+				System.out.println("Stage 2: Go back (right)");
+				diagRight();
+				if (getYFeet() >= 0) sequence = 3;
+				break;
+			case 3:
+				System.out.println("Stage 3: Preparing for another obstacle");
+				resetPedometers();
+				sequence = 4;
+			default:
+				System.out.println("Stage -1: You broke it");
+				sequence = 0;
+				break;
+			}
+		} else if(dir == Direction.RIGHT) {
+			
+		} else {
+			System.err.println("ERROR! Not a valid direction, somehow.");
+		}
+	}
+
+	public void leftSequence() { // trapezoid
 		switch (sequence) {
 		case 0:
 			System.out.println("Stage 0: Setup");
@@ -75,22 +127,19 @@ public class SonarMovement {
 		case 1:
 			System.out.println("Stage 1: Go out (left)");
 			diagLeft();
-			if (getYFeet() <= -LEGDISTANCE)
-				sequence = 2;
+			if (getYFeet() <= -LEGDISTANCE) sequence = 2;
 			break;
 		case 2:
 			System.out.println("Stage 2: Forward");
 			forwardDistance = distanceFromObject - LEGDISTANCE;
 			resetPedometers();
 			moveForward();
-			if (getXFeet() >= forwardDistance)
-				sequence = 3;
+			if (getXFeet() >= forwardDistance) sequence = 3;
 			break;
 		case 3:
 			System.out.println("Stage 3: Go back (right)");
 			diagRight();
-			if (getYFeet() >= 0)
-				sequence = 4;
+			if (getYFeet() >= 0) sequence = 4;
 			break;
 		case 4:
 			System.out.println("Stage 4: Preparing for another obstacle");
@@ -102,8 +151,8 @@ public class SonarMovement {
 			break;
 		}
 	}
-	
-	public void rightSequence() {
+
+	public void rightSequence() { // trapezoid
 		switch (sequence) {
 		case 0:
 			System.out.println("Stage 0: Setup");
@@ -113,22 +162,19 @@ public class SonarMovement {
 		case 1:
 			System.out.println("Stage 1: Go out (right)");
 			diagRight();
-			if (getYFeet() >= LEGDISTANCE)
-				sequence = 2;
+			if (getYFeet() >= LEGDISTANCE) sequence = 2;
 			break;
 		case 2:
 			System.out.println("Stage 2: Forward");
 			forwardDistance = distanceFromObject - LEGDISTANCE;
 			resetPedometers();
 			moveForward();
-			if (getXFeet() >= forwardDistance)
-				sequence = 3;
+			if (getXFeet() >= forwardDistance) sequence = 3;
 			break;
 		case 3:
 			System.out.println("Stage 3: Go back (left)");
 			diagLeft();
-			if (getYFeet() <= 0)
-				sequence = 4;
+			if (getYFeet() <= 0) sequence = 4;
 			break;
 		case 4:
 			System.out.println("Stage 4: Preparing for another obstacle");
