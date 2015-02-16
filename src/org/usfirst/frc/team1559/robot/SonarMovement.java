@@ -7,7 +7,7 @@ public class SonarMovement {
 
 	Talon leftFront, rightFront, leftBack, rightBack;
 	final double MAXDISTANCE = 7.5;
-	double distanceFromObject = 0.0;
+	double distance = 0.0;
 	final double DIAGDISTANCE = 6.0;
 	final double LEGDISTANCE = DIAGDISTANCE * Math.sqrt(2);
 	double forwardDistance; // temp
@@ -35,10 +35,12 @@ public class SonarMovement {
 	public int decide() {
 		if (isDetecting()) {
 			if (sonarStereo.right.getFeet() < sonarStereo.left.getFeet()) {
+				distance = getDistance();
 				System.out.println("Left!");
 				decisionMade = true;
 				return LEFT;
 			} else {
+				distance = getDistance();
 				System.out.println("Right!");
 				decisionMade = true;
 				return RIGHT;
@@ -72,10 +74,10 @@ public class SonarMovement {
 			moveForward();
 			break;
 		case LEFT:
-			triangleSequence(Direction.LEFT);
+			isoscelesSequence(Direction.LEFT);
 			break;
 		case RIGHT:
-			triangleSequence(Direction.RIGHT);
+			isoscelesSequence(Direction.RIGHT);
 			break;
 		default:
 			moveForward();
@@ -83,7 +85,7 @@ public class SonarMovement {
 		}
 	}
 
-	public void triangleSequence(Direction dir) {
+	public void isoscelesSequence(Direction dir) {
 		if(dir == Direction.LEFT) {
 			switch (sequence) {
 			case 0:
@@ -94,7 +96,7 @@ public class SonarMovement {
 			case 1:
 				System.out.println("Stage 1: Go out (left)");
 				diagLeft();
-				if (getYFeet() <= -LEGDISTANCE) sequence = 2;
+				if (getYFeet() <= -distance) sequence = 2;
 				break;
 			case 2:
 				System.out.println("Stage 2: Go back (right)");
@@ -104,14 +106,40 @@ public class SonarMovement {
 			case 3:
 				System.out.println("Stage 3: Preparing for another obstacle");
 				resetPedometers();
-				sequence = 4;
+				sequence = 0;
+				break;
 			default:
 				System.out.println("Stage -1: You broke it");
 				sequence = 0;
 				break;
 			}
 		} else if(dir == Direction.RIGHT) {
-			
+			switch (sequence) {
+			case 0:
+				System.out.println("Stage 0: Setup");
+				resetPedometers();
+				sequence = 1;
+				break;
+			case 1:
+				System.out.println("Stage 1: Go out (right)");
+				diagRight();
+				if (getYFeet() >= distance) sequence = 2;
+				break;
+			case 2:
+				System.out.println("Stage 2: Go back (left)");
+				diagLeft();
+				if (getYFeet() <= 0) sequence = 3;
+				break;
+			case 3:
+				System.out.println("Stage 3: Preparing for another obstacle");
+				resetPedometers();
+				sequence = 0;
+				break;
+			default:
+				System.out.println("Stage -1: You broke it");
+				sequence = 0;
+				break;
+			}
 		} else {
 			System.err.println("ERROR! Not a valid direction, somehow.");
 		}
@@ -131,7 +159,7 @@ public class SonarMovement {
 			break;
 		case 2:
 			System.out.println("Stage 2: Forward");
-			forwardDistance = distanceFromObject - LEGDISTANCE;
+			forwardDistance = distance - LEGDISTANCE;
 			resetPedometers();
 			moveForward();
 			if (getXFeet() >= forwardDistance) sequence = 3;
@@ -145,6 +173,7 @@ public class SonarMovement {
 			System.out.println("Stage 4: Preparing for another obstacle");
 			resetPedometers();
 			sequence = 0;
+			break;
 		default:
 			System.out.println("Stage -1: You broke it");
 			sequence = 0;
@@ -166,7 +195,7 @@ public class SonarMovement {
 			break;
 		case 2:
 			System.out.println("Stage 2: Forward");
-			forwardDistance = distanceFromObject - LEGDISTANCE;
+			forwardDistance = distance - LEGDISTANCE;
 			resetPedometers();
 			moveForward();
 			if (getXFeet() >= forwardDistance) sequence = 3;
@@ -180,6 +209,7 @@ public class SonarMovement {
 			System.out.println("Stage 4: Preparing for another obstacle");
 			resetPedometers();
 			sequence = 0;
+			break;
 		default:
 			System.out.println("Stage -1: You broke it");
 			sequence = 0;
@@ -213,8 +243,8 @@ public class SonarMovement {
 		}
 	}
 
-	public double diagonalDistance() { // diagonal distance needed to travel
-		return Math.sqrt(2) * getDistance();
+	public double diagonalDistance(double dist) { // diagonal distance needed to travel
+		return Math.sqrt(2) * dist;
 	}
 
 	public double xDistance() {
