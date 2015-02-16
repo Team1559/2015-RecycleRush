@@ -8,8 +8,8 @@ public class SonarMovement {
 	Talon leftFront, rightFront, leftBack, rightBack;
 	final double MAXDISTANCE = 7.5;
 	double distance = 0.0;
-	final double DIAGDISTANCE = 4.0;
-	final double LEGDISTANCE = DIAGDISTANCE * Math.sqrt(2);
+	final double LEGDISTANCE = 4.0;
+	final double DIAGDISTANCE = LEGDISTANCE * Math.sqrt(2);
 	double forwardDistance; // temp
 	final int NO = 0, LEFT = 1, RIGHT = 2;
 	SonarStereo sonarStereo;
@@ -30,6 +30,7 @@ public class SonarMovement {
 	}
 
 	public void avoid() {
+		sonarStereo.periodic();
         if(!decisionMade)
              decision = decide();
          react(decision);

@@ -32,7 +32,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		ssonar.periodic();
 		move.avoid();
     }
         
