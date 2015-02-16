@@ -393,7 +393,9 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-    	md.drivePID(pilot.getX(), pilot.getY(), pilot.getRawAxis(4));
+//    	md.drivePID(pilot.getX(), pilot.getY(), pilot.getRawAxis(4));
+    	md.drivePIDToteCenter(pilot.getX(), pilot.getY(), pilot.getRawAxis(4));
+    	
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
 //    	
@@ -422,8 +424,12 @@ public class Robot extends IterativeRobot {
 	    		gather.gatherIn();
 	    	} else if(pilot.getRawButton(XBoxController.BUTTON_LB)){
 	    		gather.gatherOut();
+	    	} else if(pilot.getRawAxis(3) > 0){
+	    		gather.rotateRight(pilot.getRawAxis(3));
+	    	} else if(pilot.getRawAxis(2) > 0){
+	    		gather.rotateLeft(pilot.getRawAxis(2));
 	    	} else {
-	    		gather.stopGather();
+	    		gather.stopGather();	    		
 	    	}
     	} else {
     		gather.stopGather();

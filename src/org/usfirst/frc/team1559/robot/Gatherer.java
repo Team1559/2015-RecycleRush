@@ -22,8 +22,8 @@ public class Gatherer {
 	
 	public void gatherIn(){
 		
-		rightGather.set(-.6);
-		leftGather.set(.6);
+		rightGather.set(-Wiring.GATHER_IN_SPEED);
+		leftGather.set(Wiring.GATHER_IN_SPEED);
 		in.set(true);
 		out.set(false);
 		
@@ -31,8 +31,8 @@ public class Gatherer {
 	
 	public void gatherOut(){
 		
-		rightGather.set(.75);
-		leftGather.set(-.75);
+		rightGather.set(Wiring.GATHER_OUT_SPEED);
+		leftGather.set(-Wiring.GATHER_OUT_SPEED);
 		in.set(true);
 		out.set(false);
 		
@@ -45,6 +45,25 @@ public class Gatherer {
 		in.set(false);
 		out.set(true);
 		
+	}
+	
+	public void rotateLeft(double speed){
+		in.set(true);
+		out.set(false);
+		rightGather.set(speed);
+		leftGather.set(speed);
+	}
+	
+	public void rotateRight(double speed){
+		in.set(true);
+		out.set(false);
+		rightGather.set(-speed);
+		leftGather.set(-speed);
+	}
+	
+	public void half(){
+		in.set(true);
+		out.set(false);
 	}
 	
 }

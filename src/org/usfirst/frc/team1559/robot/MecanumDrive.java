@@ -52,10 +52,10 @@ public class MecanumDrive {
 		
 //		prevAngle = g.getAngle();
 		
-		kP = 30/1000;
-		kI = 10/1000;
+		kP = .03;
+		kI = .01;
 		kD = 0;//.2;
-//		smartInit();
+		smartInit();
 		
 	}	
 	
@@ -96,7 +96,11 @@ public class MecanumDrive {
 		//looks like the gyro is +-180, so I copied the code from last year, and modified it for angles instead of radians
 	}
 	
-	public void drivePID(double x, double y, double rotationClockwise){
+public void drivePIDToteCenter(double x, double y, double rotationClockwise){
+		
+		//fix center of rotation
+		//FRONT 10%
+		//READ 100%
 		
 		x = Math.abs(x) * x;
 		y = Math.abs(y) * y;
@@ -104,7 +108,63 @@ public class MecanumDrive {
 		
 		double wrappedGyro = wrap(g.getAngle());
 		
-//		smartGet();
+		smartGet();
+		System.out.println("P" + kP + " I" + kI + " D" + kD);
+		
+		if(joy.getPOV(0) != -1){
+			desiredAngle = joy.getPOV(0);
+			System.out.println("GOT A POV");
+		}
+		
+		gyroAngle = g.getAngle();
+		
+		if(Math.abs(rotationClockwise) > .1){
+			desiredAngle = wrappedGyro;
+			i = 0;
+		} else {
+			SmartDashboard.putDouble("Desired", desiredAngle);
+			double delta = wrappedGyro - desiredAngle;
+			SmartDashboard.putDouble("un-Delta Angle", delta);
+			delta = -wrap(delta);
+			SmartDashboard.putDouble("Adjusted Delta", delta);
+			i += delta * .01;
+			double d = g.getRate();
+			rotationClockwise = (kP * delta) + (kI * i) + (kD * d);
+		}
+		
+		double xIn = x;
+        double yIn = -y;
+        
+//        double rotated[] = rotateVector(xIn, yIn, gyroAngle);
+//        xIn = rotated[0];
+//        yIn = rotated[1];
+        
+		double wheelSpeeds[] = new double[4];
+        wheelSpeeds[0] = xIn + yIn + (rotationClockwise * .1);
+        wheelSpeeds[1] = -xIn + yIn - rotationClockwise;
+        wheelSpeeds[2] = -xIn + yIn + (rotationClockwise * .1);
+        wheelSpeeds[3] = xIn + yIn - rotationClockwise;
+		normalize(wheelSpeeds);
+		
+		leftFront.set(-wheelSpeeds[0] * maxSpeed);
+        rightFront.set(wheelSpeeds[1] * maxSpeed);
+        leftRear.set(-wheelSpeeds[2] * maxSpeed);
+        rightRear.set(wheelSpeeds[3] * maxSpeed);
+	}
+	
+	public void drivePID(double x, double y, double rotationClockwise){
+		
+		//fix center of rotation
+		//FRONT 10%
+		//READ 100%
+		
+		x = Math.abs(x) * x;
+		y = Math.abs(y) * y;
+		rotationClockwise = Math.abs(rotationClockwise) * rotationClockwise;
+		
+		double wrappedGyro = wrap(g.getAngle());
+		
+		smartGet();
 		System.out.println("P" + kP + " I" + kI + " D" + kD);
 		
 		if(joy.getPOV(0) != -1){
