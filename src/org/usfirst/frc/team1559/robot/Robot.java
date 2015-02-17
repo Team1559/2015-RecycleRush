@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -34,7 +35,7 @@ public class Robot extends IterativeRobot {
     PixyPacket pp;
     int halfBand = Wiring.PIXY_HALF_BAND;
     PixyController p;
-//    Arduino arduino;
+    Arduino arduino;
     double sonarInch;
     IRSensor irSensor;
 	MaxSonar sonar;
@@ -47,20 +48,11 @@ public class Robot extends IterativeRobot {
 	Pedometer ped;
 	
 	//record / playback functions
-	File f;
-	FileReader fr;
-	BufferedReader br;
 	String command;
-	int lines;
-	double x;
-	double y;
 	int lifterLevel;
-	boolean done;
-	double xComp;
-	double yComp;
-	double autoSpeed = Wiring.AUTO_SPEED;
 	Gatherer gather;
 	DebounceButton dbb;
+	arduino = new Arduino(4);
 	
     public void robotInit() {
         //drive system
@@ -98,38 +90,21 @@ public class Robot extends IterativeRobot {
         //record/playback stuff
         //sorry about the nasty try-catch
         
-        try {
-        	f = new File("/home/lvuser/Output.txt");
-			if(!f.exists()){
-	        	f.createNewFile();
-	        }
-			fr = new FileReader(f);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        br = new BufferedReader(fr);
-        
-        lines = 0;
-        command = "DEFAULT";
-        x = 0.0;
-        y = 0.0;
-        //it's ok the nasty try-catch is gone
-        done = true;
-        
-        lifterLevel = 0;
-        xComp = 0.0;
-        yComp = 0.0;
-        
     }
     public void disabledInit(){
-    	
+    	arduino.writeSequence(4);
     }
 
 
     public void autonomousInit(){
     	
     	count = 1;
+    	if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue){
+        	arduino.writeAlliance(1);
+        }
+        else {
+        	arduino.writeAlliance(0);
+        }
     	
     }
     
@@ -147,7 +122,6 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
 ////    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	
-//    	//playback();
 //    	
 //    	switch (count){
 //    	case 1:
@@ -259,134 +233,16 @@ public class Robot extends IterativeRobot {
 ////    	}
     }
     
-    public void playback(){
-    	//ew
-    	if(done){
-	    	try {
-				command = br.readLine();
-				done = false;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}//end ew
-    	}
-		
-		if(command.equals("<<START>>")){
-			System.out.println(lines + ". We are at the starting position.");
-		} else if(command.contains("[MOVE]")){
-			//code for decoding x and y values
-		    x = Double.valueOf(command.substring(command.indexOf("X")+1, command.indexOf("Y")-1));
-		    y = Double.valueOf(command.substring(command.indexOf("Y")+1));
-			System.out.println(lines + ". Move " + x + " inches in x. Move " + y + " inches in Y.");
-			
-			if((x > 0) && (y > 0)){
-				
-				if((ped.getX() < x)){
-					xComp = autoSpeed * 1;
-				} else {
-					xComp = 0;
-				}
-				
-				if(ped.getY() < y){
-					yComp = autoSpeed * 1;
-				} else {
-					yComp = 0;
-				}
-				
-//				md.drive(xComp, yComp, 0, g.getAngle());
-				if((xComp >= x) && (yComp >= y)){
-					done = true;
-					ped.reset();
-				}
-				
-			} else if((x < 0) && (y > 0)){
-				
-				if((ped.getX() > x)){
-					xComp = autoSpeed * -1;
-				} else {
-					xComp = 0;
-				}
-				
-				if(ped.getY() < y){
-					yComp = autoSpeed * 1;
-				} else {
-					yComp = 0;
-				}
-				
-//				md.drive(xComp, yComp, 0, g.getAngle());
-				if((xComp >= x) && (yComp >= y)){
-					done = true;
-					ped.reset();
-				}
-				
-			} else if((x > 0) && (y < 0)){
-				
-				if((ped.getX() < x)){
-					xComp = autoSpeed * 1;
-				} else {
-					xComp = 0;
-				}
-				
-				if(ped.getY() > y){
-					yComp = autoSpeed * -1;
-				} else {
-					yComp = 0;
-				}
-				
-//				md.drive(xComp, yComp, 0, g.getAngle());
-				if((xComp >= x) && (yComp >= y)){
-					done = true;
-					ped.reset();
-				}
-				
-			} else if((x < 0) && (y > 0)){
-				
-				if((ped.getX() > x)){
-					xComp = autoSpeed * -1;
-				} else {
-					xComp = 0;
-				}
-				
-				if(ped.getY() < y){
-					yComp = autoSpeed * 1;
-				} else {
-					yComp = 0;
-				}
-				
-//				md.drive(xComp, yComp, 0, g.getAngle());
-				if((xComp >= x) && (yComp >= y)){
-					done = true;
-					ped.reset();
-				}
-				
-			}
-			
-		} else if(command.contains("[GATHER]")){
-			int totes;
-			String s = command.substring(command.indexOf((" "))).trim();
-			totes = Integer.valueOf(s);
-			System.out.println(lines + ". Gather " + totes + " tote(s)");
-			if(lifterLevel > totes){			
-				lifter.moveDown(totes);		
-				lifterLevel --;
-				done = true;
-			} else {			
-				lifter.moveUp(totes);
-				lifterLevel++;
-				done = true;
-			}
-		} else {
-			System.out.println("STOP");
-		}
-		lines++;
-		
-		// this is a comment
-		// ayy lmao yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee The Pizza is Agressive oh $%^%#$
-		
-    }
+   
     
     public void teleopInit(){
-    	
+    	arduino.writeSequence(1);
+    	if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue){
+        	arduino.writeAlliance(1);
+        }
+        else {
+        	arduino.writeAlliance(0);
+        }
     }
 
 

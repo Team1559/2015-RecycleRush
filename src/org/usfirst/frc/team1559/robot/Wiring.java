@@ -28,8 +28,9 @@ public class Wiring{
 	public static final int GATHER_ARMS_OUT = 1;
 	
 	//gatherer
-	public static final double GATHER_IN_SPEED = .6;
-	public static final double GATHER_OUT_SPEED = .75;
+	public static final double GATHER_IN_SPEED = .4;
+	public static final double GATHER_OUT_SPEED = .5;
+	public static final double GATHER_ROTATE_SPEED = .5;
 
 	//pixy
 	public static final int PIXY_HALF_BAND = 3;

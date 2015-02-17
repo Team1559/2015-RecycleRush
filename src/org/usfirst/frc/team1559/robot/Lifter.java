@@ -56,6 +56,7 @@ public class Lifter extends CANJaguar
 		move(UP);
 	}
 	
+	
 	public void goHome() // Call in periodic
 	{
 		
