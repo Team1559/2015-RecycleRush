@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	md = new MecanumDrive(pilotR, lf, lr, rf, rr);
+    	md = new MecanumDrive(pilotXY, lf, lr, rf, rr);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	firstHome = true;
     	count = 0;
@@ -238,13 +238,7 @@ public class Robot extends IterativeRobot {
    
     
     public void teleopInit(){
-    	arduino.writeSequence(1);
-    	if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue){
-        	arduino.writeAlliance(1);
-        }
-        else {
-        	arduino.writeAlliance(0);
-        }
+    	
     }
 
 
@@ -253,7 +247,7 @@ public class Robot extends IterativeRobot {
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
 //    	md.drivePID(pilotXY.getX(), pilotXY.getY(), pilotR.getZ());
-    	md.drivePIDToteCenter(pilotXY.getX(), pilotXY.getY(), pilotR.getTwist());
+    	md.drivePIDToteCenter(pilotXY.getX(), pilotXY.getY(), pilotXY.getTwist());
     	
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
@@ -261,27 +255,38 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putDouble("Lifter Current", lifter.getOutputCurrent());
     	
     	//md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
-    	if(pilotR.getRawButton(XBoxController.BUTTON_A)){
+    	if(pilotXY.getRawButton(12)){
     		md.resetGyro();
     	}
 	
 		
     	SmartDashboard.putDouble("IRSENSOR VALUE", irSensor.getVoltage());
     	
-//        arduinoControls()
-    	
+        arduinoControls();    	
         wingControls();
         lifterControls();
         gathererControls();
     	
     }
     
+    public void arduinoControls(){
+    	
+    	arduino.writeSequence(1);
+    	if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue){
+        	arduino.writeAlliance(1);
+        }
+        else {
+        	arduino.writeAlliance(0);
+        }
+    	
+    }
+    
     public void gathererControls(){
     	
     	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
-	    	if(pilotXY.getRawButton(4)){    		
+	    	if(pilotXY.getRawButton(Wiring.GATHER_IN_BUT)){    		
 	    		gather.gatherIn();
-	    	} else if(pilotXY.getRawButton(5)){
+	    	} else if(pilotXY.getRawButton(Wiring.GATHER_OUT_BUT)){
 	    		gather.gatherOut();
 //	    	} else if(pilot2.getRawAxis(3) > 0){
 //	    		gather.rotateRight(pilot2.getRawAxis(3));
@@ -298,7 +303,7 @@ public class Robot extends IterativeRobot {
     
     public void wingControls(){
     	
-    	if(pilotXY.getRawButton(3)){
+    	if(pilotXY.getRawButton(Wiring.WINGS_BUT)){
     		wing.latch();
     	} else {
     		wing.release();
@@ -330,7 +335,7 @@ public class Robot extends IterativeRobot {
 	        	}	        	
 	        }
     	} else {
-    		if(copilot.getRawButton(2)){
+    		if(copilot.getRawButton(Wiring.COPILOT_T2)){
     			if (lifter.getSpeed() == 0){
 	        		lifter.setHome();
 	        		firstHome = false;
@@ -349,10 +354,10 @@ public class Robot extends IterativeRobot {
         	
         }
     	
-        if(!copilot.getRawButton(1)){
+        if(!copilot.getRawButton(Wiring.COPILOT_TRIGGER)){
         	
         	
-	        if(copilot.getRawButton(7) || copilot.getRawButton(8))
+	        if(copilot.getRawButton(Wiring.COPILOT_T3) || copilot.getRawButton(Wiring.COPILOT_T4))
 	        { 
 	        	if(!pressed){
 	        		if (lifter.getPosition()>lifter.tgtHeight1)
@@ -361,7 +366,7 @@ public class Robot extends IterativeRobot {
 	        			lifter.moveUp(1);
 	            }
 	        	pressed = true;
-	        } else if(copilot.getRawButton(9) || copilot.getRawButton(10)) {
+	        } else if(copilot.getRawButton(Wiring.COPILOT_T5) || copilot.getRawButton(Wiring.COPILOT_T6)) {
 	        	if(!pressed){
 	        		if (lifter.getPosition()>lifter.tgtHeight2)
 	        			lifter.moveDown(2);
@@ -369,7 +374,7 @@ public class Robot extends IterativeRobot {
 	        			lifter.moveUp(2);
 	        	}
 	        	pressed = true;
-	        } else if(copilot.getRawButton(11) || copilot.getRawButton(12)) {
+	        } else if(copilot.getRawButton(Wiring.COPILOT_T7) || copilot.getRawButton(Wiring.COPILOT_T8)) {
 	        	if (!pressed){
 	        		state++;
 	//        		lifter.moveUp(3);
@@ -377,7 +382,7 @@ public class Robot extends IterativeRobot {
 	        		lifter.set(lifter.UP);
 	        	}
 	        	pressed = true;
-	        } else if(copilot.getRawButton(5) || copilot.getRawButton(6)) {
+	        } else if(copilot.getRawButton(Wiring.COPILOT_T1) || copilot.getRawButton(Wiring.COPILOT_T2)) {
 	        	if (!pressed){
 		            lifter.goHome();
 	        	}
@@ -390,32 +395,4 @@ public class Robot extends IterativeRobot {
         	lifter.set(copilot.getRawAxis(1));           	        	
         }
     }
-    	// Hide all this as backup
-//    	if(joy.getRawButton(4))
-//        { 
-//        	if(!pressed){
-//        		state--;
-//            lifter.setToteHeight(1);
-//            }
-//        	pressed = true;
-//        } else if(joy.getRawButton(3)) {
-//        	if(!pressed){
-//	            lifter.setToteHeight(2);
-//        	}
-//        	pressed = true;
-//        } else if(joy.getRawButton(5)) {
-//        	if (!pressed){
-//        		state++;
-//	            lifter.setToteHeight(3);
-//        	}
-//        	pressed = true;
-//        } else if(joy.getRawButton(2)) {
-//        	if (!pressed){
-//	            lifter.goHome();
-//        	}
-//        	pressed = true;
-//        } else {
-//            pressed = false;
-//        }
-//    }
-	}
+}
