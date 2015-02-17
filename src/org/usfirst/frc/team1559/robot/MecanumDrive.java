@@ -111,10 +111,10 @@ public void drivePIDToteCenter(double x, double y, double rotationClockwise){
 		smartGet();
 		System.out.println("P" + kP + " I" + kI + " D" + kD);
 		
-		if(joy.getPOV(0) != -1){
-			desiredAngle = joy.getPOV(0);
-			System.out.println("GOT A POV");
-		}
+//		if(joy.getPOV(0) != -1){
+//			desiredAngle = joy.getPOV(0);
+//			System.out.println("GOT A POV");
+//		}
 		
 		gyroAngle = g.getAngle();
 		
@@ -167,11 +167,11 @@ public void drivePIDToteCenter(double x, double y, double rotationClockwise){
 		smartGet();
 		System.out.println("P" + kP + " I" + kI + " D" + kD);
 		
-		if(joy.getPOV(0) != -1){
-			desiredAngle = joy.getPOV(0);
-			System.out.println("GOT A POV");
-		}
-		
+//		if(joy.getPOV(0) != -1){
+//			desiredAngle = joy.getPOV(0);
+//			System.out.println("GOT A POV");
+//		}
+//		
 		gyroAngle = g.getAngle();
 		
 		if(Math.abs(rotationClockwise) > .1){

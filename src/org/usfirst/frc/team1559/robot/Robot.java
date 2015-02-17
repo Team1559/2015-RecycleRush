@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //testing test test
 public class Robot extends IterativeRobot {
  
-	Joystick pilot1, pilot2, copilot;
+	Joystick pilotXY, pilotR, copilot;
 	Talon lf, lr, rf, rr;
 	Solenoid in;
 	Solenoid out;
@@ -64,14 +64,14 @@ public class Robot extends IterativeRobot {
 	
     public void robotInit() {
         //drive system
-    	pilot1 = new Joystick(Wiring.JOYSTICK_1);
-    	pilot2 = new Joystick(1);
+    	pilotXY = new Joystick(Wiring.JOYSTICK_1);
+    	pilotR = new Joystick(1);
     	copilot = new Joystick(2);
     	lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); //backwards
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	md = new MecanumDrive(pilot1, lf, lr, rf, rr);
+    	md = new MecanumDrive(pilotXY, lf, lr, rf, rr);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	firstHome = true;
     	count = 0;
@@ -394,7 +394,7 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-    	md.drivePID(pilot1.getX(), pilot1.getY(), pilot2.getX());
+    	md.drivePID(pilotXY.getX(), pilotXY.getY(), pilotR.getX());
 //    	md.drivePIDToteCenter(pilot1.getX(), pilot1.getY(), pilot2.getX());
     	
 //    	System.out.println("X " + ped.getX());
@@ -403,7 +403,7 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putDouble("Lifter Current", lifter.getOutputCurrent());
     	
     	//md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
-    	if(pilot2.getRawButton(XBoxController.BUTTON_A)){
+    	if(pilotR.getRawButton(XBoxController.BUTTON_A)){
     		md.resetGyro();
     	}
 	
@@ -420,22 +420,22 @@ public class Robot extends IterativeRobot {
     
     public void gathererControls(){
     	
-//    	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
-//	    	if(pilot.getRawButton(XBoxController.BUTTON_RB)){    		
-//	    		gather.gatherIn();
-//	    	} else if(pilot.getRawButton(XBoxController.BUTTON_LB)){
-//	    		gather.gatherOut();
-//	    	} else if(pilot.getRawAxis(3) > 0){
-//	    		gather.rotateRight(pilot.getRawAxis(3));
-//	    	} else if(pilot.getRawAxis(2) > 0){
-//	    		gather.rotateLeft(pilot.getRawAxis(2));
-//	    	} else {
-//	    		gather.stopGather();	    		
-//	    	}
-//    	} else {
-//    		gather.stopGather();
-//    	}
-//    	
+    	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
+	    	if(pilotR.getRawButton(5)){    		
+	    		gather.gatherIn();
+	    	} else if(pilotR.getRawButton(4)){
+	    		gather.gatherOut();
+//	    	} else if(pilot2.getRawAxis(3) > 0){
+//	    		gather.rotateRight(pilot2.getRawAxis(3));
+//	    	} else if(pilot2.getRawAxis(2) > 0){
+//	    		gather.rotateLeft(pilot2.getRawAxis(2));
+	    	} else {
+	    		gather.stopGather();	    		
+	    	}
+    	} else {
+    		gather.stopGather();
+   	}
+    	
     }
     
     public void wingControls(){
