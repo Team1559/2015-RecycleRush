@@ -4,19 +4,16 @@ package org.usfirst.frc.team1559.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 
 //testing test test
 public class Robot extends IterativeRobot {
  
 	Joystick joy;
     Arduino eyeCandy;
-    Timer timey;
 	
     public void robotInit() {
         eyeCandy = new Arduino(4);
         joy = new Joystick(0);
-        timey = new Timer();
     }
 
 
@@ -39,12 +36,17 @@ public class Robot extends IterativeRobot {
 
 
     public void teleopPeriodic() {
-    	arduinoControls();
+    	eyeCandy.writeSequence(5);
+        eyeCandy.writeElevatorPos((int)((joy.getRawAxis(1)+1)*60));
+        System.out.println((int)((joy.getRawAxis(1)+1)*60));
     }
     
 
     public void testPeriodic() {
     
+    }
+    public void disabledPeriodic(){
+    	eyeCandy.writeSequence(4);
     }
     
     public void arduinoControls(){
