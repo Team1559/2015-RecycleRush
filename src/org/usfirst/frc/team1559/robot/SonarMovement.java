@@ -83,12 +83,16 @@ public class SonarMovement {
 			case 1:
 				System.out.println("Stage 1: Go out (left)");
 				diagLeft();
-				if (getYFeet() <= -distance) sequence = 2;
+				if (distanceTraveled() <= -diagonalDistance()) {
+					sequence = 2;
+					resetPedometers();
+				}
 				break;
 			case 2:
 				System.out.println("Stage 2: Go back (right)");
 				diagRight();
-				if (getYFeet() >= 0) sequence = 3;
+				if (distanceTraveled() >= diagonalDistance()) 
+					sequence = 3;
 				break;
 			case 3:
 				System.out.println("Stage 3: Preparing for another obstacle");
@@ -110,12 +114,16 @@ public class SonarMovement {
 			case 1:
 				System.out.println("Stage 1: Go out (right)");
 				diagRight();
-				if (getYFeet() >= distance) sequence = 2;
+				if (distanceTraveled() >= diagonalDistance()) {
+					sequence = 2;
+					resetPedometers();
+				}
 				break;
 			case 2:
 				System.out.println("Stage 2: Go back (left)");
 				diagLeft();
-				if (getYFeet() <= 0) sequence = 3;
+				if (getYFeet() <= 0) 
+					sequence = 3;
 				break;
 			case 3:
 				System.out.println("Stage 3: Preparing for another obstacle");
@@ -161,7 +169,7 @@ public class SonarMovement {
 			case 1:
 				System.out.println("Stage 1: Go out (right)");
 				drive.drive((0.25 * distance) / LEGDISTANCE, 0.25, 0, 0);
-				if (yDistance() >= LEGDISTANCE) sequence = 2;
+				if (yDistance() >=LEGDISTANCE) sequence = 2;
 				break;
 			case 2:
 				System.out.println("Stage 2: Go back (left)");
@@ -189,7 +197,7 @@ public class SonarMovement {
 				break;
 			case 2:
 				System.out.println("Stage 2: Forward");
-				forwardDistance = distance - LEGDISTANCE;
+				forwardDistance = distance -LEGDISTANCE;
 				resetPedometers();
 				moveForward();
 				if (getXFeet() >= forwardDistance) sequence = 3;
@@ -219,11 +227,11 @@ public class SonarMovement {
 			case 1:
 				System.out.println("Stage 1: Go out (right)");
 				diagRight();
-				if (getYFeet() >= LEGDISTANCE) sequence = 2;
+				if (getYFeet() >=LEGDISTANCE) sequence = 2;
 				break;
 			case 2:
 				System.out.println("Stage 2: Forward");
-				forwardDistance = distance - LEGDISTANCE;
+				forwardDistance = distance -LEGDISTANCE;
 				resetPedometers();
 				moveForward();
 				if (getXFeet() >= forwardDistance) sequence = 3;
@@ -295,8 +303,12 @@ public class SonarMovement {
 		return pedometerY.get() / 2700;
 	}
 
-	public double distanceTraveled() {
+	public double distanceTraveled() { //pythag pedometers
 		return Math.sqrt(Math.pow(xDistance(), 2) + Math.pow(yDistance(), 2));
+	}
+	
+	public double diagonalDistance() { //the diagonal distance needed to travel
+		return getDistance() * Math.sqrt(2);
 	}
 	
 	public boolean isDetecting() {

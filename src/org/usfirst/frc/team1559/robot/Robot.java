@@ -7,24 +7,22 @@ import edu.wpi.first.wpilibj.Talon;
 
 public class Robot extends IterativeRobot {
 	
-	Sonar sonar;
-	SonarStereo ssonar = new SonarStereo(1, 2, 3);
-	Talon leftFront, rightFront, leftBack, rightBack;
-	SonarMovement move;
-	Encoder pedometerX;
-	Encoder pedometerY;
-  	int decision;
+	SonarStereo ssonar = new SonarStereo(1, 0, 1);
+//	Talon leftFront, rightFront, leftBack, rightBack;
+//	SonarMovement move;
+//	Encoder pedometerX;
+//	Encoder pedometerY;
+//  int decision;
 	
 	public void robotInit() {
 		
-		sonar = new Sonar(1);
-		leftFront = new Talon(9);
-		rightFront = new Talon(8);
-		leftBack = new Talon(6);
-		rightBack = new Talon(7);
-		pedometerX = new Encoder(0, 1);
-		pedometerY = new Encoder(2, 3);
-		move = new SonarMovement(leftFront, rightFront, leftBack, rightBack, ssonar, pedometerX, pedometerY);
+//		leftFront = new Talon(9);
+//		rightFront = new Talon(8);
+//		leftBack = new Talon(6);
+//		rightBack = new Talon(7);
+//		pedometerX = new Encoder(0, 1);
+//		pedometerY = new Encoder(2, 3);
+//		move = new SonarMovement(leftFront, rightFront, leftBack, rightBack, ssonar, pedometerX, pedometerY);
 	}
 
 	public void autonomousInit() {
@@ -32,7 +30,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		move.avoid();
+		//move.avoid();
     }
         
 
@@ -53,6 +51,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledPeriodic() {
-        move.disable();
+        //move.disable();
 	}
 }
