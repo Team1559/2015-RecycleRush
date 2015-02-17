@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 	int lifterLevel;
 	Gatherer gather;
 	DebounceButton dbb;
-	arduino = new Arduino(4);
+	
 	
     public void robotInit() {
         //drive system
@@ -84,6 +84,8 @@ public class Robot extends IterativeRobot {
         ped = new Pedometer();
 
         dbb = new DebounceButton(copilot, 1);
+        
+        arduino = new Arduino(4);
         //arduino stuff
 //        arduino = new Arduino(0,1,2);
         
