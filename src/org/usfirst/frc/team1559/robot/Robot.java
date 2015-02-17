@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -23,6 +24,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //testing test test
 public class Robot extends IterativeRobot {
  
+	
+	PowerDistributionPanel pdp;
 	Joystick pilotXY, pilotR, copilot;
 	Talon lf, lr, rf, rr;
 	Solenoid in;
@@ -80,6 +83,8 @@ public class Robot extends IterativeRobot {
         //pixy stuff
         pixy = new Pixy();
         p = new PixyController(pixy);
+        
+        pdp = new PowerDistributionPanel();
         
         ped = new Pedometer();
 
@@ -252,16 +257,12 @@ public class Robot extends IterativeRobot {
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
 //    	
-    	SmartDashboard.putDouble("Lifter Current", lifter.getOutputCurrent());
+    	SmartDashboard.putNumber("Lifter Current", pdp.getCurrent(13));
     	
     	//md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
     	if(pilotXY.getRawButton(12)){
     		md.resetGyro();
-    	}
-	
-		
-    	SmartDashboard.putDouble("IRSENSOR VALUE", irSensor.getVoltage());
-    	
+    	}    	
            	
         wingControls();
         lifterControls();
