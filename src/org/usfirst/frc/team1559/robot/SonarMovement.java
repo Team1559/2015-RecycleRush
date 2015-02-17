@@ -72,23 +72,6 @@ public class SonarMovement {
 		}
 	}
 
-	public void reactTriangle(int decision) {
-		switch (decision) {
-		case NO:
-			moveForward();
-			break;
-		case LEFT:
-			isoscelesSequence(Direction.LEFT);
-			break;
-		case RIGHT:
-			isoscelesSequence(Direction.RIGHT);
-			break;
-		default:
-			moveForward();
-			break;
-		}
-	}
-
 	public void isoscelesSequence(Direction dir) { // out then in (45 deg)
 		if (dir == Direction.LEFT) {
 			switch (sequence) {
@@ -265,11 +248,11 @@ public class SonarMovement {
 		}
 	}
 
-	public void moveForward() {
+	public void moveForward() { //actualy right
 		drive.drive(.25, .0, 0, 0);
 	}
 
-	public void diagLeft() {
+	public void diagLeft() { 
 		drive.drive(.25, .25, 0, 0);
 	}
 
