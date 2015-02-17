@@ -57,8 +57,8 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         //drive system
     	pilotXY = new Joystick(Wiring.JOYSTICK_1);
-    	pilotR = new Joystick(1);
-    	copilot = new Joystick(2);
+//    	pilotR = new Joystick(2);
+    	copilot = new Joystick(1);
     	lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); //backwards
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
@@ -238,7 +238,7 @@ public class Robot extends IterativeRobot {
    
     
     public void teleopInit(){
-    	
+    	arduinoControls(); 
     }
 
 
@@ -262,7 +262,7 @@ public class Robot extends IterativeRobot {
 		
     	SmartDashboard.putDouble("IRSENSOR VALUE", irSensor.getVoltage());
     	
-        arduinoControls();    	
+           	
         wingControls();
         lifterControls();
         gathererControls();
@@ -288,10 +288,10 @@ public class Robot extends IterativeRobot {
 	    		gather.gatherIn();
 	    	} else if(pilotXY.getRawButton(Wiring.GATHER_OUT_BUT)){
 	    		gather.gatherOut();
-//	    	} else if(pilot2.getRawAxis(3) > 0){
-//	    		gather.rotateRight(pilot2.getRawAxis(3));
-//	    	} else if(pilot2.getRawAxis(2) > 0){
-//	    		gather.rotateLeft(pilot2.getRawAxis(2));
+	    	} else if(pilotXY.getRawButton(Wiring.PILOT_ROTATE_RIGHT)){
+	    		gather.rotateRight();
+	    	} else if(pilotXY.getRawButton(Wiring.PILOT_ROTATE_LEFT)){
+	    		gather.rotateLeft();
 	    	} else {
 	    		gather.stopGather();	    		
 	    	}
@@ -335,9 +335,9 @@ public class Robot extends IterativeRobot {
 	        	}	        	
 	        }
     	} else {
-    		if(copilot.getRawButton(Wiring.COPILOT_T2)){
+    		if(copilot.getRawButton(6)){
     			if (lifter.getSpeed() == 0){
-	        		lifter.setHome();
+//	        		lifter.setHome();
 	        		firstHome = false;
 	        		lifterLevel = 0;
 	        		Wiring.GATHERER_HEIGHT = lifter.getHome()+25;

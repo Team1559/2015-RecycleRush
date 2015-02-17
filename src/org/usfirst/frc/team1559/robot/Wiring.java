@@ -39,7 +39,7 @@ public class Wiring{
 	public static final int GATHER_IN_BUT = 4;
 	public static final int GATHER_OUT_BUT = 3;
 	public static final int WINGS_BUT = 6;
-	public static final int RESET_GYRO_BUT = 13;
+	public static final int RESET_GYRO_BUT = 7;
 	public static final int COPILOT_T1 = 5;
 	public static final int COPILOT_T2 = 6;
 	public static final int COPILOT_T3 = 7;
@@ -50,4 +50,6 @@ public class Wiring{
 	public static final int COPILOT_T8 = 12;
 	public static final int COPILOT_RED_LIGHT = 2;
 	public static final int COPILOT_TRIGGER = 1;
+	public static final int PILOT_ROTATE_RIGHT = 11;
+	public static final int PILOT_ROTATE_LEFT = 12;
 }

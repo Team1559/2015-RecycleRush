@@ -109,7 +109,7 @@ public void drivePIDToteCenter(double x, double y, double rotationClockwise){
 		double wrappedGyro = wrap(g.getAngle());
 		
 		smartGet();
-		System.out.println("P" + kP + " I" + kI + " D" + kD);
+//		System.out.println("P" + kP + " I" + kI + " D" + kD);
 		
 		if(joy.getPOV(0) != -1){
 			desiredAngle = joy.getPOV(0);
@@ -165,7 +165,7 @@ public void drivePIDToteCenter(double x, double y, double rotationClockwise){
 		double wrappedGyro = wrap(g.getAngle());
 		
 		smartGet();
-		System.out.println("P" + kP + " I" + kI + " D" + kD);
+//		System.out.println("P" + kP + " I" + kI + " D" + kD);
 		
 		if(joy.getPOV(0) != -1){
 			desiredAngle = joy.getPOV(0);
