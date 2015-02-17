@@ -111,10 +111,10 @@ public void drivePIDToteCenter(double x, double y, double rotationClockwise){
 		smartGet();
 		System.out.println("P" + kP + " I" + kI + " D" + kD);
 		
-//		if(joy.getPOV(0) != -1){
-//			desiredAngle = joy.getPOV(0);
-//			System.out.println("GOT A POV");
-//		}
+		if(joy.getPOV(0) != -1){
+			desiredAngle = joy.getPOV(0);
+			System.out.println("GOT A POV");
+		}
 		
 		gyroAngle = g.getAngle();
 		
@@ -141,8 +141,8 @@ public void drivePIDToteCenter(double x, double y, double rotationClockwise){
         
 		double wheelSpeeds[] = new double[4];
         wheelSpeeds[0] = xIn + yIn + (rotationClockwise * .1);
-        wheelSpeeds[1] = -xIn + yIn - rotationClockwise;
-        wheelSpeeds[2] = -xIn + yIn + (rotationClockwise * .1);
+        wheelSpeeds[1] = -xIn + yIn - (rotationClockwise * .1);
+        wheelSpeeds[2] = -xIn + yIn + (rotationClockwise);
         wheelSpeeds[3] = xIn + yIn - rotationClockwise;
 		normalize(wheelSpeeds);
 		
@@ -167,11 +167,11 @@ public void drivePIDToteCenter(double x, double y, double rotationClockwise){
 		smartGet();
 		System.out.println("P" + kP + " I" + kI + " D" + kD);
 		
-//		if(joy.getPOV(0) != -1){
-//			desiredAngle = joy.getPOV(0);
-//			System.out.println("GOT A POV");
-//		}
-//		
+		if(joy.getPOV(0) != -1){
+			desiredAngle = joy.getPOV(0);
+			System.out.println("GOT A POV");
+		}
+		
 		gyroAngle = g.getAngle();
 		
 		if(Math.abs(rotationClockwise) > .1){

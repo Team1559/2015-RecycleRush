@@ -71,7 +71,7 @@ public class Robot extends IterativeRobot {
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	md = new MecanumDrive(pilotXY, lf, lr, rf, rr);
+    	md = new MecanumDrive(pilotR, lf, lr, rf, rr);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	firstHome = true;
     	count = 0;
@@ -394,8 +394,8 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
-    	md.drivePID(pilotXY.getX(), pilotXY.getY(), pilotR.getX());
-//    	md.drivePIDToteCenter(pilot1.getX(), pilot1.getY(), pilot2.getX());
+//    	md.drivePID(pilotXY.getX(), pilotXY.getY(), pilotR.getZ());
+    	md.drivePIDToteCenter(pilotXY.getX(), pilotXY.getY(), pilotR.getTwist());
     	
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
@@ -421,9 +421,9 @@ public class Robot extends IterativeRobot {
     public void gathererControls(){
     	
     	if(lifter.getPosition() > Wiring.GATHERER_HEIGHT){
-	    	if(pilotR.getRawButton(5)){    		
+	    	if(pilotXY.getRawButton(4)){    		
 	    		gather.gatherIn();
-	    	} else if(pilotR.getRawButton(4)){
+	    	} else if(pilotXY.getRawButton(5)){
 	    		gather.gatherOut();
 //	    	} else if(pilot2.getRawAxis(3) > 0){
 //	    		gather.rotateRight(pilot2.getRawAxis(3));
@@ -440,11 +440,11 @@ public class Robot extends IterativeRobot {
     
     public void wingControls(){
     	
-//    	if(pilot.getRawButton(XBoxController.BUTTON_B)){
-//    		wing.latch();
-//    	} else {
-//    		wing.release();
-//    	}
+    	if(pilotXY.getRawButton(3)){
+    		wing.latch();
+    	} else {
+    		wing.release();
+    	}
     	
     }
     
