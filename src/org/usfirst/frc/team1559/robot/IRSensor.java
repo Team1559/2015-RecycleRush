@@ -10,7 +10,7 @@ public class IRSensor {
 	public IRSensor(){
 		
 		ir = new AnalogInput(2);
-		normalDist = 0.0;
+		normalDist = 2.0;
 	}
 	
 	public boolean hasTote(){

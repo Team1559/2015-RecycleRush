@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //testing test test
@@ -55,6 +56,12 @@ public class Robot extends IterativeRobot {
 	int lifterLevel;
 	Gatherer gather;
 	DebounceButton dbb;
+	BCDSwitch autoMode;
+	int mode;
+	int ticks;
+	boolean once;
+	boolean flag;
+	int num;
 	
 	
     public void robotInit() {
@@ -78,7 +85,15 @@ public class Robot extends IterativeRobot {
     	in = new Solenoid(Wiring.GATHER_ARMS_IN);
     	out = new Solenoid(Wiring.GATHER_ARMS_OUT);
     	
+    	autoMode = new BCDSwitch(6, 7, 8, 9);
+    	
+    	once = true;
+    	flag = true;
+    	
     	irSensor = new IRSensor();
+    	mode = -1;
+    	
+    	ticks = 0;
     	
         //pixy stuff
         pixy = new Pixy();
@@ -100,6 +115,8 @@ public class Robot extends IterativeRobot {
     }
     public void disabledInit(){
     	arduino.writeSequence(4);
+    	flag = true;
+    	once = true;
     }
 
 
@@ -113,6 +130,12 @@ public class Robot extends IterativeRobot {
         	arduino.writeAlliance(0);
         }
     	
+//    	mode = autoMode.read();
+    	mode = 0;
+    	num = 0;
+    	once = true;
+    	flag = true;
+    	
     }
     
     /* no comment */
@@ -123,6 +146,69 @@ public class Robot extends IterativeRobot {
     //dank meme
     
     public void autonomousPeriodic() {
+    	
+    	/*
+    	 * 
+    	 * THIS CODE ASSUMES THAT THE ROBOT WILL START WITH THE GATHERER ABOVE HOME!!!!!!!!!!!
+    	 * 
+    	 */
+    	
+    	switch(mode){
+    	
+    	default:
+    		mode = 0;
+    	break;
+    	case 0:
+    		switch(num){
+    		default:
+    			num = 0;
+    		break;
+    	
+    		case 0:    		    
+    			wing.release();
+		    	if(irSensor.hasTote()){
+		    		num++;
+		    	} else {
+		    		gather.gatherIn();
+		    	}		    	
+    		break;
+    		case 1: 
+    			if(once){
+    				System.out.println("MODE " + num);
+    				gather.stopGather();
+        			/* You're dunk. */lifter.goHome();
+        			once = false;
+    			}    			
+    			
+    			if(!lifter.getReverseLimitOK()){
+    				lifter.setHome();
+    				Timer.delay(.25);
+    				lifter.moveUp(1);
+    				num++;
+    			}
+			break;
+    		case 2:
+    			if(sonar.getInches() <= 120){
+    				md.drivePID(1, -.25, 0);
+    				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
+    			} else {
+    				num++;
+    			}
+    		break;
+    		case 3:
+    			md.drivePID(0, 0, 0);
+//    			lifter.goHome();
+//    			wing.latch();
+    			arduino.writeSequence(2);
+    		break;
+    		
+    	}
+    	break;
+    	
+    	}
+    	
+    	
+    	
 //    	PixyPacket pkt = pixy.getPacket();
 ////    	md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
 //    	SmartDashboard.putDouble("Error for Pixy", p.error);
@@ -313,9 +399,13 @@ public class Robot extends IterativeRobot {
     }
     
     public void testPeriodic() {
-        lifter.set(copilot.getAxis(AxisType.kY));
-        System.out.println("Encoder Pos. " + (lifter.getPosition() - lifter.getHome()));
+//        lifter.set(copilot.getAxis(AxisType.kY));
+//        System.out.println("Encoder Pos. " + (lifter.getPosition() - lifter.getHome()));
 //        System.out.println("Encoder Spd." + lifter.getSpeed());
+    	
+    	System.out.println("HAS TOTE: " + irSensor.hasTote());
+    	System.out.println("IR VOLTAGE: " + irSensor.getVoltage());
+    	
     }
 
 
@@ -336,9 +426,9 @@ public class Robot extends IterativeRobot {
 	        	}	        	
 	        }
     	} else {
-    		if(copilot.getRawButton(6)){
+    		if(copilot.getRawButton(Wiring.COPILOT_RED_LIGHT)){
     			if (lifter.getSpeed() == 0){
-//	        		lifter.setHome();
+	        		lifter.setHome();
 	        		firstHome = false;
 	        		lifterLevel = 0;
 	        		Wiring.GATHERER_HEIGHT = lifter.getHome()+25;
