@@ -67,13 +67,13 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         //drive system
     	pilotXY = new Joystick(Wiring.JOYSTICK_1);
-//    	pilotR = new Joystick(2);
-    	copilot = new Joystick(1);
+    	pilotR = new Joystick(1);
+    	copilot = new Joystick(2);
     	lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); //backwards
     	lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); //backwards
     	rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
     	rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
-    	md = new MecanumDrive(pilotXY, lf, lr, rf, rr);
+    	md = new MecanumDrive(pilotR, lf, lr, rf, rr);
     	lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
     	firstHome = true;
     	count = 0;
@@ -176,7 +176,7 @@ public class Robot extends IterativeRobot {
     			if(once){
     				System.out.println("MODE " + num);
     				gather.stopGather();
-        			/* You're dunk. */lifter.goHome();
+        			/* You're drunk. */lifter.goHome();
         			once = false;
     			}    			
     			
@@ -214,116 +214,6 @@ public class Robot extends IterativeRobot {
 //    	SmartDashboard.putDouble("Error for Pixy", p.error);
 //    	SmartDashboard.putDouble("Crate Ratio", p.objRatio);
 ////    	SmartDashboard.putDouble("Gyro angle", g.getAngle());
-//    	
-//    	
-//    	switch (count){
-//    	case 1:
-//    		wing.release();
-//    		lifter.moveUp(1);
-//    		count++;
-//    		break;
-//    	case 2:
-//    		gather.gatherIn();
-//    		try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//    		gather.stopGather(); //need ir to stop
-//    		count++;
-//    		break;
-//    	case 3:
-//    		lifter.goHome();
-//    		try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//    		wing.latch();
-//    		try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//    		lifter.moveUp(1);
-//    		count++;
-//    		break;
-//    	case 4:
-//    		
-//    		
-//    		break;
-//    		
-//    	}
-//    	
-//    	
-//    	
-////    	SmartDashboard.putDouble("Crate center", pp.X);
-////
-////    	wallDist = sonar.getInches();
-////    	int toWall = 60;
-////    	System.out.println("Count: "+count);
-////    	System.out.println(wallDist);
-////    	switch(count)
-////    	{
-////    	
-////    	case 1:
-////    		if(timesRun > 0) {
-////    			//Drive
-//////    			lifter.goHome();
-////    		}
-//////    		lifter.liftTote(1);
-////    		count = 2;
-////    		break;
-////    	case 2:
-////    		if(wallDist>toWall-25)
-////    		{
-////        		rd.mecanumDrive_Cartesian(-.75, -.2, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
-////    		}
-////    		else
-////    			count = 3;
-////    		break;
-////    	case 3:
-////    		wallDist = sonar.getInches();
-////    		if(wallDist<toWall)
-////    		{
-////        		rd.mecanumDrive_Cartesian(.5, -.35, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
-////    		}
-////    		else
-////    			count = 4;
-////    		break;
-////    	case 4:
-////    		rd.mecanumDrive_Cartesian(p.autoCenter(), 0, Wiring.STUPID_CHASSIS_SIDEWAYS, g.getAngle());
-////    		if(timesRun == 2){
-////    			count = 5;
-////    		}
-////    		else{
-////    			count = 1;
-////    			timesRun++;
-////    		}
-////    		break;
-////    	case 5:
-////    		wallDist = sonar.getInches();
-////    		if (wallDist<100)
-////    		{
-////    			rd.mecanumDrive_Cartesian(.5, 0, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-////    		}
-////    		else
-////    			count = 6;
-////    		break;
-////    	case 6:
-//////    		lifter.goHome();
-////    		count = 7;
-////    		break;
-////    	case 7:
-////    		rd.mecanumDrive_Cartesian(0, .5, Wiring.STUPID_CHASSIS_CORRECTION, g.getAngle());
-////    		count = 8;
-////    	case 8:
-////    		//Pretty Lights
-////    		break;
-////    	}
     }
     
    
@@ -338,15 +228,15 @@ public class Robot extends IterativeRobot {
 //    	rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 //    	System.out.println(g.getAngle());
 //    	md.drivePID(pilotXY.getX(), pilotXY.getY(), pilotR.getZ());
-    	md.drivePIDToteCenter(pilotXY.getX(), pilotXY.getY(), pilotXY.getTwist());
+    	md.drivePIDToteCenter(pilotXY.getX(), pilotXY.getY(), pilotR.getZ());
     	
 //    	System.out.println("X " + ped.getX());
 //    	System.out.println("Y " + ped.getY());
 //    	
-    	SmartDashboard.putNumber("Lifter Current", pdp.getCurrent(13));
+//    	SmartDashboard.putNumber("Lifter Current", pdp.getCurrent(13));
     	
     	//md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
-    	if(pilotXY.getRawButton(12)){
+    	if(pilotR.getRawButton(Wiring.RESET_GYRO_BUT)){
     		md.resetGyro();
     	}    	
            	

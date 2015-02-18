@@ -36,10 +36,10 @@ public class Wiring{
 	public static final int PIXY_HALF_BAND = 3;
 	
 	//controls!
-	public static final int GATHER_IN_BUT = 4;
-	public static final int GATHER_OUT_BUT = 3;
-	public static final int WINGS_BUT = 6;
-	public static final int RESET_GYRO_BUT = 7;
+	public static final int GATHER_IN_BUT = 5;
+	public static final int GATHER_OUT_BUT = 4;
+	public static final int WINGS_BUT = 3;
+	public static final int RESET_GYRO_BUT = 12;
 	public static final int COPILOT_T1 = 5;
 	public static final int COPILOT_T2 = 6;
 	public static final int COPILOT_T3 = 7;
