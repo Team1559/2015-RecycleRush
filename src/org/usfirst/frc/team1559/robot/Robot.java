@@ -176,7 +176,7 @@ public class Robot extends IterativeRobot {
     			if(once){
     				System.out.println("MODE " + num);
     				gather.stopGather();
-        			/* You're drunk. */lifter.goHome();
+        			lifter.goHome();/* You're drunk. */
         			once = false;
     			}    			
     			
