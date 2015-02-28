@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1559.robot;
 
+
 import java.util.Arrays;
 
 public class Ramp {
@@ -26,11 +27,11 @@ public class Ramp {
 		
 		double ramp = 0.0;
 		
-		if(primaryCell == primaryBuffer.length - 1){
+		if(primaryCell == primaryBuffer.length){
 			primaryCell = 0;
 		}
 		
-		if(secondaryCell == secondaryBuffer.length - 1){
+		if(secondaryCell == secondaryBuffer.length){
 			secondaryCell = 0;
 		}
 		
