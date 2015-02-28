@@ -50,6 +50,7 @@ public class Robot extends IterativeRobot {
 	Compressor c;
 	boolean firstHome;
 	Pedometer ped;
+	Ramp ramp;
 	
 	//record / playback functions
 	String command;
@@ -106,6 +107,8 @@ public class Robot extends IterativeRobot {
         dbb = new DebounceButton(copilot, 1);
         
         arduino = new Arduino(4);
+        
+        ramp = new Ramp();
         //arduino stuff
 //        arduino = new Arduino(0,1,2);
         
