@@ -23,7 +23,8 @@ public class SonarMovement {
 		LEFT, RIGHT;
 	}
 
-	public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack, Talon rightBack, SonarStereo sonarStereo, Encoder pedometerX, Encoder pedometerY) {
+	public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack, Talon rightBack,
+			SonarStereo sonarStereo, Encoder pedometerX, Encoder pedometerY) {
 		drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
 		this.sonarStereo = sonarStereo;
 		sequence = 0;

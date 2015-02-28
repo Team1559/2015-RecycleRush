@@ -12,7 +12,7 @@ public class Robot extends IterativeRobot {
 	SonarMovement move;
 	Encoder pedometerX;
 	Encoder pedometerY;
-  int decision;
+	int decision;
 	
 	public void robotInit() {
 		
@@ -33,7 +33,6 @@ public class Robot extends IterativeRobot {
 		move.avoid();
     }
         
-
 	public void teleopInit() {
          
     }
