@@ -37,7 +37,7 @@ public class MecanumDrive {
 		leftRear = lr;
 		rightFront = rf;
 		rightRear = rr;
-		g = new Gyro(Wiring.GYRO_ID);
+		g = new Gyro(Wiring.GYRO_ANALOG_ID);
 				
 		this.lf = 0.0; //accesses the double values for driving calculations
 		this.lr = 0.0;
@@ -95,6 +95,9 @@ public class MecanumDrive {
 		
 		//looks like the gyro is +-180, so I copied the code from last year, and modified it for angles instead of radians
 	}
+	
+	
+	
 	
 public void drivePIDToteCenter(double x, double y, double rotationClockwise){
 		

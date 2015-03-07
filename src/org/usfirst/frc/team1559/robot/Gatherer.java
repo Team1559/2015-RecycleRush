@@ -50,15 +50,15 @@ public class Gatherer {
 	public void rotateLeft(){
 		in.set(true);
 		out.set(false);
-		rightGather.set(Wiring.GATHER_ROTATE_SPEED);
-		leftGather.set(Wiring.GATHER_ROTATE_SPEED);
+		rightGather.set(Wiring.GATHER_ROTATE_OUT_SPEED);
+		leftGather.set(Wiring.GATHER_ROTATE_IN_SPEED);
 	}
 	
 	public void rotateRight(){
 		in.set(true);
 		out.set(false);
-		rightGather.set(-Wiring.GATHER_ROTATE_SPEED);
-		leftGather.set(-Wiring.GATHER_ROTATE_SPEED);
+		rightGather.set(-Wiring.GATHER_ROTATE_IN_SPEED);
+		leftGather.set(-Wiring.GATHER_ROTATE_OUT_SPEED);
 	}
 	
 	public void half(){

@@ -8,19 +8,19 @@ public class Lifter extends CANJaguar
 	ControlMode m_controlMode;
 	double homePos;
 	final int UP = 1, DOWN = 2;
-	boolean hardLimit = false;
 	int state = 0;
 	double tgtHeight, tgtHeight1, tgtHeight2, tgtHeight3;
 	boolean movingDown;
+	boolean movingUp;
+	boolean f = false; // print once
 	
 	
 	public Lifter(int deviceNumber)
 	{
 		super(deviceNumber);
-		setPercentMode(CANJaguar.kQuadEncoder, 360); //Use voltage and encoder
+		setPercentMode(CANJaguar.kQuadEncoder, Wiring.LIFTER_ENCODER_TICKS_PER_INCH); //Use voltage and encoder
 		configNeutralMode(CANJaguar.NeutralMode.Brake);
 		enableControl();
-		configLimitMode(LimitMode.SoftPositionLimits);
 	}
 	
 	public void moveToPosition(double rotations){
@@ -31,44 +31,43 @@ public class Lifter extends CANJaguar
 	
 	public void moveDown(int toteLevel) // 1 TOTE = 1'
 	{
-		hardLimit = false;
 		tgtHeight = (toteLevel * Wiring.TOTE_HEIGHT) + getHome();
-		disableSoftPositionLimits();
-//		configSoftPositionLimits(100, tgtHeight); //ISSUES
 		move(DOWN);
 		System.out.println("Going down");
+		System.out.println(tgtHeight);
 		movingDown = true;
 		
 	}
 	public void moveUp(int toteLevel){
 		tgtHeight = toteLevel * Wiring.TOTE_HEIGHT + getHome();
-		configSoftPositionLimits(tgtHeight, 0);
 		move(UP);
 		System.out.println("Going up");
 		System.out.println(tgtHeight);
+		movingUp = true;
+	}
+	
+	public void moveElevator(int toteLevel){
+		tgtHeight = (toteLevel * Wiring.TOTE_HEIGHT) + getHome();
+		System.out.println(tgtHeight);
+		if(tgtHeight > getPosition()){
+			move(DOWN);
+			movingDown = true;
+		} else if(tgtHeight < getPosition()){
+			move(UP);
+			movingUp = true;
+		}
 		
 	}
-	
-	public void liftCan(double height) // 1 CAN = 2'5"
-	{
-		hardLimit = false;
-		configForwardLimit(getPosition() + (height * Wiring.TOTE_HEIGHT) + 11);
-		move(UP);
-	}
-	
 	
 	public void goHome() // Call in periodic
 	{
-		
-		disableSoftPositionLimits();
 		move(DOWN);
-		hardLimit = true;
 	}
 	
 	public void stop() {
-		hardLimit = false;
 		set(0);
 		movingDown = false;
+		movingUp = false;
 	}
 	
 	public void move(int direction) {
@@ -84,11 +83,11 @@ public class Lifter extends CANJaguar
 	
 	public void setHome() {
 		homePos = getPosition();
-		hardLimit = false;
-		tgtHeight1 = 25 + getHome();
-		tgtHeight2 = 50 + getHome();
-		tgtHeight3 = 75 + getHome();
-		System.out.println("Set home to " + homePos);
+		Wiring.GATHERER_HEIGHT = getHome()+25;
+		if(!f){
+			System.out.println("Set home to " + homePos);
+			f = true;
+		}
 	}
 	
 	public double getHome() {

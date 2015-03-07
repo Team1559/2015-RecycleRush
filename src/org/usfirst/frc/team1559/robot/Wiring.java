@@ -11,13 +11,15 @@ public class Wiring{
 	public static final double STUPID_CHASSIS_CORRECTION = -.023;
 	public static final double STUPID_CHASSIS_SIDEWAYS = -.05;
 	public static final double AUTO_SPEED = 1;
-	public static final double MAX_SPEED = .625;
-
+	public static final double MAX_SPEED = .8;
+	public static final int PRIMARY_BUFFER_LENGTH = 10;
+	public static final int SECONDARY_BUFFER_LENGTH = 4;
 	//sensors
-	public static final int GYRO_ID = 0;
-	public static final int SONAR_ID = 1;
+	public static final int GYRO_ANALOG_ID = 0;
+	public static final int SONAR_ANALOG_ID = 1;
 
 	//lifter
+	public static final int LIFTER_ENCODER_TICKS_PER_INCH = 240;//360; use 360 for competition
 	public static final int LIFTER_JAGUAR_VALUE = 15;
 	public static final double TOTE_HEIGHT = 32.0;
 	public static final double DRIVE_HEIGHT = 8.74;
@@ -30,16 +32,17 @@ public class Wiring{
 	//gatherer
 	public static final double GATHER_IN_SPEED = .4;
 	public static final double GATHER_OUT_SPEED = .5;
-	public static final double GATHER_ROTATE_SPEED = .5;
+	public static final double GATHER_ROTATE_OUT_SPEED = .25;
+	public static final double GATHER_ROTATE_IN_SPEED = .5;
 
 	//pixy
 	public static final int PIXY_HALF_BAND = 3;
 	
 	//controls!
-	public static final int GATHER_IN_BUT = 5;
-	public static final int GATHER_OUT_BUT = 4;
+	public static final int GATHER_IN_BUT = 2;
+	public static final int GATHER_OUT_BUT = 3;
 	public static final int WINGS_BUT = 3;
-	public static final int RESET_GYRO_BUT = 12;
+	public static final int RESET_GYRO_BUT = 11;
 	public static final int COPILOT_T1 = 5;
 	public static final int COPILOT_T2 = 6;
 	public static final int COPILOT_T3 = 7;
@@ -50,6 +53,7 @@ public class Wiring{
 	public static final int COPILOT_T8 = 12;
 	public static final int COPILOT_RED_LIGHT = 2;
 	public static final int COPILOT_TRIGGER = 1;
-	public static final int PILOT_ROTATE_RIGHT = 11;
-	public static final int PILOT_ROTATE_LEFT = 12;
+	public static final int PILOT_ROTATE_RIGHT = 5;
+	public static final int PILOT_ROTATE_LEFT = 4;
+	public static final int COPILOT_AUTO_1_TOTE = 3;
 }

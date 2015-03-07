@@ -12,8 +12,8 @@ public class Ramp {
 	
 	public Ramp(){
 		
-		primaryBuffer = new double[10];
-		secondaryBuffer = new double[4];
+		primaryBuffer = new double[Wiring.PRIMARY_BUFFER_LENGTH];
+		secondaryBuffer = new double[Wiring.SECONDARY_BUFFER_LENGTH];
 		
 		//this happens automatically, but I like wasting CPU cycles :)
 		Arrays.fill(primaryBuffer, 0.0);
@@ -42,6 +42,7 @@ public class Ramp {
 		
 		primaryCell++;
 		secondaryCell++;
+		
 		return ramp;
 		
 	}
