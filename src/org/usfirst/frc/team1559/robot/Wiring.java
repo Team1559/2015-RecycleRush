@@ -28,6 +28,10 @@ public class Wiring{
 	public static final int RIGHT_GATHER_MOTOR = 5;
 	public static final int GATHER_ARMS_IN = 0;
 	public static final int GATHER_ARMS_OUT = 1;
+	public static final int ZERO = 0;
+	public static final int ELEVATOR_UP_SPEED = 1;
+	public static final int ELEVATOR_DOWN_SPEED = -1;
+	
 	
 	//gatherer
 	public static final double GATHER_IN_SPEED = .4;

@@ -44,7 +44,7 @@ public class Playback {
 	        xComp = 0.0;
 	        yComp = 0.0;
 	        ped = new Pedometer();
-	        lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
+	        lifter = new Lifter();
 	}
 	
 	 public void playback(){
@@ -155,11 +155,11 @@ public class Playback {
 				totes = Integer.valueOf(s);
 				System.out.println(lines + ". Gather " + totes + " tote(s)");
 				if(lifterLevel > totes){			
-					lifter.moveDown(totes);		
+					lifter.move(totes);		
 					lifterLevel --;
 					done = true;
 				} else {			
-					lifter.moveUp(totes);
+					lifter.move(totes);
 					lifterLevel++;
 					done = true;
 				}

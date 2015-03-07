@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
 		rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
 		rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
 		md = new MecanumDrive(pilotR, lf, lr, rf, rr);
-		lifter = new Lifter(Wiring.LIFTER_JAGUAR_VALUE);
+		lifter = new Lifter();
 		firstHome = true;
 		count = 0;
 		sonar = new MaxSonar(Wiring.SONAR_ANALOG_ID);
@@ -172,10 +172,10 @@ public class Robot extends IterativeRobot {
 					once = false;
 				}
 
-				if (!lifter.getReverseLimitOK()) {
+				if (lifter.bottomLimit()) {
 					lifter.setHome();
 					Timer.delay(.25);
-					lifter.moveUp(1);
+					lifter.move(1);
 					num++;
 				}
 				break;
@@ -213,24 +213,12 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		SmartDashboard.putNumber("Gyro angle", md.g.getAngle());
-		SmartDashboard.putNumber("Lifter Encoder", lifter.getRelative());
-
-		// rd.mecanumDrive_Cartesian(joy.getX(), joy.getY(), joy.getRawAxis(4),
-		// g.getAngle());
-		// System.out.println(g.getAngle());
-		// md.drivePID(pilotXY.getX(), pilotXY.getY(), pilotR.getZ());
 
 		md.drivePIDToteCenter(rampX.rampMotorValue(pilotXY.getX()),
 				rampY.rampMotorValue(pilotXY.getY()), pilotR.getX());
-		// md.drivePIDToteCenter(pilotXY.getX(), pilotXY.getY(), pilotR.getX());
 
-		// System.out.println("X " + ped.getX());
-		// System.out.println("Y " + ped.getY());
-		//
 		SmartDashboard.putNumber("Lifter Current", pdp.getCurrent(13));
 
-		// md.drive(joy.getX(), joy.getY(), joy.getRawAxis(4), g.getAngle());
 		if (pilotXY.getRawButton(Wiring.RESET_GYRO_BUT)) {
 			md.resetGyro();
 		}
@@ -241,58 +229,8 @@ public class Robot extends IterativeRobot {
 		wingControls();
 		lifterControls();
 		gathererControls();
-//		liftOneToteControls();
-//		homeThenLiftOneTote();
 
 	}
-
-//	public void homeThenLiftOneTote(){
-//		if(copilot.getRawButton(Wiring.COPILOT_AUTO_1_TOTE)){
-//			
-//			
-//			
-//		}
-//	}
-	
-//	public void liftOneToteControls() {
-//
-//		if (copilot.getRawButton(Wiring.COPILOT_AUTO_1_TOTE)) {
-//			step = 0;
-//		}
-//
-//		switch (step) {
-//		default:
-//
-//			break;
-//
-//		case 0:
-//			wing.release();
-//			if (irSensor.hasTote()) {
-//				step++;
-//			} else {
-//				gather.gatherIn();
-//			}
-//			break;
-//		case 1:
-//			if (once) {
-//				gather.stopGather();
-//				lifter.goHome();/* You're drunk. */
-//				once = false;
-//			}
-//
-//			if (!lifter.getReverseLimitOK()) {
-//				lifter.setHome();
-//				Timer.delay(.25);
-//				lifter.moveUp(1);
-//				step++;
-//			}
-//			break;
-//		case 2:
-//			step = 15;
-//			break;
-//		}
-//
-//	}
 
 	public void arduinoControls() {
 
@@ -307,7 +245,7 @@ public class Robot extends IterativeRobot {
 
 	public void gathererControls() {
 
-		if (lifter.getPosition() > Wiring.GATHERER_HEIGHT) {
+		if (lifter.getEncoderPosition() > Wiring.GATHERER_HEIGHT) {
 			if (pilotXY.getRawButton(Wiring.GATHER_IN_BUT)) {
 				gather.gatherIn();
 			} else if (pilotXY.getRawButton(Wiring.GATHER_OUT_BUT)) {
@@ -352,21 +290,7 @@ public class Robot extends IterativeRobot {
 		// lifter.getPosition()>=lifter.tgtHeight+.5)
 		// lifter.configForwardLimit(lifter.tgtHeight);
 		if (dbb.getRelease()) {
-			lifter.set(0);
-		}
-		
-		if(!lifter.getReverseLimitOK()){
-			lifter.setHome();
-		}
-
-		if (lifter.movingDown) {
-			if (lifter.getPosition() <= lifter.tgtHeight) {
-				lifter.stop();
-			}
-		} else if(lifter.movingUp){
-			if(lifter.getPosition() >= lifter.tgtHeight) {
-				lifter.stop();
-			}
+			lifter.stop();
 		}
 
 		if (!copilot.getRawButton(Wiring.COPILOT_TRIGGER)) {
@@ -374,19 +298,19 @@ public class Robot extends IterativeRobot {
 			if (copilot.getRawButton(Wiring.COPILOT_T3)
 					|| copilot.getRawButton(Wiring.COPILOT_T4)) {
 				if (!pressed) {
-					lifter.moveElevator(1);
+					lifter.move(1);
 				}
 				pressed = true;
 			} else if (copilot.getRawButton(Wiring.COPILOT_T5)
 					|| copilot.getRawButton(Wiring.COPILOT_T6)) {
 				if (!pressed) {
-					lifter.moveElevator(2);
+					lifter.move(2);
 				}
 				pressed = true;
 			} else if (copilot.getRawButton(Wiring.COPILOT_T7)
 					|| copilot.getRawButton(Wiring.COPILOT_T8)) {
 				if (!pressed) {
-					lifter.moveElevator(3);
+					lifter.move(3);
 				}
 				pressed = true;
 			} else if (copilot.getRawButton(Wiring.COPILOT_T1)
