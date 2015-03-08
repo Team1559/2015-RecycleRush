@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.CANJaguar;
 
 public class Lifter implements Runnable
 {
-	double encoderPosition;
 	double targetPosition;
 	CANJaguar motor;
 	boolean movingDown;
@@ -14,14 +13,13 @@ public class Lifter implements Runnable
 	double homePosition;
 	
 	public Lifter(){
-		encoderPosition = 0.0;
 		targetPosition = 0.0;
 		motor = new CANJaguar(Wiring.LIFTER_JAGUAR_VALUE);
 		movingDown = false;
 		movingUp = false;
 		notMoving = true;
 		currentLevel = 0;
-		homePosition = 0; //just cuz - MAKE SURE YOU RESET IT!
+		homePosition = 0; //just 'cuz - MAKE SURE YOU RESET IT!
 	}
 
 	/*
@@ -39,7 +37,7 @@ public class Lifter implements Runnable
 			motor.set(Wiring.ELEVATOR_DOWN_SPEED);
 			movingUp = false;
 			movingDown = true;
-			notMoving =false;
+			notMoving = false;
 		}
 	}
 	
@@ -58,7 +56,7 @@ public class Lifter implements Runnable
 	}
 	
 	//a method to get a position relative to home, for the gatherers
-	public double getCurrentPosition(){
+	public double getRelativePosition(){
 		return currentLevel - homePosition;
 	}
 	
@@ -75,7 +73,7 @@ public class Lifter implements Runnable
 	}
 	
 	public void setHome(){
-		homePosition = motor.getPosition();
+		homePosition = getEncoderPosition();
 	}
 	
 	public void stop(){
@@ -93,18 +91,18 @@ public class Lifter implements Runnable
 	 * 
 	 */
 	public void run() { //here you go, Jeremy. The thread you wanted. You're welcome
-		//ypu forgot to update current level!
+		//you forgot to update current level!
 		currentLevel = (int) (getEncoderPosition() / Wiring.TOTE_HEIGHT);
 		
 		//check to see when the values are correct, so we can stop checking iteratively
 		if(!notMoving){
 		
 			if(movingUp){
-				if(encoderPosition >= targetPosition){
+				if(getEncoderPosition() >= targetPosition){
 					stop();
 				}
 			} else if(movingDown) {
-				if(encoderPosition <= targetPosition){
+				if(getEncoderPosition() <= targetPosition){
 					stop();
 				}
 			}
