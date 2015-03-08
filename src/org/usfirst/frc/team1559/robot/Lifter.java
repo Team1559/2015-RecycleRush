@@ -28,15 +28,14 @@ public class Lifter implements Runnable
 	 * This method is to set the elevator in motion
 	 */
 	public void move(int desiredLevel){ //1 2 or 3
-		
 		targetPosition = homePosition + (desiredLevel * Wiring.TOTE_HEIGHT);
 		
-		if(desiredLevel > currentLevel){
+		if(targetPosition > currentLevel){
 			motor.set(Wiring.ELEVATOR_UP_SPEED);
 			movingUp = true;
 			movingDown = false;
 			notMoving = false;
-		} else if(desiredLevel < currentLevel){
+		} else if(targetPosition < currentLevel){
 			motor.set(Wiring.ELEVATOR_DOWN_SPEED);
 			movingUp = false;
 			movingDown = true;
@@ -45,11 +44,22 @@ public class Lifter implements Runnable
 	}
 	
 	public void set(double input){
+		//this could break a couple of things if triggered while we're going to a level, so I made it safer
 		motor.set(input);
+		//safety First!
+		notMoving = true;
+		movingUp = false;
+		movingDown = false;
+		
 	}
 	
 	public double getEncoderPosition(){
 		return motor.getPosition();
+	}
+	
+	//a method to get a position relative to home, for the gatherers
+	public double getCurrentPosition(){
+		return currentLevel - homePosition;
 	}
 	
 	public void goHome(){ //you're drunk
@@ -83,6 +93,8 @@ public class Lifter implements Runnable
 	 * 
 	 */
 	public void run() { //here you go, Jeremy. The thread you wanted. You're welcome
+		//ypu forgot to update current level!
+		currentLevel = getEncoderPosition();
 		
 		//check to see when the values are correct, so we can stop checking iteratively
 		if(!notMoving){
