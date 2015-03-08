@@ -316,7 +316,11 @@ public class Robot extends IterativeRobot {
 			} else if (copilot.getRawButton(Wiring.COPILOT_T1)
 					|| copilot.getRawButton(Wiring.COPILOT_T2)) {
 				if (!pressed) {
-					lifter.goHome();
+					//goHome() doesn't change any of the variables you use to determine speed/position,
+					//so I changed it to move(0), which should do the same thing, but change the variables
+					//so everything else doesn't break
+					//lifter.goHome();
+					lifter.move(0);
 				}
 				pressed = true;
 			} else {
