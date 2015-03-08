@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lifter implements Runnable
 {
@@ -92,27 +93,38 @@ public class Lifter implements Runnable
 	 */
 	public void run() { //here you go, Jeremy. The thread you wanted. You're welcome
 		//you forgot to update current level!
-		currentLevel = (int) (getEncoderPosition() / Wiring.TOTE_HEIGHT);
 		
-		//check to see when the values are correct, so we can stop checking iteratively
-		if(!notMoving){
-		
-			if(movingUp){
-				if(getEncoderPosition() >= targetPosition){
-					stop();
+		while(true){ //this is a little necessary
+			currentLevel = (int) (getEncoderPosition() / Wiring.TOTE_HEIGHT);
+			SmartDashboard.putNumber("CURRENT LEVEL", currentLevel);
+			SmartDashboard.putNumber("ENCODER VALUE", getEncoderPosition());
+			SmartDashboard.putNumber("TARGET", targetPosition);
+			SmartDashboard.putNumber("HOME POSITION", homePosition);
+			//check to see when the values are correct, so we can stop checking iteratively
+			if(!notMoving){
+			
+				if(movingUp){
+					if(getEncoderPosition() >= targetPosition){
+						stop();
+					}
+				} else if(movingDown) {
+					if(getEncoderPosition() <= targetPosition){
+						stop();
+					}
 				}
-			} else if(movingDown) {
-				if(getEncoderPosition() <= targetPosition){
-					stop();
-				}
+				
 			}
 			
+			if(bottomLimit()){
+				setHome();
+			}
+			try {
+				Thread.sleep(250);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		
-		if(bottomLimit()){
-			setHome();
-		}
-		
 	}
 	
 }
