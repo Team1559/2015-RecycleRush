@@ -244,8 +244,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void gathererControls() {
-
-		if (lifter.getEncoderPosition() > Wiring.GATHERER_HEIGHT) {
+		//used to use getEncoderPosition, but it would've returned un-home-adjusted values, so I changed it to getCurrentPosition() 
+		if (lifter.getCurrentPosition() > Wiring.GATHERER_HEIGHT) {
 			if (pilotXY.getRawButton(Wiring.GATHER_IN_BUT)) {
 				gather.gatherIn();
 			} else if (pilotXY.getRawButton(Wiring.GATHER_OUT_BUT)) {
