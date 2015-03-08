@@ -94,7 +94,7 @@ public class Lifter implements Runnable
 	 */
 	public void run() { //here you go, Jeremy. The thread you wanted. You're welcome
 		//ypu forgot to update current level!
-		currentLevel = getEncoderPosition();
+		currentLevel = (int) (getEncoderPosition() / Wiring.TOTE_HEIGHT);
 		
 		//check to see when the values are correct, so we can stop checking iteratively
 		if(!notMoving){
