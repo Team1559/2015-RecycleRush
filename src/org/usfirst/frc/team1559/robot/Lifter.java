@@ -5,12 +5,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lifter implements Runnable
 {
+	
+	//Thread Safety!
 	double targetPosition;
 	CANJaguar motor;
-	boolean movingDown;
-	boolean movingUp;
-	boolean notMoving;
-	int currentLevel;
+	volatile boolean movingDown;
+	volatile boolean movingUp;
+	volatile boolean notMoving;
+	volatile double currentLevel;
 	double homePosition;
 	
 	public Lifter(){
@@ -95,7 +97,7 @@ public class Lifter implements Runnable
 		//you forgot to update current level!
 		
 		while(true){ //this is a little necessary
-			currentLevel = (int) (getEncoderPosition() / Wiring.TOTE_HEIGHT);
+			currentLevel = (int) (getEncoderPosition());//Shouldn't this just be the relative encoder position?
 			SmartDashboard.putNumber("CURRENT LEVEL", currentLevel);
 			SmartDashboard.putNumber("ENCODER VALUE", getEncoderPosition());
 			SmartDashboard.putNumber("TARGET", targetPosition);
@@ -119,7 +121,8 @@ public class Lifter implements Runnable
 				setHome();
 			}
 			try {
-				Thread.sleep(250);
+				//Thread.sleep(250); We might miss stuff if we only check every .25 seconds
+				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
