@@ -78,7 +78,7 @@ public class Robot extends IterativeRobot {
 
 		once = true;
 		flag = true;
-
+//yee
 		irSensor = new IRSensor();
 		mode = -1;
 
@@ -105,13 +105,14 @@ public class Robot extends IterativeRobot {
 
 		// record/playback stuff
 		// sorry about the nasty try-catch
-
+		
 	}
 
 	public void disabledInit() {
 		arduino.writeSequence(4);
 		flag = true;
 		once = true;
+//		lifter.kill();
 	}
 
 	public void autonomousInit() {
@@ -210,6 +211,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		arduinoControls();
 		md.resetGyro();
+//		lifter.run();
 	}
 
 	public void teleopPeriodic() {
@@ -293,6 +295,8 @@ public class Robot extends IterativeRobot {
 			lifter.stop();
 		}
 
+		lifter.run();
+		
 		if (!copilot.getRawButton(Wiring.COPILOT_TRIGGER)) {
 
 			if (copilot.getRawButton(Wiring.COPILOT_T3)
@@ -316,11 +320,9 @@ public class Robot extends IterativeRobot {
 			} else if (copilot.getRawButton(Wiring.COPILOT_T1)
 					|| copilot.getRawButton(Wiring.COPILOT_T2)) {
 				if (!pressed) {
-					//goHome() doesn't change any of the variables you use to determine speed/position,
-					//so I changed it to move(0), which should do the same thing, but change the variables
-					//so everything else doesn't break
-					//lifter.goHome();
-					lifter.move(0);
+					lifter.goHome();
+//					lifter.move(0);
+					System.out.println("PRESSED BUTTON 1 or 2");
 				}
 				pressed = true;
 			} else {

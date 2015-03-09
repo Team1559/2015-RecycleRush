@@ -3,7 +3,7 @@ package org.usfirst.frc.team1559.robot;
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Lifter implements Runnable
+public class Lifter //implements Runnable
 {
 	
 	//Thread Safety!
@@ -14,6 +14,7 @@ public class Lifter implements Runnable
 	volatile boolean notMoving;
 	volatile double currentLevel;
 	double homePosition;
+	boolean run= true;
 	
 	public Lifter(){
 		targetPosition = 0.0;
@@ -23,20 +24,26 @@ public class Lifter implements Runnable
 		notMoving = true;
 		currentLevel = 0;
 		homePosition = 0; //just 'cuz - MAKE SURE YOU RESET IT!
+		motor.setPercentMode(CANJaguar.kQuadEncoder, 360);
+		motor.configNeutralMode(CANJaguar.NeutralMode.Brake);
+		motor.enableControl();
 	}
+	
 
 	/*
 	 * This method is to set the elevator in motion
 	 */
 	public void move(int desiredLevel){ //1 2 or 3
 		targetPosition = homePosition + (desiredLevel * Wiring.TOTE_HEIGHT);
-		
+		System.out.println("Trying to MOVE TO " + desiredLevel);
 		if(targetPosition > currentLevel){
+			System.out.println("going up");
 			motor.set(Wiring.ELEVATOR_UP_SPEED);
 			movingUp = true;
 			movingDown = false;
 			notMoving = false;
 		} else if(targetPosition < currentLevel){
+			System.out.println("going down");
 			motor.set(Wiring.ELEVATOR_DOWN_SPEED);
 			movingUp = false;
 			movingDown = true;
@@ -48,9 +55,10 @@ public class Lifter implements Runnable
 		//this could break a couple of things if triggered while we're going to a level, so I made it safer
 		motor.set(input);
 		//safety First!
-		notMoving = true;
+		notMoving = false;
 		movingUp = false;
 		movingDown = false;
+		System.out.println("I got here :)");
 		
 	}
 	
@@ -85,7 +93,17 @@ public class Lifter implements Runnable
 		movingUp = false;
 		movingDown = false;
 	}
+	public void kill(){
+		run = false;
+		System.out.println("its ded jim");
+	}
+	
+	public void start(){
+		run = true;
+		this.run();
 
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Runnable#run()
@@ -95,9 +113,9 @@ public class Lifter implements Runnable
 	 */
 	public void run() { //here you go, Jeremy. The thread you wanted. You're welcome
 		//you forgot to update current level!
-		
-		while(true){ //this is a little necessary
-			currentLevel = (int) (getEncoderPosition());//Shouldn't this just be the relative encoder position?
+
+//		while(run){ //this is a little necessary
+			currentLevel = (getEncoderPosition() - homePosition);//Shouldn't this just be the relative encoder position?
 			SmartDashboard.putNumber("CURRENT LEVEL", currentLevel);
 			SmartDashboard.putNumber("ENCODER VALUE", getEncoderPosition());
 			SmartDashboard.putNumber("TARGET", targetPosition);
@@ -106,12 +124,14 @@ public class Lifter implements Runnable
 			if(!notMoving){
 			
 				if(movingUp){
-					if(getEncoderPosition() >= targetPosition){
+					if(currentLevel >= targetPosition){
 						stop();
+						System.out.println("Stopped the motor!");
 					}
 				} else if(movingDown) {
-					if(getEncoderPosition() <= targetPosition){
+					if(currentLevel <= targetPosition){
 						stop();
+						System.out.println("Stopped the motor!");
 					}
 				}
 				
@@ -119,15 +139,9 @@ public class Lifter implements Runnable
 			
 			if(bottomLimit()){
 				setHome();
+				System.out.println("Set home");
 			}
-			try {
-				//Thread.sleep(250); We might miss stuff if we only check every .25 seconds
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		}
 	}
 	
 }
