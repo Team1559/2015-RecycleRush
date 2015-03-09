@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	PowerDistributionPanel pdp;
+	Camera cam;
 	Joystick pilotXY, pilotR, copilot;
 	Talon lf, lr, rf, rr;
 	Solenoid in;
@@ -105,6 +106,8 @@ public class Robot extends IterativeRobot {
 
 		// record/playback stuff
 		// sorry about the nasty try-catch
+//		cam = new Camera("cam0");
+//		cam.startStream();
 		
 	}
 
@@ -135,6 +138,7 @@ public class Robot extends IterativeRobot {
 	/* no comment */
 
 	// ///////////////////////////////////well commented
+	
 	// m'comment *tips IDE*
 	// dank meme
 
@@ -215,6 +219,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
+//		cam.stream();
 
 		md.drivePIDToteCenter(rampX.rampMotorValue(pilotXY.getX()),
 				rampY.rampMotorValue(pilotXY.getY()), pilotR.getX());
@@ -321,7 +326,8 @@ public class Robot extends IterativeRobot {
 					|| copilot.getRawButton(Wiring.COPILOT_T2)) {
 				if (!pressed) {
 					lifter.goHome();
-//					lifter.move(0);
+										
+//					lifter.move(0); //yee
 					System.out.println("PRESSED BUTTON 1 or 2");
 				}
 				pressed = true;

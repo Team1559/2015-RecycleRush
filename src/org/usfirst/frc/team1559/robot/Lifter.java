@@ -24,7 +24,7 @@ public class Lifter //implements Runnable
 		notMoving = true;
 		currentLevel = 0;
 		homePosition = 0; //just 'cuz - MAKE SURE YOU RESET IT!
-		motor.setPercentMode(CANJaguar.kQuadEncoder, 360);
+		motor.setPercentMode(CANJaguar.kQuadEncoder, Wiring.LIFTER_ENCODER_TICKS_PER_INCH);
 		motor.configNeutralMode(CANJaguar.NeutralMode.Brake);
 		motor.enableControl();
 	}
@@ -34,7 +34,7 @@ public class Lifter //implements Runnable
 	 * This method is to set the elevator in motion
 	 */
 	public void move(int desiredLevel){ //1 2 or 3
-		targetPosition = homePosition + (desiredLevel * Wiring.TOTE_HEIGHT);
+		targetPosition = (desiredLevel * Wiring.TOTE_HEIGHT);
 		System.out.println("Trying to MOVE TO " + desiredLevel);
 		if(targetPosition > currentLevel){
 			System.out.println("going up");
@@ -68,7 +68,7 @@ public class Lifter //implements Runnable
 	
 	//a method to get a position relative to home, for the gatherers
 	public double getRelativePosition(){
-		return currentLevel - homePosition;
+		return currentLevel;
 	}
 	
 	public void goHome(){ //you're drunk
