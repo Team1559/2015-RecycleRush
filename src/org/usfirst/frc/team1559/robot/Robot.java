@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	PowerDistributionPanel pdp;
-	Camera cam;
+//	Camera cam;
 	Joystick pilotXY, pilotR, copilot;
 	Talon lf, lr, rf, rr;
 	Solenoid in;
@@ -338,4 +338,10 @@ public class Robot extends IterativeRobot {
 			lifter.set(copilot.getRawAxis(1));
 		}
 	}
+	
+	//CoOOdddYYYYY
+	//This is your comment ghost
+	//OooooOOOOOoooooOOO
+	//*HAUNTED*
+	//Oooo
 }
