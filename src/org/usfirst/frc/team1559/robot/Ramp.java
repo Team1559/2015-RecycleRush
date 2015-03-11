@@ -37,9 +37,9 @@ public class Ramp {
 		
 		primaryBuffer[primaryCell] = joystickInput;
 		secondaryBuffer[secondaryCell] = takeAverage(primaryBuffer);
-		
-		ramp = takeAverage(secondaryBuffer);
-		
+
+			ramp = takeAverage(secondaryBuffer);
+			
 		primaryCell++;
 		secondaryCell++;
 		

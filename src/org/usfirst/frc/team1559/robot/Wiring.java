@@ -11,9 +11,9 @@ public class Wiring{
 	public static final double STUPID_CHASSIS_CORRECTION = -.023;
 	public static final double STUPID_CHASSIS_SIDEWAYS = -.05;
 	public static final double AUTO_SPEED = 1;
-	public static final double MAX_SPEED = .8;
-	public static final int PRIMARY_BUFFER_LENGTH = 10;
-	public static final int SECONDARY_BUFFER_LENGTH = 4;
+	public static final double MAX_SPEED = .685;
+	public static final int PRIMARY_BUFFER_LENGTH = 11;
+	public static final int SECONDARY_BUFFER_LENGTH = 10;
 	//sensors
 	public static final int GYRO_ANALOG_ID = 0;
 	public static final int SONAR_ANALOG_ID = 1;
@@ -46,7 +46,7 @@ public class Wiring{
 	public static final int GATHER_IN_BUT = 2;
 	public static final int GATHER_OUT_BUT = 3;
 	public static final int WINGS_BUT = 3;
-	public static final int RESET_GYRO_BUT = 11;
+	public static final int RESET_GYRO_BUT = 6;
 	public static final int COPILOT_T1 = 5;
 	public static final int COPILOT_T2 = 6;
 	public static final int COPILOT_T3 = 7;

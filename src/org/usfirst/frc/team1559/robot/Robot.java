@@ -106,8 +106,7 @@ public class Robot extends IterativeRobot {
 
 		// record/playback stuff
 		// sorry about the nasty try-catch
-//		cam = new Camera("cam0");
-//		cam.startStream();
+//		cam = new Camera("cam0", 320, 240, 100);//Name on Web-Interface, Width, Height, Quality(0-100)
 		
 	}
 
@@ -221,8 +220,8 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 //		cam.stream();
 
-		md.drivePIDToteCenter(rampX.rampMotorValue(pilotXY.getX()),
-				rampY.rampMotorValue(pilotXY.getY()), pilotR.getX());
+		md.drivePIDToteCenter(pilotXY.getX(),
+				pilotXY.getY(), pilotR.getX());
 
 		SmartDashboard.putNumber("Lifter Current", pdp.getCurrent(13));
 
@@ -238,7 +237,7 @@ public class Robot extends IterativeRobot {
 		gathererControls();
 
 	}
-
+	
 	public void arduinoControls() {
 
 		arduino.writeSequence(1);
