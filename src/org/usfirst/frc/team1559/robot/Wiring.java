@@ -31,6 +31,7 @@ public class Wiring{
 	public static final int ZERO = 0;
 	public static final int ELEVATOR_UP_SPEED = 1;
 	public static final int ELEVATOR_DOWN_SPEED = -1;
+	public static final double CRUISING_HEIGHT = 13.5;
 	
 	
 	//gatherer

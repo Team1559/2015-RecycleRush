@@ -51,6 +51,24 @@ public class Lifter //implements Runnable
 		}
 	}
 	
+	public void cruisingHeight(){ //1 2 or 3
+		targetPosition = (Wiring.CRUISING_HEIGHT);
+		System.out.println("Trying to MOVE TO " + Wiring.CRUISING_HEIGHT);
+		if(targetPosition > currentLevel){
+			System.out.println("going up");
+			motor.set(Wiring.ELEVATOR_UP_SPEED);
+			movingUp = true;
+			movingDown = false;
+			notMoving = false;
+		} else if(targetPosition < currentLevel){
+			System.out.println("going down");
+			motor.set(Wiring.ELEVATOR_DOWN_SPEED);
+			movingUp = false;
+			movingDown = true;
+			notMoving = false;
+		}
+	}
+	
 	public void set(double input){
 		//this could break a couple of things if triggered while we're going to a level, so I made it safer
 		motor.set(input);

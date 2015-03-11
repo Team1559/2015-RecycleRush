@@ -309,6 +309,11 @@ public class Robot extends IterativeRobot {
 					lifter.move(1);
 				}
 				pressed = true;
+			} else if (copilot.getRawButton(Wiring.COPILOT_RED_LIGHT)) {
+				if (!pressed) {
+					lifter.cruisingHeight();
+				}
+				pressed = true;
 			} else if (copilot.getRawButton(Wiring.COPILOT_T5)
 					|| copilot.getRawButton(Wiring.COPILOT_T6)) {
 				if (!pressed) {
@@ -325,9 +330,6 @@ public class Robot extends IterativeRobot {
 					|| copilot.getRawButton(Wiring.COPILOT_T2)) {
 				if (!pressed) {
 					lifter.goHome();
-										
-//					lifter.move(0); //yee
-					System.out.println("PRESSED BUTTON 1 or 2");
 				}
 				pressed = true;
 			} else {
