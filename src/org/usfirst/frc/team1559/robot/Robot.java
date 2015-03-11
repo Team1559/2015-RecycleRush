@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	PowerDistributionPanel pdp;
-//	Camera cam;
 	Joystick pilotXY, pilotR, copilot;
 	Talon lf, lr, rf, rr;
 	Solenoid in;
@@ -41,21 +40,16 @@ public class Robot extends IterativeRobot {
 	Ramp rampX;
 	Ramp rampY;
 
-	// record / playback functions
-	String command;
-	int lifterLevel;
 	Gatherer gather;
 	DebounceButton dbb;
 	BCDSwitch autoMode;
 	int mode;
-	int ticks;
 	boolean once;
 	boolean flag;
 	int num;
 	int step;
 
 	public void robotInit() {
-		// drive system
 		pilotXY = new Joystick(Wiring.JOYSTICK_1);
 		pilotR = new Joystick(1);
 		copilot = new Joystick(2);
@@ -79,11 +73,10 @@ public class Robot extends IterativeRobot {
 
 		once = true;
 		flag = true;
-//yee
+		
 		irSensor = new IRSensor();
 		mode = -1;
 
-		ticks = 0;
 
 		// pixy stuff
 		pixy = new Pixy();
@@ -114,7 +107,6 @@ public class Robot extends IterativeRobot {
 		arduino.writeSequence(4);
 		flag = true;
 		once = true;
-//		lifter.kill();
 	}
 
 	public void autonomousInit() {
@@ -136,10 +128,7 @@ public class Robot extends IterativeRobot {
 
 	/* no comment */
 
-	// ///////////////////////////////////well commented
-	
-	// m'comment *tips IDE*
-	// dank meme
+	/////////////////////////////////////well commented
 
 	public void autonomousPeriodic() {
 
@@ -214,12 +203,9 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		arduinoControls();
 		md.resetGyro();
-//		lifter.run();
 	}
 
 	public void teleopPeriodic() {
-//		cam.stream();
-
 		md.drivePIDToteCenter(pilotXY.getX(),
 				pilotXY.getY(), pilotR.getX());
 
@@ -280,10 +266,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
-		// lifter.set(copilot.getAxis(AxisType.kY));
-		// System.out.println("Encoder Pos. " + (lifter.getPosition() -
-		// lifter.getHome()));
-		// System.out.println("Encoder Spd." + lifter.getSpeed());
 
 		System.out.println("HAS TOTE: " + irSensor.hasTote());
 		System.out.println("IR VOLTAGE: " + irSensor.getVoltage());
@@ -292,9 +274,6 @@ public class Robot extends IterativeRobot {
 
 	public void lifterControls() {
 
-		// if (lifter.getPosition()<=lifter.tgtHeight-.5 &&
-		// lifter.getPosition()>=lifter.tgtHeight+.5)
-		// lifter.configForwardLimit(lifter.tgtHeight);
 		if (dbb.getRelease()) {
 			lifter.stop();
 		}
@@ -339,10 +318,5 @@ public class Robot extends IterativeRobot {
 			lifter.set(copilot.getRawAxis(1));
 		}
 	}
-	
-	//CoOOdddYYYYY
-	//This is your comment ghost
-	//OooooOOOOOoooooOOO
-	//*HAUNTED*
-	//Oooo
+
 }
