@@ -35,7 +35,7 @@ public class Wiring{
 	
 	
 	//gatherer
-	public static final double GATHER_IN_SPEED = .4;
+	public static final double GATHER_IN_SPEED = .5;
 	public static final double GATHER_OUT_SPEED = .5;
 	public static final double GATHER_ROTATE_OUT_SPEED = .25;
 	public static final double GATHER_ROTATE_IN_SPEED = .5;
