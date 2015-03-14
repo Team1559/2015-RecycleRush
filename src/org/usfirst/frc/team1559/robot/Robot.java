@@ -10,8 +10,6 @@ public class Robot extends IterativeRobot {
 	SonarStereo ssonar = new SonarStereo(1, 0, 1);
 	Talon leftFront, rightFront, leftBack, rightBack;
 	SonarMovement move;
-	Encoder pedometerX;
-	Encoder pedometerY;
 	int decision;
 	
 	public void robotInit() {
@@ -20,9 +18,7 @@ public class Robot extends IterativeRobot {
 		rightFront = new Talon(8);
 		leftBack = new Talon(6);
 		rightBack = new Talon(7);
-		pedometerX = new Encoder(0, 1);
-		pedometerY = new Encoder(2, 3);
-		move = new SonarMovement(leftFront, rightFront, leftBack, rightBack, ssonar, pedometerX, pedometerY);
+		move = new SonarMovement(leftFront, rightFront, leftBack, rightBack, ssonar);
 	}
 
 	public void autonomousInit() {
