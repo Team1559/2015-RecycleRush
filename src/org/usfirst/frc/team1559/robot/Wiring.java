@@ -17,6 +17,7 @@ public class Wiring{
 	//sensors
 	public static final int GYRO_ANALOG_ID = 0;
 	public static final int SONAR_ANALOG_ID = 1;
+	public static final int[] BCD_PORTS = {6, 7, 8, 9};
 
 	//lifter
 	public static final int LIFTER_ENCODER_TICKS_PER_INCH = 240;//360; use 360 for competition

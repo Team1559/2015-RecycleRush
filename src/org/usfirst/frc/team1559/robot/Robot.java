@@ -69,7 +69,7 @@ public class Robot extends IterativeRobot {
 		in = new Solenoid(Wiring.GATHER_ARMS_IN);
 		out = new Solenoid(Wiring.GATHER_ARMS_OUT);
 
-		autoMode = new BCDSwitch(6, 7, 8, 9);
+		autoMode = new BCDSwitch(Wiring.BCD_PORTS);
 
 		once = true;
 		flag = true;
@@ -137,6 +137,8 @@ public class Robot extends IterativeRobot {
 		 * THIS CODE ASSUMES THAT THE ROBOT WILL START WITH THE GATHERER ABOVE
 		 * HOME!!!!!!!!!!!
 		 */
+		
+		lifter.run();
 
 		switch (mode) {
 

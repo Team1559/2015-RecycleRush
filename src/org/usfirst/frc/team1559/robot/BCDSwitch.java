@@ -23,11 +23,11 @@ public class BCDSwitch {
 	 * @param in4 Digital input for 4 wire
 	 * @param in8 Digital input for 8 wire
 	 */
-	public BCDSwitch(int in1, int in2, int in4, int in8) {
-		di1 = new DigitalInput(in1);
-		di2 = new DigitalInput(in2);
-		di4 = new DigitalInput(in4);
-		di8 = new DigitalInput(in8);
+	public BCDSwitch(int[] ports) {
+		di1 = new DigitalInput(ports[0]);
+		di2 = new DigitalInput(ports[1]);
+		di4 = new DigitalInput(ports[2]);
+		di8 = new DigitalInput(ports[3]);
 	}
 	
 	/**
