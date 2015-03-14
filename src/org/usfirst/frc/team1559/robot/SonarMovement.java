@@ -8,7 +8,7 @@ public class SonarMovement {
 	private double distance = 0.0;
 
 	private final double MAXDISTANCE = 7.5;
-	private final double LEGDISTANCE = 4.0;
+	private final double DIAGDISTANCE = 4.0;
 
 	private SonarStereo sonarStereo;
 	private MecanumDrive drive;
@@ -17,7 +17,6 @@ public class SonarMovement {
 	private int desiredTime;
 	private int sequence;
 	private final double conversionFactor = 7.5; // Feet per second
-	// periodic at 50 Hz
 
 	private final int NO = 0, LEFT = 1, RIGHT = 2;
 	private int decision = NO;
@@ -27,7 +26,7 @@ public class SonarMovement {
 		LEFT, RIGHT;
 	}
 
-	public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack, Talon rightBack, SonarStereo sonarStereo, Encoder pedometerX, Encoder pedometerY) {
+	public SonarMovement(Talon leftFront, Talon rightFront, Talon leftBack, Talon rightBack, SonarStereo sonarStereo) {
 		drive = new MecanumDrive(leftFront, leftBack, rightFront, rightBack);
 		this.sonarStereo = sonarStereo;
 		sequence = 0;
@@ -65,6 +64,7 @@ public class SonarMovement {
 
 	public void react(int decision) {
 		switch (decision) {
+		default:
 		case NO:
 			moveForward();
 			break;
@@ -73,9 +73,6 @@ public class SonarMovement {
 			break;
 		case RIGHT:
 			isoscelesSequence(Direction.RIGHT);
-			break;
-		default:
-			moveForward();
 			break;
 		}
 	}
@@ -195,79 +192,84 @@ public class SonarMovement {
 	//		}
 	//	}
 
-	//	public void trapezoidSequence(Direction dir) { // out at 45 to fixed distance, forward until perp, then back at 45
-	//		if (dir == Direction.LEFT) {
-	//			switch (sequence) {
-	//			case 0:
-	//				System.out.println("Stage 0: Setup");
-	//				sequence = 1;
-	//				break;
-	//			case 1:
-	//				System.out.println("Stage 1: Go out (left)");
-	//				diagLeft();
-	//				if (getYFeet() <= -LEGDISTANCE)
-	//					sequence = 2;
-	//				break;
-	//			case 2:
-	//				System.out.println("Stage 2: Forward");
-	//				forwardDistance = distance - LEGDISTANCE;
-	//				moveForward();
-	//				if (getXFeet() >= forwardDistance)
-	//					sequence = 3;
-	//				break;
-	//			case 3:
-	//				System.out.println("Stage 3: Go back (right)");
-	//				diagRight();
-	//				if (getYFeet() >= 0)
-	//					sequence = 4;
-	//				break;
-	//			case 4:
-	//				System.out.println("Stage 4: Preparing for another obstacle");
-	//				sequence = 0;
-	//				break;
-	//			default:
-	//				System.out.println("Stage -1: You broke it");
-	//				sequence = 0;
-	//				break;
-	//			}
-	//		} else if (dir == Direction.RIGHT) {
-	//			switch (sequence) {
-	//			case 0:
-	//				System.out.println("Stage 0: Setup");
-	//				sequence = 1;
-	//				break;
-	//			case 1:
-	//				System.out.println("Stage 1: Go out (right)");
-	//				diagRight();
-	//				if (getYFeet() >= LEGDISTANCE)
-	//					sequence = 2;
-	//				break;
-	//			case 2:
-	//				System.out.println("Stage 2: Forward");
-	//				forwardDistance = distance - LEGDISTANCE;
-	//				moveForward();
-	//				if (getXFeet() >= forwardDistance)
-	//					sequence = 3;
-	//				break;
-	//			case 3:
-	//				System.out.println("Stage 3: Go back (left)");
-	//				diagLeft();
-	//				if (getYFeet() <= 0)
-	//					sequence = 4;
-	//				break;
-	//			case 4:
-	//				System.out.println("Stage 4: Preparing for another obstacle");
-	//				sequence = 0;
-	//				break;
-	//			default:
-	//				System.out.println("Stage -1: You broke it");
-	//				sequence = 0;
-	//				break;
-	//			}
-	//		} else {
-	//			System.err.println("ERROR! Not a valid direction, somehow.");
-	//		}
-	//	}
+//	public void trapezoidSequence(Direction dir) { // out at 45 to fixed distance, forward until perp, then back at 45
+//		if (dir == Direction.LEFT) {
+//			switch (sequence) {
+//			case 0:
+//				System.out.println("Stage 0: Setup");
+//				sequence = 1;
+//				break;
+//			case 1:
+//				System.out.println("Stage 1: Go out (left)");
+//				diagLeft();
+//				setDesiredTime(DIAGDISTANCE);
+//				if (timer <= desiredTime) {
+//					timer = 0;
+//					sequence = 2;
+//				}
+//				break;
+//			case 2:
+//				System.out.println("Stage 2: Forward");
+//				setDesiredTime(distance - (DIAGDISTANCE / Math.sqrt(2)));
+//				moveForward();
+//				if (timer <= desiredTime) {
+//					timer = 0;
+//					sequence = 3;
+//				}
+//				break;
+//			case 3:
+//				System.out.println("Stage 3: Go back (right)");
+//				diagRight();
+//				if (getYFeet() >= 0)
+//					sequence = 4;
+//				break;
+//			case 4:
+//				System.out.println("Stage 4: Preparing for another obstacle");
+//				sequence = 0;
+//				break;
+//			default:
+//				System.out.println("Stage -1: You broke it");
+//				sequence = 0;
+//				break;
+//			}
+//		} else if (dir == Direction.RIGHT) {
+//			switch (sequence) {
+//			case 0:
+//				System.out.println("Stage 0: Setup");
+//				sequence = 1;
+//				break;
+//			case 1:
+//				System.out.println("Stage 1: Go out (right)");
+//				diagRight();
+//				if (getYFeet() >= LEGDISTANCE)
+//					sequence = 2;
+//				break;
+//			case 2:
+//				System.out.println("Stage 2: Forward");
+//				forwardDistance = distance - LEGDISTANCE;
+//				moveForward();
+//				if (getXFeet() >= forwardDistance)
+//					sequence = 3;
+//				break;
+//			case 3:
+//				System.out.println("Stage 3: Go back (left)");
+//				diagLeft();
+//				if (getYFeet() <= 0)
+//					sequence = 4;
+//				break;
+//			case 4:
+//				System.out.println("Stage 4: Preparing for another obstacle");
+//				sequence = 0;
+//				break;
+//			default:
+//				System.out.println("Stage -1: You broke it");
+//				sequence = 0;
+//				break;
+//			}
+//		} else {
+//			System.err.println("ERROR! Not a valid direction, somehow.");
+//		}
+//	}
 
 	public void moveForward() { //actualy right
 		drive.drive(.25, .0, 0, 0);
@@ -298,11 +300,11 @@ public class SonarMovement {
 		return getDistance() * Math.sqrt(2);
 	}
 
-	public boolean isDetecting() {
+	private boolean isDetecting() {
 		return sonarStereo.right.getFeet() < MAXDISTANCE || sonarStereo.left.getFeet() < MAXDISTANCE;
 	}
 
-	public void setDesiredTime(double dist) {
+	private void setDesiredTime(double dist) {
 		int result = 0;
 		result = (int) (dist * conversionFactor * 50); // 50 Hz
 		desiredTime = result;
