@@ -13,36 +13,32 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //testing test test
 public class Robot extends IterativeRobot {
 
+	//Robot Components
 	PowerDistributionPanel pdp;
-	Joystick pilotXY, pilotR, copilot;
 	Talon lf, lr, rf, rr;
-	Solenoid in;
-	Solenoid out;
+	Solenoid gatherIn, gatherOut;
 	MecanumDrive md;
 	Lifter lifter;
-	int count;
-	boolean pressed;
 	Pixy pixy;
 	PixyPacket pp;
-	int halfBand = Wiring.PIXY_HALF_BAND;
 	PixyController p;
 	Arduino arduino;
-	double sonarInch;
 	IRSensor irSensor;
 	MaxSonar sonar;
-	double wallDist;
-	int timesRun = 0;
-	int state = 0;
 	Wings wing;
 	Compressor c;
-	boolean firstHome;
 	Pedometer ped;
 	Ramp rampX;
 	Ramp rampY;
-
 	Gatherer gather;
 	DebounceButton dbb;
-	BCDSwitch autoMode;
+	
+	//Controllers
+	Joystick pilotXY, pilotR, copilot;
+	
+	//Other random ints, doubles, booleans and such
+	int count;
+	boolean pressed;
 	int mode;
 	boolean once;
 	boolean flag;
@@ -59,17 +55,14 @@ public class Robot extends IterativeRobot {
 		rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
 		md = new MecanumDrive(pilotR, lf, lr, rf, rr);
 		lifter = new Lifter();
-		firstHome = true;
 		count = 0;
 		sonar = new MaxSonar(Wiring.SONAR_ANALOG_ID);
 		wing = new Wings();
 		c = new Compressor();
 		c.start();
 		gather = new Gatherer();
-		in = new Solenoid(Wiring.GATHER_ARMS_IN);
-		out = new Solenoid(Wiring.GATHER_ARMS_OUT);
-
-		autoMode = new BCDSwitch(Wiring.BCD_PORTS);
+		gatherIn = new Solenoid(Wiring.GATHER_ARMS_IN);
+		gatherOut = new Solenoid(Wiring.GATHER_ARMS_OUT);
 
 		once = true;
 		flag = true;

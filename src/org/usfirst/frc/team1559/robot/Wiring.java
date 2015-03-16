@@ -1,7 +1,9 @@
 package org.usfirst.frc.team1559.robot;
 public class Wiring{
 	
-	//CONTROLS
+	/*
+	 * Controls
+	 */
 	public static final int JOYSTICK_1 = 0;
 	public static final int JOYSTICK_2 = 1;
 	
@@ -24,7 +26,9 @@ public class Wiring{
 	public static final int PILOT_ROTATE_LEFT = 4;
 	public static final int COPILOT_AUTO_1_TOTE = 3;
 	
-	//COMPONENTS: Drive System
+	/*
+	 * Drive system
+	 */
 	public static final int LEFT_FRONT_MOTOR_ID = 9;
 	public static final int LEFT_REAR_MOTOR_ID = 6;
 	public static final int RIGHT_FRONT_MOTOR_ID = 8;
@@ -36,7 +40,9 @@ public class Wiring{
 		public static final int PRIMARY_BUFFER_LENGTH = 5;
 		public static final int SECONDARY_BUFFER_LENGTH = 4;
 	
-	//COMPONENTS: Lifter
+	/*
+	 * Lifter
+	 */
 	public static final int LIFTER_ENCODER_TICKS_PER_INCH = 360;
 	public static final int LIFTER_JAGUAR_VALUE = 15;
 	
@@ -47,7 +53,9 @@ public class Wiring{
 		public static final double CRUISING_HEIGHT = 13.5;
 		public static final double TOTE_HEIGHT = 32.0;
 	
-	//COMPONENTS: Gatherer
+	/*
+	 * Gatherer
+	 */
 	public static final int LEFT_GATHER_MOTOR = 4;
 	public static final int RIGHT_GATHER_MOTOR = 5;
 	
@@ -61,12 +69,16 @@ public class Wiring{
 		public static final double GATHER_ROTATE_IN_SPEED = .5;
 
 	
-	//COMPONENTS: Other
+	/*
+	 * Other stuff
+	 */
 	public static final int GYRO_ANALOG_ID = 0;
 	public static final int SONAR_ANALOG_ID = 1;
 	public static final int[] BCD_PORTS = {6, 7, 8, 9};
 
-	//PIXY
+	/*
+	 * Pixy Things
+	 */
 	public static final int PIXY_HALF_BAND = 3;
 
 	
