@@ -49,10 +49,7 @@ public class Robot extends IterativeRobot {
 	int step;
 
 	public void robotInit() {
-		
-		//Other software things
-		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor);
-		
+					
 		//Controllers
 		pilotXY = new Joystick(Wiring.JOYSTICK_1);
 		pilotR = new Joystick(1);
@@ -80,7 +77,8 @@ public class Robot extends IterativeRobot {
 		rampX = new Ramp();
 		rampY = new Ramp();
 		
-		
+		//Other software things
+		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor, sonar, arduino, md);
 		
 		//random ints, booleans, doubles, floats, etc.
 		count = 0;
@@ -127,60 +125,6 @@ public class Robot extends IterativeRobot {
 		
 		lifter.run();
 
-		switch (mode) {
-
-		default:
-			mode = 0;
-			break;
-		case 0:
-			switch (num) {
-			default:
-				num = 0;
-				break;
-
-			case 0:
-				wing.release();
-				if (irSensor.hasTote()) {
-					num++;
-				} else {
-					gather.gatherIn();
-				}
-				break;
-			case 1:
-				if (once) {
-					System.out.println("MODE " + num);
-					gather.stopGather();
-					lifter.goHome();/* You're drunk. */
-					once = false;
-				}
-
-				if (lifter.bottomLimit()) {
-					lifter.setHome();
-					Timer.delay(.25);
-					lifter.move(1);
-					num++;
-				}
-				break;
-			case 2:
-				if (sonar.getInches() <= 120) {
-					md.drivePID(1, -.25, 0);
-					System.out.println("TRYING TO MOVE!!!! "
-							+ sonar.getInches());
-				} else {
-					num++;
-				}
-				break;
-			case 3:
-				md.drivePID(0, 0, 0);
-				// lifter.goHome();
-				// wing.latch();
-				arduino.writeSequence(2);
-				break;
-
-			}
-			break;
-
-		}
 
 		// PixyPacket pkt = pixy.getPacket();
 		// // md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
