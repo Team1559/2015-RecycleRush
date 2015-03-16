@@ -48,7 +48,7 @@ public class MecanumDrive {
 //		desiredAngle = g.getAngle();
 		correctionAngle = 0.0;
 		
-		maxSpeed = Wiring.MAX_SPEED;
+		maxSpeed = Wiring.MAX_DRIVE_SPEED;
 		
 //		prevAngle = g.getAngle();
 		
