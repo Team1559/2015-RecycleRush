@@ -195,15 +195,10 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		md.drivePIDToteCenter(pilotXY.getX(),
 				pilotXY.getY(), pilotR.getX());
-
-		SmartDashboard.putNumber("Lifter Current", pdp.getCurrent(13));
-
+		
 		if (pilotXY.getRawButton(Wiring.RESET_GYRO_BUT)) {
 			md.resetGyro();
 		}
-
-		SmartDashboard.putNumber("PEDOMETER X", ped.getX());
-		SmartDashboard.putNumber("PEDOMETER Y", ped.getY());
 		
 		wingControls();
 		lifterControls();
@@ -261,6 +256,10 @@ public class Robot extends IterativeRobot {
 
 	public void lifterControls() {
 
+		/*
+		 * DON'T PLAY WITH THIS!!!! IT COULD GET DANGEROUS IF YOU DO!!
+		 */
+		
 		if (dbb.getRelease()) {
 			lifter.stop();
 		}
