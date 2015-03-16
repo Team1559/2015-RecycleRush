@@ -50,6 +50,14 @@ public class Robot extends IterativeRobot {
 
 	public void robotInit() {
 		
+		//Other software things
+		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor);
+		
+		//Controllers
+		pilotXY = new Joystick(Wiring.JOYSTICK_1);
+		pilotR = new Joystick(1);
+		copilot = new Joystick(2);
+				
 		//Robot Components
 		lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); // backwards
 		lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); // backwards
@@ -72,13 +80,7 @@ public class Robot extends IterativeRobot {
 		rampX = new Ramp();
 		rampY = new Ramp();
 		
-		//Other software things
-		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor);
 		
-		//Controllers
-		pilotXY = new Joystick(Wiring.JOYSTICK_1);
-		pilotR = new Joystick(1);
-		copilot = new Joystick(2);
 		
 		//random ints, booleans, doubles, floats, etc.
 		count = 0;
