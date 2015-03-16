@@ -33,6 +33,9 @@ public class Robot extends IterativeRobot {
 	Gatherer gather;
 	DebounceButton dbb;
 	
+	//Other Software Components
+	Autonomous auto;
+	
 	//Controllers
 	Joystick pilotXY, pilotR, copilot;
 	
@@ -46,54 +49,43 @@ public class Robot extends IterativeRobot {
 	int step;
 
 	public void robotInit() {
-		pilotXY = new Joystick(Wiring.JOYSTICK_1);
-		pilotR = new Joystick(1);
-		copilot = new Joystick(2);
+		
+		//Robot Components
 		lf = new Talon(Wiring.LEFT_FRONT_MOTOR_ID); // backwards
 		lr = new Talon(Wiring.LEFT_REAR_MOTOR_ID); // backwards
 		rf = new Talon(Wiring.RIGHT_FRONT_MOTOR_ID);
 		rr = new Talon(Wiring.RIGHT_REAR_MOTOR_ID);
 		md = new MecanumDrive(pilotR, lf, lr, rf, rr);
 		lifter = new Lifter();
-		count = 0;
 		sonar = new MaxSonar(Wiring.SONAR_ANALOG_ID);
 		wing = new Wings();
 		c = new Compressor();
 		c.start();
 		gather = new Gatherer();
-		gatherIn = new Solenoid(Wiring.GATHER_ARMS_IN);
-		gatherOut = new Solenoid(Wiring.GATHER_ARMS_OUT);
-
-		once = true;
-		flag = true;
-		
 		irSensor = new IRSensor();
-		mode = -1;
-
-
-		// pixy stuff
 		pixy = new Pixy();
 		p = new PixyController(pixy);
-
 		pdp = new PowerDistributionPanel();
-
 		ped = new Pedometer();
-
 		dbb = new DebounceButton(copilot, 1);
-
 		arduino = new Arduino(4);
-
 		rampX = new Ramp();
 		rampY = new Ramp();
-
-		step = 0;
-		// arduino stuff
-		// arduino = new Arduino(0,1,2);
-
-		// record/playback stuff
-		// sorry about the nasty try-catch
-//		cam = new Camera("cam0", 320, 240, 100);//Name on Web-Interface, Width, Height, Quality(0-100)
 		
+		//Other software things
+		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor);
+		
+		//Controllers
+		pilotXY = new Joystick(Wiring.JOYSTICK_1);
+		pilotR = new Joystick(1);
+		copilot = new Joystick(2);
+		
+		//random ints, booleans, doubles, floats, etc.
+		count = 0;
+		step = 0;
+		once = true;
+		flag = true;		
+		mode = -1;
 	}
 
 	public void disabledInit() {
