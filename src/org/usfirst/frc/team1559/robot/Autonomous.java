@@ -19,6 +19,8 @@ public class Autonomous {
 	Pixy p;
 	PixyController pc;
 	PixyPacket pkt;
+	double desired;
+	double orig;
 	
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir, MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p, PixyController pc){
 		
@@ -67,6 +69,7 @@ public class Autonomous {
 	}
 	
 	/*
+	 * TESTED WORKING
 	 * ==========ROUTINE 0==========
 	 * 
 	 * Pick up one tote, and run into the auto zone (get in the zone!)
@@ -132,7 +135,7 @@ public class Autonomous {
 	 *
 	 * ==========ROUTINE 1==========
 	 * 
-	 * Just drive forward until the robot is in the auto zone, no totes/recycling bins
+	 * Just drive sideways until the robot is in the auto zone, no totes/recycling bins
 	 * 
 	 * ROBOT Placement:
 	 * 
@@ -221,7 +224,7 @@ public class Autonomous {
 	}
 	
 	/*
-	 *
+	 * TESTED WORKING
 	 * ==========ROUTINE 3==========
 	 * 
 	 * Just grab the recycling can, and run
@@ -371,40 +374,41 @@ public class Autonomous {
 	 *
 	 * ==========ROUTINE 5==========
 	 * 
-	 * Just grab the barrel and run
+	 * [TOTE](B)
+	 * 			  |
+	 * ___________/
+	 * 
+	 * Grab the tote, and put it on a tote
 	 * 
 	 * =============================
 	 * 
 	 */
 	public void routine5(){
-		
+
 		switch(step){
 		
 		case 0:
-			wing.latch();
+			lifter.move(2);
+			step++;
 		break;
 		case 1:
-			lifter.move(2);
-		break;
-		case 2:
-			if (sonar.getInches() <= 120) {
-				md.drivePID(1, -.25, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
-			} else {
+			if(lifter.notMoving){
 				step++;
+				counter = 0;
 			}
 		break;
-		case 3:
-			md.drivePID(0, 0, 0);
-			arduino.writeSequence(2);
+		case 2:
+			if(counter <= 15){
+				md.drivePIDToteCenter(0, .5, 0);
+			}
 		break;
+		
 		}
 		
 	}
 	
 	/*
-	 *
+	 * TESTED WORKING!
 	 * ==========ROUTINE 6==========
 	 * 
 	 * Grab the barrell on the opposite side as routine 3;
@@ -414,7 +418,7 @@ public class Autonomous {
 	 * 
 	 */
 	public void routine6(){
-switch(step){
+		switch(step){
 		
 		case 0:
 			lifter.move(1);
@@ -422,21 +426,34 @@ switch(step){
 		break;
 		case 1:
 			if(lifter.notMoving){
+				counter = 0;
 				step++;
-                                md.g.reset();
-			        double orig = md.g.getAngle();
-			        double desired = orig + 90;
 			}
 		break;
 		case 2:
-			SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
-			if(md.g.getAngle() <= desired){
-				md.drivePIDToteCenter(0, 0, desired);
+			if(counter <= 50){
+				md.drivePID(-1, 0, 0);
+				counter++;
 			} else {
 				step++;
 			}
 		break;
-		case 3:
+		case 3:			
+                md.g.reset();
+		        orig = md.g.getAngle();
+		        desired = orig + 180;
+		        step++;
+		break;
+		case 4:			
+			if(md.g.getAngle() <= desired){
+				md.drivePIDToteCenter(0, 0, 1);
+				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
+			} else {
+				md.drivePIDToteCenter(0, 0, 0);
+				step++;
+			}
+		break;
+		case 5:
 			if (sonar.getInches() <= 135) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "
@@ -445,11 +462,11 @@ switch(step){
 				step++;
 			}
 		break;
-		case 4:
+		case 6:
 			lifter.goHome();
 			step++;
 		break;
-		case 5:
+		case 7:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
 		break;
