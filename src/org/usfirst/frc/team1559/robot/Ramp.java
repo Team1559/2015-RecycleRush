@@ -3,12 +3,16 @@ package org.usfirst.frc.team1559.robot;
 
 import java.util.Arrays;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Ramp {
 
 	double[] primaryBuffer;
 	double[] secondaryBuffer;
 	int primaryCell;
 	int secondaryCell;
+	double delta;
+	double previousValue;
 	
 	public Ramp(){
 		
@@ -20,12 +24,19 @@ public class Ramp {
 		Arrays.fill(secondaryBuffer, 0.0);
 		primaryCell = 0;
 		secondaryCell = 0;
-		
+		previousValue = 0;
 	}
 	
 	public double rampMotorValue(double joystickInput){
 		
 		double ramp = 0.0;
+		if(previousValue != 0){
+			delta = ((joystickInput - previousValue)/previousValue) * 100;
+		} else {
+			delta = joystickInput * 100;
+		}
+		
+		SmartDashboard.putNumber("Drive delta", delta);
 		
 		if(primaryCell == primaryBuffer.length){
 			primaryCell = 0;
@@ -43,6 +54,7 @@ public class Ramp {
 		primaryCell++;
 		secondaryCell++;
 		
+		joystickInput = previousValue;
 		return ramp;
 		
 	}

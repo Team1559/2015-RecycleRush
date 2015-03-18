@@ -15,6 +15,7 @@ public class Lifter //implements Runnable
 	volatile double currentLevel;
 	double homePosition;
 	boolean run= true;
+	int elevatorLevel;
 	
 	public Lifter(){
 		targetPosition = 0.0;
@@ -27,6 +28,7 @@ public class Lifter //implements Runnable
 		motor.setPercentMode(CANJaguar.kQuadEncoder, Wiring.LIFTER_ENCODER_TICKS_PER_INCH);
 		motor.configNeutralMode(CANJaguar.NeutralMode.Brake);
 		motor.enableControl();
+		elevatorLevel = 0;
 	}
 	
 
@@ -42,12 +44,14 @@ public class Lifter //implements Runnable
 			movingUp = true;
 			movingDown = false;
 			notMoving = false;
+			elevatorLevel++;
 		} else if(targetPosition < currentLevel){
 			System.out.println("going down");
 			motor.set(Wiring.ELEVATOR_DOWN_SPEED);
 			movingUp = false;
 			movingDown = true;
 			notMoving = false;
+			elevatorLevel--;
 		}
 	}
 	
@@ -103,6 +107,7 @@ public class Lifter //implements Runnable
 	
 	public void setHome(){
 		homePosition = getEncoderPosition();
+		elevatorLevel = 0;
 	}
 	
 	public void stop(){

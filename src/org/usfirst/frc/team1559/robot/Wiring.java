@@ -75,6 +75,7 @@ public class Wiring{
 	public static final int GYRO_ANALOG_ID = 0;
 	public static final int SONAR_ANALOG_ID = 1;
 	public static final int[] BCD_PORTS = {6, 7, 8, 9};
+	public static final int IR_SENSOR = 2;
 
 	/*
 	 * Pixy Things

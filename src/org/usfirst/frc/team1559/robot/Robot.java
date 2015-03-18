@@ -78,7 +78,7 @@ public class Robot extends IterativeRobot {
 		rampY = new Ramp();
 		
 		//Other software things
-		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor, sonar, arduino, md);
+		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor, sonar, arduino, md, pixy, p);
 		
 		//random ints, booleans, doubles, floats, etc.
 		count = 0;
@@ -123,7 +123,8 @@ public class Robot extends IterativeRobot {
 		 * HOME!!!!!!!!!!!
 		 */
 		
-		lifter.run();
+		lifter.run();		
+		auto.startAutonomous();
 
 
 		// PixyPacket pkt = pixy.getPacket();
@@ -149,6 +150,10 @@ public class Robot extends IterativeRobot {
 		wingControls();
 		lifterControls();
 		gathererControls();
+		
+		SmartDashboard.putNumber("SONAR_VALUE", sonar.getInches());
+		SmartDashboard.putBoolean("HAS_TOTE", irSensor.hasTote());
+		SmartDashboard.putDouble("IR VALUE", irSensor.getVoltage());
 
 	}
 	

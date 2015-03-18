@@ -9,7 +9,7 @@ public class IRSensor {
 	
 	public IRSensor(){
 		
-		ir = new AnalogInput(2);
+		ir = new AnalogInput(Wiring.IR_SENSOR);
 		normalDist = 2.0;
 	}
 	

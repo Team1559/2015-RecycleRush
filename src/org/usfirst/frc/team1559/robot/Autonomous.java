@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1559.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
 
@@ -15,8 +16,11 @@ public class Autonomous {
 	MaxSonar sonar;
 	Arduino arduino;
 	MecanumDrive md;
+	Pixy p;
+	PixyController pc;
+	PixyPacket pkt;
 	
-	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir, MaxSonar sonar, Arduino arduino, MecanumDrive md){
+	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir, MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p, PixyController pc){
 		
 		bcd = new BCDSwitch(ports);
 		step = 0;
@@ -28,8 +32,10 @@ public class Autonomous {
 		this.sonar = sonar;
 		this.arduino = arduino;
 		this.md = md;
+		this.p = p;
+		this.pc = pc;
 		counter = 0;
-	
+		pkt = new PixyPacket();
 	}
 	
 	public int getBCDValue(){
@@ -99,15 +105,19 @@ public class Autonomous {
 			}
 			break;
 		case 2:
-			if (sonar.getInches() <= 120) {
+			if (sonar.getInches() <= 135) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
 				step++;
 			}
-			break;
+		break;
 		case 3:
+			lifter.goHome();
+			step++;
+		break;
+		case 4:
 			md.drivePID(0, 0, 0);
 			// lifter.goHome();
 			// wing.latch();
@@ -136,7 +146,7 @@ public class Autonomous {
 		switch(step){
 		
 		case 0:
-			if (sonar.getInches() <= 120) {
+			if (sonar.getInches() <= 135) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -229,12 +239,15 @@ public class Autonomous {
 		
 		case 0:
 			lifter.move(1);
+			step++;
+		break;
+		case 1:
 			if(lifter.notMoving){
 				step++;
 			}
 		break;
-		case 1:
-			if (sonar.getInches() <= 120) {
+		case 2:
+			if (sonar.getInches() <= 135) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -242,7 +255,11 @@ public class Autonomous {
 				step++;
 			}
 		break;
-		case 2:
+		case 3:
+			lifter.goHome();
+			step++;
+		break;
+		case 4:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
 		break;
@@ -305,8 +322,13 @@ public class Autonomous {
 			
 		break;
 		case 4:
-			
+			PixyDriveValues pdv = new PixyDriveValues();
+			pdv = pc.autoCenter(pkt);
+			md.drivePID(pdv.driveX, pdv.driveY, md.g.getAngle());
 			//make the pixy center the tote...when it's done, it returns to here!
+			step++;
+		break;
+		case 5:
 			if(!irSensor.hasTote()){
 				gather.gatherIn();	
 			} else {
@@ -314,19 +336,19 @@ public class Autonomous {
 			}
 			
 		break;
-		case 5:
+		case 6:
 			
 			lifter.goHome();
 			if(lifter.bottomLimit()){
 				step++;
 			}	
 		break;
-		case 6: //grab the tote!
+		case 7: //grab the tote!
 			
 			lifter.move(1);
 			
 		break;
-		case 7:
+		case 8:
 			if (sonar.getInches() <= 120) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "
@@ -335,7 +357,7 @@ public class Autonomous {
 				step++;
 			}
 		break;
-		case 8:
+		case 9:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
 		break;
@@ -385,13 +407,53 @@ public class Autonomous {
 	 *
 	 * ==========ROUTINE 6==========
 	 * 
-	 * 
+	 * Grab the barrell on the opposite side as routine 3;
+	 * This shuold be opposite the routine 0 configuration
 	 * 
 	 * =============================
 	 * 
 	 */
 	public void routine6(){
+switch(step){
 		
+		case 0:
+			lifter.move(1);
+			step++;
+		break;
+		case 1:
+			if(lifter.notMoving){
+				step++;
+			}
+		break;
+		case 2:			
+			md.g.reset();
+			double orig = md.g.getAngle();
+			double desired = orig + 90;
+			SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
+			if(md.g.getAngle() <= desired){
+				md.drivePIDToteCenter(0, 0, desired);
+			} else {
+				step++;
+			}
+		break;
+		case 3:
+			if (sonar.getInches() <= 135) {
+				md.drivePID(1, -.25, 0);
+				System.out.println("TRYING TO MOVE!!!! "
+						+ sonar.getInches());
+			} else {
+				step++;
+			}
+		break;
+		case 4:
+			lifter.goHome();
+			step++;
+		break;
+		case 5:
+			md.drivePID(0, 0, 0);
+			arduino.writeSequence(2);
+		break;
+		}
 	}
 	
 	/*
