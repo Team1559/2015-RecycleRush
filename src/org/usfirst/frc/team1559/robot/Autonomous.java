@@ -428,9 +428,7 @@ switch(step){
 			        double desired = orig + 90;
 			}
 		break;
-		case 2:			
-			double orig = md.g.getAngle();
-			double desired = orig + 90;
+		case 2:
 			SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
 			if(md.g.getAngle() <= desired){
 				md.drivePIDToteCenter(0, 0, desired);
