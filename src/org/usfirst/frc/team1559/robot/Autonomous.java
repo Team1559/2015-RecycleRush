@@ -423,10 +423,12 @@ switch(step){
 		case 1:
 			if(lifter.notMoving){
 				step++;
+                                md.g.reset();
+			        double orig = md.g.getAngle();
+			        double desired = orig + 90;
 			}
 		break;
 		case 2:			
-			md.g.reset();
 			double orig = md.g.getAngle();
 			double desired = orig + 90;
 			SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
