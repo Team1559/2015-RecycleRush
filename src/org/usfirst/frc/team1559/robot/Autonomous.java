@@ -506,13 +506,33 @@ public class Autonomous {
 						+ sonar.getInches());
 			} else {
 				step++;
+				once = true;
 			}
 		break;
 		case 6:
-			lifter.goHome();
-			step++;
+			if(once){
+				md.drivePIDToteCenter(0, 0, 0);
+				lifter.goHome();
+				counter = 0;
+				once = false;
+			} 
+			
+			if(lifter.bottomLimit()){
+				step++;
+			}
 		break;
 		case 7:
+			if(counter <= 35){
+				wing.latch();
+				md.drivePIDToteCenter(0, .75, 0);
+				counter++;
+			} else {
+				step++;
+				counter = 0;
+
+			}
+		break;
+		case 8:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
 		break;
@@ -520,7 +540,7 @@ public class Autonomous {
 	}
 	
 	/*
-	 *
+	 * WORKS - FIRST TRY!!!!!! CODY IS THE BEST 5=EVER!!1!
 	 * ==========ROUTINE 7==========
 	 *   --
 	 *  R(B)[TOTE]   |
@@ -595,13 +615,33 @@ public class Autonomous {
 						+ sonar.getInches());
 			} else {
 				step++;
+				once = true;
 			}
 		break;
 		case 8:
-			lifter.goHome();
-			step++;
+			if(once){
+				lifter.goHome();
+				counter = 0;
+				once = false;
+			} 
+			
+			if(lifter.bottomLimit()){
+				step++;
+			}
+			
 		break;
 		case 9:
+			if(counter <= 35){
+				wing.latch();
+				md.drivePIDToteCenter(0, .75, 0);
+				counter++;
+			} else {
+				step++;
+				counter = 0;
+				
+			}
+		break;
+		case 10:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
 		break;
@@ -635,4 +675,5 @@ public class Autonomous {
 		
 	}
 
+	
 }
