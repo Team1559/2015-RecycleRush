@@ -132,7 +132,7 @@ public class Autonomous {
 	
 	
 	/*
-	 *
+	 * TESTED WORKING
 	 * ==========ROUTINE 1==========
 	 * 
 	 * Just drive sideways until the robot is in the auto zone, no totes/recycling bins
@@ -373,12 +373,12 @@ public class Autonomous {
 	/*
 	 *
 	 * ==========ROUTINE 5==========
-	 * 
-	 * [TOTE](B)
-	 * 			  |
+	 * 		  ---
+	 * [TOTE](B)|R|
+	 * 		  ---  |
 	 * ___________/
 	 * 
-	 * Grab the tote, and put it on a tote
+	 * Grab the !tote, and put it on a tote
 	 * 
 	 * =============================
 	 * 
@@ -398,11 +398,47 @@ public class Autonomous {
 			}
 		break;
 		case 2:
-			if(counter <= 15){
-				md.drivePIDToteCenter(0, .5, 0);
+			if(counter <= 35){
+				md.drivePIDToteCenter(0, -.75, 0);
+				counter++;
+			} else {
+				step++;
+				md.drive(0, 0, 0);
 			}
 		break;
-		
+		case 3:
+			if(!irSensor.hasTote()){
+				gather.gatherIn();
+			} else {
+				step++;
+				gather.stopGather();
+			}
+		break;
+		case 4:
+			lifter.goHome();
+			step++;
+		break;
+		case 5:
+			if(lifter.bottomLimit()){
+				lifter.cruisingHeight();
+				step++;
+			}
+		break;
+		case 6:
+			if (sonar.getInches() <= 135) {
+				md.drivePID(1, -.25, 0);
+				System.out.println("TRYING TO MOVE!!!! "
+						+ sonar.getInches());
+			} else {
+				step++;
+			}
+		break;
+		case 7:
+			md.drivePID(0, 0, 0);
+			lifter.goHome();
+			wing.release();
+			arduino.writeSequence(2);
+		break;
 		}
 		
 	}
