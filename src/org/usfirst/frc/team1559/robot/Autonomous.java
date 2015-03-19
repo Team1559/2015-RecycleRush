@@ -378,9 +378,9 @@ public class Autonomous {
 	/*
 	 * TESTED WORKING!
 	 * ==========ROUTINE 5==========
-	 * 		  ---
-	 * [TOTE](B)|R|
-	 * 		  ---  |
+	 * 		  
+	 * [TOTE](B)R
+	 * 		       |
 	 * ___________/
 	 * 
 	 * Grab the !tote, and put it on a tote
@@ -522,14 +522,91 @@ public class Autonomous {
 	/*
 	 *
 	 * ==========ROUTINE 7==========
-	 * 
-	 * 
-	 * 
+	 *   --
+	 *  R(B)[TOTE]   |
+	 *   --         /
+	 *   __________/
+	 *   
+	 *   Grabs the !tote, puts it on the tote, does a 180, and moves into the auto zone!
 	 * =============================
 	 * 
 	 */
 	public void routine7(){
+		switch(step){
 		
+		case 0:
+			lifter.move(2);
+			step++;
+		break;
+		case 1:
+			if(lifter.notMoving){
+				step++;
+				counter = 0;
+			}
+		break;
+		case 2:
+			if(counter <= 15){
+				md.drivePIDToteCenter(0, -.75, 0);
+				counter++;
+			} else {
+				step++;
+				md.drive(0, 0, 0);
+				counter = 0;
+			}
+		break;
+		case 3:
+			if(!irSensor.hasTote()){
+				gather.gatherIn();
+			} else {
+				if(counter <= 15){
+					counter++;
+				} else {
+					step++;
+					gather.stopGather();
+				}
+			}
+		break;
+		case 4:
+			lifter.goHome();
+			step++;
+		break;
+		case 5:
+			if(lifter.bottomLimit()){
+				lifter.cruisingHeight();
+				step++;
+				md.g.reset();
+				orig = md.g.getAngle();
+		        desired = orig + 180;
+			}
+		break;
+		case 6:
+			if(md.g.getAngle() <= desired){
+				md.drivePIDToteCenter(0, 0, 1);
+				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
+			} else {
+				md.drivePIDToteCenter(0, 0, 0);
+				step++;
+			}
+		break;
+		case 7:
+			if (sonar.getInches() <= 135) {
+				md.drivePID(1, -.25, 0);
+				System.out.println("TRYING TO MOVE!!!! "
+						+ sonar.getInches());
+			} else {
+				step++;
+			}
+		break;
+		case 8:
+			lifter.goHome();
+			step++;
+		break;
+		case 9:
+			md.drivePID(0, 0, 0);
+			arduino.writeSequence(2);
+		break;
+		
+		}
 	}
 	
 	/*
