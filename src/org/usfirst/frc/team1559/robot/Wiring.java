@@ -37,8 +37,8 @@ public class Wiring{
 		//CONSTANTS: Drive System
 		public static final double AUTO_SPEED = 1;
 		public static final double MAX_DRIVE_SPEED = .685;
-		public static final int PRIMARY_BUFFER_LENGTH = 5;
-		public static final int SECONDARY_BUFFER_LENGTH = 4;
+		public static final int PRIMARY_BUFFER_LENGTH = 9;
+		public static final int SECONDARY_BUFFER_LENGTH = 8;
 	
 	/*
 	 * Lifter

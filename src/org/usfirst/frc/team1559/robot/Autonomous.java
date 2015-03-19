@@ -21,6 +21,8 @@ public class Autonomous {
 	PixyPacket pkt;
 	double desired;
 	double orig;
+	Ramp rampx;
+	Ramp rampy;
 	
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir, MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p, PixyController pc){
 		
@@ -38,7 +40,10 @@ public class Autonomous {
 		this.pc = pc;
 		counter = 0;
 		pkt = new PixyPacket();
+		rampx = new Ramp();
+		rampy = new Ramp();
 	}
+	
 	
 	public int getBCDValue(){
 		return bcd.read();
@@ -371,7 +376,7 @@ public class Autonomous {
 
 	
 	/*
-	 *
+	 * TESTED WORKING!
 	 * ==========ROUTINE 5==========
 	 * 		  ---
 	 * [TOTE](B)|R|
@@ -398,20 +403,25 @@ public class Autonomous {
 			}
 		break;
 		case 2:
-			if(counter <= 35){
+			if(counter <= 15){
 				md.drivePIDToteCenter(0, -.75, 0);
 				counter++;
 			} else {
 				step++;
-				md.drive(0, 0, 0);
+				md.drive(0, rampy.rampMotorValue(0), 0);
+				counter = 0;
 			}
 		break;
 		case 3:
 			if(!irSensor.hasTote()){
 				gather.gatherIn();
 			} else {
-				step++;
-				gather.stopGather();
+				if(counter <= 15){
+					counter++;
+				} else {
+					step++;
+					gather.stopGather();
+				}
 			}
 		break;
 		case 4:
@@ -426,7 +436,7 @@ public class Autonomous {
 		break;
 		case 6:
 			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
+				md.drivePID(rampx.rampMotorValue(1), rampy.rampMotorValue(-.25), 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
@@ -434,7 +444,7 @@ public class Autonomous {
 			}
 		break;
 		case 7:
-			md.drivePID(0, 0, 0);
+			md.drivePID(rampx.rampMotorValue(0), rampy.rampMotorValue(0), 0);
 			lifter.goHome();
 			wing.release();
 			arduino.writeSequence(2);
