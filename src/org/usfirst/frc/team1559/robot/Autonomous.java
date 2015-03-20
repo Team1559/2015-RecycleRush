@@ -163,7 +163,7 @@ public class Autonomous {
 	}
 	
 	/*
-	 *
+	 * TESTED WORKING!
 	 * ==========ROUTINE 2==========
 	 * 
 	 *  R [TOTE](B)  | Gather and pick up a crate, do a 180, and move into the auto zone.
@@ -189,6 +189,9 @@ public class Autonomous {
 					step++;
 				}
 			}
+		break;
+		case 1:
+			step++;
 		break;
 		case 2:
 			lifter.goHome();
@@ -224,6 +227,7 @@ public class Autonomous {
 						+ sonar.getInches());
 			} else {
 				md.drive(0, 0, 0);
+				step++;
 			}
 		break;
 		case 8:
@@ -244,6 +248,7 @@ public class Autonomous {
 			} else {
 				step++;
 				counter = 0;
+				md.drivePIDToteCenter(0, 0, 0);
 			}
 		break;
 		case 11:
