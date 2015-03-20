@@ -253,6 +253,7 @@ public class Autonomous {
 	}
 	
 	/*
+	 * ADD BACK AWAY CODE
 	 * TESTED WORKING
 	 * ==========ROUTINE 2==========
 	 * 		 ----   |
@@ -292,6 +293,7 @@ public class Autonomous {
 		case 4:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
+			wing.latch();
 		break;
 		}
 		
@@ -383,7 +385,7 @@ public class Autonomous {
 		}
 	}
 	
-	/*
+	/* ADD BACK AWAY CODE
 	 * TESTED WORKING!
 	 * ==========ROUTINE 4==========
 	 * 		 ----
