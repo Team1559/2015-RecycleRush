@@ -129,42 +129,9 @@ public class Autonomous {
 		
 	}
 	
-	
-	/*
-	 * TESTED WORKING
-	 * ==========ROUTINE 1==========
-	 * 
-	 * This mode simply moves the robot into the auto zone, there is no interaction with field pieces
-	 * 			R	   | **The robot can be placed anywhere such that the sonar faces the wall. It will move to be ~135" from it
-	 * _______________/																								(Auto Zone)
-	 * 
-	 * =============================
-	 * 
-	 */
-	public void routine1(){
-		
-		switch(step){
-		
-		case 0:
-			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
-			} else {
-				md.drive(0, 0, 0);
-			}
-		break;
-		case 1:
-			arduino.writeSequence(2);
-		break;
-		
-		}
-		
-	}
-	
 	/*
 	 * TESTED WORKING!
-	 * ==========ROUTINE 2==========
+	 * ==========ROUTINE 1==========
 	 * 
 	 *  R [TOTE](B)  | Gather and pick up a crate, do a 180, and move into the auto zone.
 	 * 				/   *****START LIFTER ABOVE HOME!*****
@@ -173,7 +140,7 @@ public class Autonomous {
 	 * =============================
 	 * 
 	 */
-	public void routine2(){
+	public void routine1(){
 		
 		switch(step){
 		
@@ -258,11 +225,9 @@ public class Autonomous {
 		
 	}
 	
-	
-	
 	/*
 	 * TESTED WORKING
-	 * ==========ROUTINE 3==========
+	 * ==========ROUTINE 2==========
 	 * 		 ----   |
 	 * [TOTE](B)R   | Grabs the barrel, and moves into the auto Zone, place the barrel inside the robot at the start of the match
 	 *       ----   |
@@ -271,7 +236,7 @@ public class Autonomous {
 	 * =============================
 	 * 
 	 */
-	public void routine3(){
+	public void routine2(){
 		
 		switch(step){
 		
@@ -306,100 +271,8 @@ public class Autonomous {
 	}
 	
 	/*
-	 *
-	 * ==========ROUTINE 4==========
-	 * 
-	 * 
-	 * 
-	 * =============================
-	 * 
-	 */
-	public void routine4(){
-		
-	}
-		
-
-	
-	/*
 	 * TESTED WORKING!
-	 * ==========ROUTINE 5==========
-	 * 		 ----
-	 * [TOTE](B)R  | Grab the can, place it on a tote, and grab the stack. 
-	 * 		 ----  | Move into the auto Zone
-	 * ___________/
-	 * 
-	 * 
-	 * =============================
-	 * 
-	 */
-	public void routine5(){
-
-		switch(step){
-		
-		case 0:
-			lifter.move(2);
-			step++;
-		break;
-		case 1:
-			if(lifter.notMoving){
-				step++;
-				counter = 0;
-			}
-		break;
-		case 2:
-			if(counter <= 15){
-				md.drivePIDToteCenter(0, -.75, 0);
-				counter++;
-			} else {
-				step++;
-				md.drive(0, rampy.rampMotorValue(0), 0);
-				counter = 0;
-			}
-		break;
-		case 3:
-			if(!irSensor.hasTote()){
-				gather.gatherIn();
-			} else {
-				if(counter <= 15){
-					counter++;
-				} else {
-					step++;
-					gather.stopGather();
-				}
-			}
-		break;
-		case 4:
-			lifter.goHome();
-			step++;
-		break;
-		case 5:
-			if(lifter.bottomLimit()){
-				lifter.cruisingHeight();
-				step++;
-			}
-		break;
-		case 6:
-			if (sonar.getInches() <= 135) {
-				md.drivePID(rampx.rampMotorValue(1), rampy.rampMotorValue(-.25), 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
-			} else {
-				step++;
-			}
-		break;
-		case 7:
-			md.drivePID(rampx.rampMotorValue(0), rampy.rampMotorValue(0), 0);
-			lifter.goHome();
-			wing.release();
-			arduino.writeSequence(2);
-		break;
-		}
-		
-	}
-	
-	/*
-	 * TESTED WORKING!
-	 * ==========ROUTINE 6==========
+	 * ==========ROUTINE 3==========
 	 * ---- 
 	 * R(B)[TOTE]  | Grab the barrel, run into the auto zone after a 180 degree death spiral
 	 * ----		   |
@@ -407,7 +280,7 @@ public class Autonomous {
 	 * =============================
 	 * 
 	 */
-	public void routine6(){
+	public void routine3(){
 		switch(step){
 		
 		case 0:
@@ -484,17 +357,94 @@ public class Autonomous {
 	}
 	
 	/*
+	 * TESTED WORKING!
+	 * ==========ROUTINE 4==========
+	 * 		 ----
+	 * [TOTE](B)R  | Grab the can, place it on a tote, and grab the stack. 
+	 * 		 ----  | Move into the auto Zone
+	 * ___________/
+	 * 
+	 * 
+	 * =============================
+	 * 
+	 */
+	public void routine4(){
+
+		switch(step){
+		
+		case 0:
+			lifter.move(2);
+			step++;
+		break;
+		case 1:
+			if(lifter.notMoving){
+				step++;
+				counter = 0;
+			}
+		break;
+		case 2:
+			if(counter <= 15){
+				md.drivePIDToteCenter(0, -.75, 0);
+				counter++;
+			} else {
+				step++;
+				md.drive(0, rampy.rampMotorValue(0), 0);
+				counter = 0;
+			}
+		break;
+		case 3:
+			if(!irSensor.hasTote()){
+				gather.gatherIn();
+			} else {
+				if(counter <= 15){
+					counter++;
+				} else {
+					step++;
+					gather.stopGather();
+				}
+			}
+		break;
+		case 4:
+			lifter.goHome();
+			step++;
+		break;
+		case 5:
+			if(lifter.bottomLimit()){
+				lifter.cruisingHeight();
+				step++;
+			}
+		break;
+		case 6:
+			if (sonar.getInches() <= 135) {
+				md.drivePID(rampx.rampMotorValue(1), rampy.rampMotorValue(-.25), 0);
+				System.out.println("TRYING TO MOVE!!!! "
+						+ sonar.getInches());
+			} else {
+				step++;
+			}
+		break;
+		case 7:
+			md.drivePID(rampx.rampMotorValue(0), rampy.rampMotorValue(0), 0);
+			lifter.goHome();
+			wing.release();
+			arduino.writeSequence(2);
+		break;
+		}
+		
+	}
+	
+	/*
 	 * WORKS - FIRST TRY!!!!!! CODY IS THE BEST 5=EVER!!1!
-	 * ==========ROUTINE 7==========
+	 * ==========ROUTINE 5==========
 	 *  ----
-	 *  R(B)[TOTE]   | Grab the can, place it on a barrel, move into the auto zone with the stack
+	 *  R(B)[TOTE]   | Grab the can, place it on a tote, move into the auto zone with the stack
 	 *  ----        /                   *****DOES A 180!*****
 	 *   __________/
 	 *   
 	 * =============================
 	 * 
 	 */
-	public void routine7(){
+	public void routine5(){
 		switch(step){
 		
 		case 0:
@@ -592,6 +542,52 @@ public class Autonomous {
 		}
 	}
 	
+	/*
+	 * TESTED WORKING
+	 * ==========ROUTINE 6==========
+	 * 
+	 * This mode simply moves the robot into the auto zone, there is no interaction with field pieces
+	 * 			R	   | **The robot can be placed anywhere such that the sonar faces the wall. It will move to be ~135" from it
+	 * _______________/																								(Auto Zone)
+	 * 
+	 * =============================
+	 * 
+	 */
+	public void routine6(){
+		
+		switch(step){
+		
+		case 0:
+			if (sonar.getInches() <= 135) {
+				md.drivePID(1, -.25, 0);
+				System.out.println("TRYING TO MOVE!!!! "
+						+ sonar.getInches());
+			} else {
+				md.drive(0, 0, 0);
+			}
+		break;
+		case 1:
+			arduino.writeSequence(2);
+		break;
+		
+		}
+		
+	}
+	
+	
+	/*
+	 *
+	 * ==========ROUTINE 7==========
+	 * 
+	 * 
+	 * 
+	 * =============================
+	 * 
+	 */
+	public void routine7(){
+		
+	}
+		
 	/*
 	 *
 	 * ==========ROUTINE 8==========
