@@ -120,8 +120,25 @@ public class Autonomous {
 		case 3:
 			lifter.goHome();
 			step++;
+			counter = 0;
 		break;
 		case 4:
+			if(lifter.bottomLimit()){
+				counter = 0;
+				step++;
+				lifter.move(1);
+			}
+		break;
+		case 5:
+			if(counter <= 20){
+				wing.latch();
+				gather.gatherOut();
+				counter++;
+			} else {
+				step++;
+			}
+		break;
+		case 6:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
 		break;
