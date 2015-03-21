@@ -3,17 +3,20 @@ package org.usfirst.frc.team1559.robot;
 
 public class PixyController {
 	Pixy pixy;
-	PixyDriveValues drivePkt;
-	double errorX;
-	double errorY;
-	double objRatio = 0;
-	public final double ratio = 109/80;
+	
+    final double ratio = 109/80;
 	
 	public PixyController(Pixy p){
 		pixy = new Pixy();
 	}
 	
 	public PixyDriveValues autoCenter(PixyPacket pkt){
+		double errorX = 0;
+		double errorY = 0;
+		double objRatio = 0;
+		
+		PixyDriveValues drivePkt = new PixyDriveValues();
+		
 		if (pkt != null){
 			System.out.println(pkt.X + " " + pkt.Y);
 			try{
@@ -26,17 +29,17 @@ public class PixyController {
 				if (pkt.X < 150 || pkt.X > 170){
 					errorX = pkt.X - 160;
 					errorX = errorX/160;
-					if(-0.3 < errorX && errorX < 0.3 && errorX < 0){
+					if(-0.3 < errorX && errorX < 0){
 						errorX = -0.3;
-					}
-					if(-0.3 < errorX && errorX < 0.3 && errorX > 0){
+					} else if (0 < errorX && errorX < 0.3){
 						errorX = 0.3;
 					}
 				}
 				else{
-					System.out.println("Tote within band");
+					drivePkt.centeredX = true;
 					errorX = 0;
 				}
+				
 				if (pkt.Width < 320){
 					errorY = 320 - pkt.Width;
 					errorY = errorY/320;
@@ -47,6 +50,7 @@ public class PixyController {
 				else{
 					System.out.println("Tote fills screen");
 					errorY = 0;
+					drivePkt.centeredY = true;
 				}
 //			}
 //			else if((objRatio) > (ratio+0.1)){
@@ -56,6 +60,7 @@ public class PixyController {
 //				error = 0;
 //			}
 		}
+			
 		drivePkt.driveX = errorX;
 		drivePkt.driveY = errorY;
 		return drivePkt;

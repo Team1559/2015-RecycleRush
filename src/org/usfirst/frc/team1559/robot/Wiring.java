@@ -52,6 +52,7 @@ public class Wiring{
 		public static final int ELEVATOR_DOWN_SPEED = -1;
 		public static final double CRUISING_HEIGHT = 13.5;
 		public static final double TOTE_HEIGHT = 32.0;
+		public static final double CAN_HEIGHT = 42;
 	
 	/*
 	 * Gatherer

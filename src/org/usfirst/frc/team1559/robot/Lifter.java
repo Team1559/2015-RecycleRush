@@ -55,6 +55,24 @@ public class Lifter //implements Runnable
 		}
 	}
 	
+	public void liftCan(){ //lift a can yesh
+		targetPosition = (Wiring.CAN_HEIGHT);
+		System.out.println("Trying to MOVE TO " + Wiring.CAN_HEIGHT);
+		if(targetPosition > currentLevel){
+			System.out.println("going up");
+			motor.set(Wiring.ELEVATOR_UP_SPEED);
+			movingUp = true;
+			movingDown = false;
+			notMoving = false;
+		} else if(targetPosition < currentLevel){
+			System.out.println("going down");
+			motor.set(Wiring.ELEVATOR_DOWN_SPEED);
+			movingUp = false;
+			movingDown = true;
+			notMoving = false;
+		}
+	}
+	
 	public void cruisingHeight(){ //1 2 or 3
 		targetPosition = (Wiring.CRUISING_HEIGHT);
 		System.out.println("Trying to MOVE TO " + Wiring.CRUISING_HEIGHT);

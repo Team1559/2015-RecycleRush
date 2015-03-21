@@ -48,6 +48,7 @@ public class Pixy extends Thread{
 		int Sig = 0;
 		int packetCounter = 0;
 		while (!interrupted()) {
+			System.out.println("The thread is running");
 			try {
 				b1 = pixy.read(1);
 			} catch (RuntimeException r) {

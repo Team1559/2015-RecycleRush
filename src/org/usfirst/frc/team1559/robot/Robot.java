@@ -108,7 +108,9 @@ public class Robot extends IterativeRobot {
 		num = 0;
 		once = true;
 		flag = true;
-
+		System.out.print("I got here");
+		pixy.start();
+		System.out.println("...but not here");
 	}
 
 	/* no comment */
@@ -123,15 +125,19 @@ public class Robot extends IterativeRobot {
 		 * HOME!!!!!!!!!!!
 		 */
 		
-		lifter.run();		
-		auto.startAutonomous();
+//		lifter.run();		
+//		auto.startAutonomous();
+//		SmartDashboard.putNumber("LIFTER CURRENT", lifter.motor.getOutputCurrent());
 
+		PixyPacket pkt = pixy.getPacket();
+		PixyDriveValues pd = p.autoCenter(pkt);
+		if (pkt != null){
+			SmartDashboard.putNumber("PixyWidth", pkt.Width);
+		} else {
+			SmartDashboard.putNumber("PixyWidth", 0);
+		}
+		
 
-		// PixyPacket pkt = pixy.getPacket();
-		// // md.drive(p.autoCenter(pkt), -p.autoCenter(pkt), 0, g.getAngle());
-		// SmartDashboard.putDouble("Error for Pixy", p.error);
-		// SmartDashboard.putDouble("Crate Ratio", p.objRatio);
-		// // SmartDashboard.putDouble("Gyro angle", g.getAngle());
 	}
 
 	public void teleopInit() {

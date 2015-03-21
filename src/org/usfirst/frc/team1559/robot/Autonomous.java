@@ -39,7 +39,6 @@ public class Autonomous {
 		this.p = p;
 		this.pc = pc;
 		counter = 0;
-		pkt = new PixyPacket();
 		rampx = new Ramp();
 		rampy = new Ramp();
 	}
@@ -608,13 +607,30 @@ public class Autonomous {
 	 *
 	 * ==========ROUTINE 7==========
 	 * 
-	 * 
+	 * n8
 	 * 
 	 * =============================
 	 * 
 	 */
 	public void routine7(){
-		
+		switch(step){
+		case 0:
+	    PixyPacket pkt = p.getPacket();
+		PixyDriveValues pd = new PixyDriveValues();
+		pd = pc.autoCenter(pkt);
+		SmartDashboard.putNumber("PIXY", pd.driveY);
+		break;
+//		case 0:
+//			PixyDriveValues pd = new PixyDriveValues();
+//			md.drivePID(pd.driveX, -.5, 0);
+//			if (pc.centeredX){
+//				step++;
+//			}
+//		break;
+//		case 1:
+//			md.drivePID(0,0,0);
+//		break;
+		}
 	}
 		
 	/*
@@ -627,7 +643,12 @@ public class Autonomous {
 	 * 
 	 */
 	public void routine8(){
-		
+		switch(step){
+		case 0:
+			lifter.liftCan();
+			step++;
+		break;
+		}
 	}
 	
 	/*
@@ -641,47 +662,70 @@ public class Autonomous {
 	 */
 	public void routine9(){
 		
-		switch (step) {
-		case 0:
-			wing.release();
-			if (irSensor.hasTote()) {
-				step++;
-			} else {
-				gather.gatherIn();
-			}
-			break;
+		switch(step){
+		
+		case 0: //get can
+			lifter.liftCan();
+			step++;
+		break;
 		case 1:
-			if (once) {
-				gather.stopGather();
-				lifter.goHome();/* You're drunk. */
-				once = false;
+			if(lifter.notMoving){
+				md.drivePIDToteCenter(.0, -.5, 0);
+				step++;
 			}
-
-			if (lifter.bottomLimit()) {
-				lifter.setHome();
-				Timer.delay(.25);
+		break;
+		case 2: 
+			if(irSensor.hasTote()){
+				lifter.goHome();
+				step++;
+			}
+		break;
+		case 3:
+			if(lifter.bottomLimit()){
 				lifter.move(1);
 				step++;
 			}
-			break;
-		case 2:
-			if (sonar.getInches() <= 120) {
+		break;
+		case 4:
+			if(lifter.notMoving && irSensor.hasTote()){
+				lifter.goHome();
+				step++;
+			}
+		break;
+		case 5:
+			PixyDriveValues pd = new PixyDriveValues();
+			md.drive(pd.driveX, -.5, 0);
+			if (pd.centeredX){
+				step++;
+			}
+		break;
+		case 6:
+			if(lifter.bottomLimit()){
+				lifter.move(1);
+				step++;
+			}
+		break;
+		case 7:
+			if(lifter.notMoving && irSensor.hasTote()){
+				lifter.goHome();
+				step++;
+				md.drivePIDToteCenter(0, 0, 0);
+			}
+		break;
+		case 8:
+			if (sonar.getInches() <= 100) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
-				step++;
+				md.drive(0, 0, 0);
 			}
-			break;
-		case 3:
-			md.drivePID(0, 0, 0);
-			// lifter.goHome();
-			// wing.latch();
+		break;
+		case 9:
 			arduino.writeSequence(2);
-			break;
-		}
-		
-	}
+		break;
 
-	
+		}	
+
+	}
 }
