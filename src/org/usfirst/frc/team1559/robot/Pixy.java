@@ -144,13 +144,23 @@ public class Pixy extends Thread{
 						}
 						state = 0;
 						index = 0;
-						yield();
+						try {
+							Thread.sleep(5);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						break;
 					}// switch
 				}// switch
 			}// if
 			else{
-				yield();
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}// while
 	}//parsePackets method

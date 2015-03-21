@@ -92,6 +92,7 @@ public class Robot extends IterativeRobot {
 		arduino.writeSequence(4);
 		flag = true;
 		once = true;
+		pixy.interrupt();
 	}
 
 	public void autonomousInit() {
