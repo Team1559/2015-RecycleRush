@@ -23,7 +23,7 @@ public class Autonomous {
 	double orig;
 	Ramp rampx;
 	Ramp rampy;
-	FrontSonar tiny;
+	FrontSonar tinySonar;
 	
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir, MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p, PixyController pc){
 		
@@ -42,7 +42,7 @@ public class Autonomous {
 		counter = 0;
 		rampx = new Ramp();
 		rampy = new Ramp();
-		tiny = new FrontSonar();
+		tinySonar = new FrontSonar();
 	}
 	
 	
@@ -689,33 +689,26 @@ public class Autonomous {
 			}
 		break;
 		case 4:
-			if((tiny.getInches() <= Wiring.GATHER_RANGE) && lifter.notMoving && irSensor.hasTote()){
+			if((tinySonar.getInches() <= Wiring.GATHER_RANGE) && lifter.notMoving && irSensor.hasTote()){
 				lifter.goHome();
 				step++;
 			}
 		break;
 		case 5:
-			PixyDriveValues pd = new PixyDriveValues();
-			md.drive(pd.driveX, -.5, 0);
-			if (pd.centeredX){
-				step++;
-			}
-		break;
-		case 6:
 			if(lifter.bottomLimit()){
 				lifter.move(1);
 				step++;
 			}
 		break;
-		case 7:
-			if(lifter.notMoving && irSensor.hasTote()){
+		case 6:
+			if((tinySonar.getInches() <= Wiring.GATHER_RANGE) && lifter.notMoving && irSensor.hasTote()){
 				lifter.goHome();
 				step++;
 				md.drivePIDToteCenter(0, 0, 0);
 			}
 		break;
-		case 8:
-			if (sonar.getInches() <= 100) {
+		case 7:
+			if (sonar.getInches() <= 135) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -723,7 +716,7 @@ public class Autonomous {
 				md.drive(0, 0, 0);
 			}
 		break;
-		case 9:
+		case 8:
 			arduino.writeSequence(2);
 		break;
 

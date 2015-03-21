@@ -11,7 +11,7 @@ public class FrontSonar {
 	}
 	
 	public double getFeet(){
-		return sonar.getVoltage() * 9.3;
+		return sonar.getAverageVoltage() * 9.3;
 	}
 	
 	public double getInches(){
