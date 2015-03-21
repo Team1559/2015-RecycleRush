@@ -68,8 +68,8 @@ public class Robot extends IterativeRobot {
 		c.start();
 		gather = new Gatherer();
 		irSensor = new IRSensor();
-		pixy = new Pixy();
-		p = new PixyController(pixy);
+		pixy = new Pixy(this);
+		p = new PixyController();
 		pdp = new PowerDistributionPanel();
 		ped = new Pedometer();
 		dbb = new DebounceButton(copilot, 1);
@@ -111,6 +111,7 @@ public class Robot extends IterativeRobot {
 		flag = true;
 		System.out.print("I got here");
 		System.out.println("...but not here");
+		pixy.start();
 	}
 
 	/* no comment */
@@ -125,17 +126,13 @@ public class Robot extends IterativeRobot {
 		 * HOME!!!!!!!!!!!
 		 */
 		
-//		lifter.run();		
-//		auto.startAutonomous();
-//		SmartDashboard.putNumber("LIFTER CURRENT", lifter.motor.getOutputCurrent());
-		pixy.process();
-		PixyPacket pkt = pixy.getPacket();
-		PixyDriveValues pd = p.autoCenter(pkt);
-		if (pkt != null){
-			SmartDashboard.putNumber("PixyWidth", pkt.Width);
-		} else {
-			SmartDashboard.putNumber("PixyWidth", 0);
-		}
+		lifter.run();		
+		auto.startAutonomous();
+		SmartDashboard.putNumber("LIFTER CURRENT", lifter.motor.getOutputCurrent());
+//		PixyPacket pkt = pixy.getPacket();
+//		PixyDriveValues pd = p.autoCenter(pkt);
+//		md.drivePID(pd.driveX, 0, 0);
+//		SmartDashboard.putNumber("X Correction Pixy",pd.driveX);
 		
 
 	}

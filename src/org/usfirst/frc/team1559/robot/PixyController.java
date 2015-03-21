@@ -2,12 +2,11 @@ package org.usfirst.frc.team1559.robot;
 //NOTE: Pixy is offset 3 in to the right
 
 public class PixyController {
-	Pixy pixy;
 	
     final double ratio = 109/80;
 	
-	public PixyController(Pixy p){
-		pixy = new Pixy();
+	public PixyController(){
+		
 	}
 	
 	public PixyDriveValues autoCenter(PixyPacket pkt){

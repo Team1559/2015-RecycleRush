@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 
 //Warning: if the pixy is plugged in through mini usb, this code WILL NOT WORK b/c the pixy is smart and detects where it should send data
-public class Pixy {
+public class Pixy extends Thread{
 	private SerialPort pixy;
 	private Port port = Port.kMXP;
 	private PixyPacket pkt;
@@ -20,10 +20,11 @@ public class Pixy {
 	private int Sig = 0;
 	private int packetCounter = 0;
 	private int bCount = 0;
+	private Robot rob;
 	
-	private final int QUEUE_SIZE = 10;
+	private final int QUEUE_SIZE = 1;
 
-	public Pixy() {
+	public Pixy(Robot r) {
 		pixy = new SerialPort(115200, port);
 		pixy.setReadBufferSize(1);
 		pkt = new PixyPacket();
@@ -32,6 +33,7 @@ public class Pixy {
 		queueIn = queueOut = 0;
 		queue = new PixyPacket[QUEUE_SIZE];
 //		start();
+		rob = r;
 	}
 
 	// This method parses raw data from the pixy into readable integers
@@ -44,6 +46,20 @@ public class Pixy {
 	}
 	public void setFlag(boolean value){
 		flag = value;
+	}
+	public void run(){
+		while (rob.isAutonomous()){
+			process();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				break;
+				
+			}
+		}
+		System.out.println("Ding dong the witch is dead");
 	}
 
 	public void process() {
