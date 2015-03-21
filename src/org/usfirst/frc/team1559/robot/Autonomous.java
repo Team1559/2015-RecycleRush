@@ -23,7 +23,7 @@ public class Autonomous {
 	double orig;
 	Ramp rampx;
 	Ramp rampy;
-	FrontSonar tinySonar;
+	SonarToteDetector tinySonar;
 	
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir, MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p, PixyController pc){
 		
@@ -42,7 +42,7 @@ public class Autonomous {
 		counter = 0;
 		rampx = new Ramp();
 		rampy = new Ramp();
-		tinySonar = new FrontSonar();
+		tinySonar = new SonarToteDetector();
 	}
 	
 	
@@ -639,32 +639,13 @@ public class Autonomous {
 	 *
 	 * ==========ROUTINE 8==========
 	 * 
-	 * 
+	 * Strictly timing
 	 * 
 	 * =============================
 	 * 
 	 */
 	public void routine8(){
-		switch(step){
-		case 0:
-			lifter.liftCan();
-			step++;
-		break;
-		}
-	}
-	
-	/*
-	 *
-	 * ==========ROUTINE 9==========
-	 * 
-	 * 3-Tote Autonomous... This is a little bit of a stretch
-	 * 
-	 * =============================
-	 * 
-	 */
-	public void routine9(){
-		
-		switch(step){
+switch(step){
 		
 		case 0: //get can
 			lifter.liftCan();
@@ -689,7 +670,7 @@ public class Autonomous {
 			}
 		break;
 		case 4:
-			if((tinySonar.getInches() <= Wiring.GATHER_RANGE) && lifter.notMoving && irSensor.hasTote()){
+			if(lifter.notMoving && irSensor.hasTote()){
 				lifter.goHome();
 				step++;
 			}
@@ -701,10 +682,89 @@ public class Autonomous {
 			}
 		break;
 		case 6:
-			if((tinySonar.getInches() <= Wiring.GATHER_RANGE) && lifter.notMoving && irSensor.hasTote()){
+			if(lifter.notMoving && irSensor.hasTote()){
 				lifter.goHome();
 				step++;
 				md.drivePIDToteCenter(0, 0, 0);
+			}
+		break;
+		case 7:
+			if (sonar.getInches() <= 135) {
+				md.drivePID(1, -.25, 0);
+				System.out.println("TRYING TO MOVE!!!! "
+						+ sonar.getInches());
+			} else {
+				md.drive(0, 0, 0);
+			}
+		break;
+		case 8:
+			arduino.writeSequence(2);
+		break;
+
+		}	
+	}
+	
+	/*
+	 *
+	 * ==========ROUTINE 9==========
+	 * 
+	 * 3-Tote Autonomous... This is a little bit of a stretch
+	 * 
+	 * =============================
+	 * 
+	 */
+	public void routine9(){
+		
+		switch(step){
+		
+		case 0: //get can
+			lifter.liftCan();
+			step++;
+		break;
+		case 1:
+			if(lifter.notMoving){
+				md.drivePIDToteCenter(0, -.5, 0);
+				step++;
+			}
+		break;
+		case 2: 
+			if(irSensor.hasTote()){
+				lifter.goHome();
+				step++;
+			}
+		break;
+		case 3:
+			if(lifter.bottomLimit()){
+				lifter.move(1);
+				step++;
+			}
+		break;
+		case 4:
+			if((!tinySonar.toteInRange()) && !irSensor.hasTote()){
+				md.drivePIDToteCenter(tinySonar.getCorrection(), -.5, 0);
+			} else {
+				md.drivePIDToteCenter(0, -.5, 0);
+				if(lifter.notMoving && irSensor.hasTote()){
+					lifter.goHome();
+					step++;
+				}
+			}
+		break;
+		case 5:
+			if(lifter.bottomLimit()){
+				lifter.move(1);
+				step++;
+			}
+		break;
+		case 6:
+			if((!tinySonar.toteInRange()) && !irSensor.hasTote()){
+				md.drivePIDToteCenter(tinySonar.getCorrection(), -.5, 0);
+			} else {
+				md.drivePIDToteCenter(0, 0, 0);
+				if(lifter.notMoving && irSensor.hasTote()){
+					lifter.goHome();
+					step++;
+				}
 			}
 		break;
 		case 7:
