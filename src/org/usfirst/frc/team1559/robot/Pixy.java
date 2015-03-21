@@ -47,13 +47,16 @@ public class Pixy extends Thread{
 		int index = 0;
 		int Sig = 0;
 		int packetCounter = 0;
+		
 		while (!interrupted()) {
 			System.out.println("The thread is running");
+			
 			try {
 				b1 = pixy.read(1);
 			} catch (RuntimeException r) {
-//				System.out.println(r.getMessage());
+				System.out.println(r.getMessage());
 			}
+			
 			if (b1.length > 0) {
 				// if (b1 != null){
 //				System.out.println("s:" + state);
@@ -144,24 +147,22 @@ public class Pixy extends Thread{
 						}
 						state = 0;
 						index = 0;
-						try {
-							Thread.sleep(5);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						
 						break;
 					}// switch
 				}// switch
 			}// if
 			else{
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
 			}
+			
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}// while
 	}//parsePackets method
 	

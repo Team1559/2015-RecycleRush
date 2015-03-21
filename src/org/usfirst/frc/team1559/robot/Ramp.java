@@ -30,13 +30,8 @@ public class Ramp {
 	public double rampMotorValue(double joystickInput){
 		
 		double ramp = 0.0;
-		if(previousValue != 0){
-			delta = ((joystickInput - previousValue)/previousValue) * 100;
-		} else {
-			delta = joystickInput * 100;
-		}
 		
-		SmartDashboard.putNumber("Drive delta", delta);
+		SmartDashboard.putNumber("Command Delta", delta);
 		
 		if(primaryCell == primaryBuffer.length){
 			primaryCell = 0;
@@ -54,6 +49,8 @@ public class Ramp {
 		primaryCell++;
 		secondaryCell++;
 		
+		delta = joystickInput - previousValue;
+
 		joystickInput = previousValue;
 		return ramp;
 		
