@@ -618,7 +618,7 @@ public class Autonomous {
 	    PixyPacket pkt = p.getPacket();
 		PixyDriveValues pd = new PixyDriveValues();
 		pd = pc.autoCenter(pkt);
-		SmartDashboard.putNumber("PIXY", pd.driveY);
+		md.drivePIDToteCenter(pd.driveX, 0, 0);
 		break;
 //		case 0:
 //			PixyDriveValues pd = new PixyDriveValues();

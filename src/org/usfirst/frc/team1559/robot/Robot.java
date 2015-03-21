@@ -110,7 +110,6 @@ public class Robot extends IterativeRobot {
 		once = true;
 		flag = true;
 		System.out.print("I got here");
-		pixy.start();
 		System.out.println("...but not here");
 	}
 
@@ -129,7 +128,7 @@ public class Robot extends IterativeRobot {
 //		lifter.run();		
 //		auto.startAutonomous();
 //		SmartDashboard.putNumber("LIFTER CURRENT", lifter.motor.getOutputCurrent());
-
+		pixy.process();
 		PixyPacket pkt = pixy.getPacket();
 		PixyDriveValues pd = p.autoCenter(pkt);
 		if (pkt != null){

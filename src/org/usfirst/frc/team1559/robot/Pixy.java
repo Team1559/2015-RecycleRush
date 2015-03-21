@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 
 //Warning: if the pixy is plugged in through mini usb, this code WILL NOT WORK b/c the pixy is smart and detects where it should send data
-public class Pixy extends Thread{
+public class Pixy {
 	private SerialPort pixy;
 	private Port port = Port.kMXP;
 	private PixyPacket pkt;
@@ -15,11 +15,16 @@ public class Pixy extends Thread{
 	private int queueIn;
 	private int queueOut;
 	private PixyPacket[] queue;
+	private int Checksum = 0;
+	private int index = 0;
+	private int Sig = 0;
+	private int packetCounter = 0;
+	private int bCount = 0;
 	
 	private final int QUEUE_SIZE = 10;
 
 	public Pixy() {
-		pixy = new SerialPort(19200, port);
+		pixy = new SerialPort(115200, port);
 		pixy.setReadBufferSize(1);
 		pkt = new PixyPacket();
 		b1 = new byte[1];
@@ -41,23 +46,23 @@ public class Pixy extends Thread{
 		flag = value;
 	}
 
-	public void run() {
+	public void process() {
 		// This method gathers data, then parses that data, and assigns the ints to global variables
-		int Checksum = 0;
-		int index = 0;
-		int Sig = 0;
-		int packetCounter = 0;
 		
-		while (!interrupted()) {
 			System.out.println("The thread is running");
-			
+			while (true){
 			try {
+				bCount = pixy.getBytesReceived();
+				if (bCount == 0){
+					return;
+				}
 				b1 = pixy.read(1);
 			} catch (RuntimeException r) {
 				System.out.println(r.getMessage());
+				bCount = 0;
 			}
 			
-			if (b1.length > 0) {
+			if (bCount > 0) {
 				// if (b1 != null){
 //				System.out.println("s:" + state);
 				switch (state) {
@@ -152,18 +157,7 @@ public class Pixy extends Thread{
 					}// switch
 				}// switch
 			}// if
-			else{
-				
 			}
-			
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}// while
 	}//parsePackets method
 	
 	public PixyPacket getPacket(){
