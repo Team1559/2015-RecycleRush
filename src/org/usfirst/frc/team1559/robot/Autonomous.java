@@ -23,6 +23,7 @@ public class Autonomous {
 	double orig;
 	Ramp rampx;
 	Ramp rampy;
+	FrontSonar tiny;
 	
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir, MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p, PixyController pc){
 		
@@ -41,6 +42,7 @@ public class Autonomous {
 		counter = 0;
 		rampx = new Ramp();
 		rampy = new Ramp();
+		tiny = new FrontSonar();
 	}
 	
 	
@@ -687,7 +689,7 @@ public class Autonomous {
 			}
 		break;
 		case 4:
-			if(lifter.notMoving && irSensor.hasTote()){
+			if((tiny.getInches() <= Wiring.GATHER_RANGE) && lifter.notMoving && irSensor.hasTote()){
 				lifter.goHome();
 				step++;
 			}

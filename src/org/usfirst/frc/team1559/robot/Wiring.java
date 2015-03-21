@@ -77,6 +77,8 @@ public class Wiring{
 	public static final int SONAR_ANALOG_ID = 1;
 	public static final int[] BCD_PORTS = {6, 7, 8, 9};
 	public static final int IR_SENSOR = 2;
+	public static final int TINYSONAR = 3;
+	public static final double GATHER_RANGE = 22;
 
 	/*
 	 * Pixy Things
