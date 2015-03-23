@@ -724,79 +724,14 @@ public class Autonomous {
 	 *
 	 * ==========ROUTINE 9==========
 	 * 
-	 * 3-Tote Autonomous... This is a little bit of a stretch
+	 * Dud	  
 	 * 
 	 * =============================
 	 * 
 	 */
 	public void routine9(){
 		
-		switch(step){
 		
-		case 0: //get can
-			lifter.liftCan();
-			step++;
-		break;
-		case 1:
-			if(lifter.notMoving){
-				md.drivePIDToteCenter(0, -.5, 0);
-				step++;
-			}
-		break;
-		case 2: 
-			if(irSensor.hasTote()){
-				lifter.goHome();
-				step++;
-			}
-		break;
-		case 3:
-			if(lifter.bottomLimit()){
-				lifter.move(1);
-				step++;
-			}
-		break;
-		case 4:
-			if((!tinySonar.toteInRange()) && !irSensor.hasTote()){
-				md.drivePIDToteCenter(tinySonar.getCorrection(), -.5, 0);
-			} else {
-				md.drivePIDToteCenter(0, -.5, 0);
-				if(lifter.notMoving && irSensor.hasTote()){
-					lifter.goHome();
-					step++;
-				}
-			}
-		break;
-		case 5:
-			if(lifter.bottomLimit()){
-				lifter.move(1);
-				step++;
-			}
-		break;
-		case 6:
-			if((!tinySonar.toteInRange()) && !irSensor.hasTote()){
-				md.drivePIDToteCenter(tinySonar.getCorrection(), -.5, 0);
-			} else {
-				md.drivePIDToteCenter(0, 0, 0);
-				if(lifter.notMoving && irSensor.hasTote()){
-					lifter.goHome();
-					step++;
-				}
-			}
-		break;
-		case 7:
-			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
-			} else {
-				md.drive(0, 0, 0);
-			}
-		break;
-		case 8:
-			arduino.writeSequence(2);
-		break;
-
-		}	
 
 	}
 }
