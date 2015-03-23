@@ -620,7 +620,7 @@ public class Autonomous {
 	 * 
 	 */
 	public void routine7(){
-		md.drivePIDToteCenter(0, -.75, 0);
+		
 	}
 		
 	/*
