@@ -594,16 +594,21 @@ public class Autonomous {
 						+ sonar.getInches());
 			} else {
 				md.drive(0, 0, 0);
+				gather.stopGather();
 			}
 		break;
 		case 1:
 			arduino.writeSequence(2);
+			lifter.goHome();
 		break;
 		
 		}
 		
 	}
 	
+	public void driveForward(){
+		md.drivePIDToteCenter(0, -.55, 0);
+	}
 	
 	/*
 	 *
@@ -615,24 +620,7 @@ public class Autonomous {
 	 * 
 	 */
 	public void routine7(){
-		switch(step){
-		case 0:
-	    PixyPacket pkt = p.getPacket();
-		PixyDriveValues pd = new PixyDriveValues();
-		pd = pc.autoCenter(pkt);
-		md.drivePIDToteCenter(pd.driveX, 0, 0);
-		break;
-//		case 0:
-//			PixyDriveValues pd = new PixyDriveValues();
-//			md.drivePID(pd.driveX, -.5, 0);
-//			if (pc.centeredX){
-//				step++;
-//			}
-//		break;
-//		case 1:
-//			md.drivePID(0,0,0);
-//		break;
-		}
+		md.drivePIDToteCenter(0, -.75, 0);
 	}
 		
 	/*
@@ -645,7 +633,8 @@ public class Autonomous {
 	 * 
 	 */
 	public void routine8(){
-switch(step){
+		gather.runMotorsIn();
+		switch(step){
 		
 		case 0: //get can
 			lifter.liftCan();
@@ -653,42 +642,69 @@ switch(step){
 		break;
 		case 1:
 			if(lifter.notMoving){
-				md.drivePIDToteCenter(.0, -.5, 0);
+				driveForward();
 				step++;
 			}
 		break;
 		case 2: 
+			driveForward();
 			if(irSensor.hasTote()){
 				lifter.goHome();
 				step++;
 			}
 		break;
 		case 3:
+			driveForward();
 			if(lifter.bottomLimit()){
 				lifter.move(1);
 				step++;
+				counter = 0;
 			}
 		break;
 		case 4:
+			driveForward();
+			if(counter <= 200){
+				counter++;
+			} else {
+				gather.gatherIn();
+			}
 			if(lifter.notMoving && irSensor.hasTote()){
+				gather.stopGather();
 				lifter.goHome();
 				step++;
 			}
 		break;
 		case 5:
+			driveForward();
 			if(lifter.bottomLimit()){
 				lifter.move(1);
 				step++;
+				counter = 0;
 			}
 		break;
 		case 6:
+			if(counter <= 200){
+				counter++;
+			} else {
+				gather.gatherIn();
+			}
 			if(lifter.notMoving && irSensor.hasTote()){
+				gather.stopGather();
 				lifter.goHome();
-				step++;
+				if(lifter.bottomLimit()){
+					step++;
+					once = true;
+				}
 				md.drivePIDToteCenter(0, 0, 0);
+			} else {
+				driveForward();
 			}
 		break;
 		case 7:
+			if(once){
+				lifter.cruisingHeight();
+				once = false;
+			}
 			if (sonar.getInches() <= 135) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "

@@ -111,7 +111,6 @@ public class Robot extends IterativeRobot {
 		flag = true;
 		System.out.print("I got here");
 		System.out.println("...but not here");
-		pixy.start();
 	}
 
 	/* no comment */
@@ -143,8 +142,10 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		md.drivePIDToteCenter(pilotXY.getX(),
-				pilotXY.getY(), pilotR.getX());
+//		md.drivePIDToteCenter(pilotXY.getX(),
+//				pilotXY.getY(), pilotR.getX());
+		
+		md.drivePIDToteCenter(rampX.rampMotorValue(pilotXY.getX()), rampY.rampMotorValue(pilotXY.getY()), pilotR.getX());
 		
 		if (pilotXY.getRawButton(Wiring.RESET_GYRO_BUT)) {
 			md.resetGyro();

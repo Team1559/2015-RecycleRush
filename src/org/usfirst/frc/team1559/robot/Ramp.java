@@ -41,6 +41,15 @@ public class Ramp {
 			secondaryCell = 0;
 		}
 		
+		delta = joystickInput - previousValue;
+		if(delta > .1){
+			joystickInput += .1;
+		} else if(delta < .1){
+			joystickInput -= .1;
+		} else {
+			joystickInput += delta;
+		}
+		
 		primaryBuffer[primaryCell] = joystickInput;
 		secondaryBuffer[secondaryCell] = takeAverage(primaryBuffer);
 
@@ -49,7 +58,9 @@ public class Ramp {
 		primaryCell++;
 		secondaryCell++;
 		
-		delta = joystickInput - previousValue;
+		
+		
+		
 
 		joystickInput = previousValue;
 		return ramp;

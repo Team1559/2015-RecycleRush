@@ -66,4 +66,9 @@ public class Gatherer {
 		out.set(false);
 	}
 	
+	public void runMotorsIn(){
+		rightGather.set(-Wiring.GATHER_IN_SPEED);
+		leftGather.set(Wiring.GATHER_IN_SPEED);
+	}
+	
 }
