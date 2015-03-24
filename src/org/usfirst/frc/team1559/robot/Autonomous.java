@@ -637,8 +637,16 @@ public class Autonomous {
 		switch(step){
 		
 		case 0: //get can
-			lifter.liftCan();
-			step++;
+//			lifter.liftCan();
+			if (sonar.getInches() <= 40) {
+				md.drivePID(1, -.25, 0);
+				System.out.println("TRYING TO MOVE!!!! "
+						+ sonar.getInches());
+			} else {
+				md.drive(0, 0, 0);
+				step++;
+			}
+			
 		break;
 		case 1:
 			if(lifter.notMoving){
