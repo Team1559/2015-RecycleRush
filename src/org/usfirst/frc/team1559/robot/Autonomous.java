@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1559.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -639,10 +640,11 @@ public class Autonomous {
 		case 0: //get can
 //			lifter.liftCan();
 			if(once){
-				lifter.move(1);
+				gather.stopGather();
 				once = false;
 			}
-			if (sonar.getInches() <= 40) {
+			wing.latch();
+			if (sonar.getInches() <= 38) {
 				md.drivePID(1, -.25, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -655,14 +657,19 @@ public class Autonomous {
 		case 1:
 			if(lifter.notMoving){
 				driveForward();
+				wing.latch();
 				step++;
 			}
 		break;
 		case 2: 
+			
 			driveForward();
 			if(irSensor.hasTote()){
 				lifter.goHome();
+				wing.release();
 				step++;
+			} else {
+				wing.latch();
 			}
 		break;
 		case 3:
@@ -716,17 +723,35 @@ public class Autonomous {
 			if(once){
 				lifter.cruisingHeight();
 				once = false;
+				md.g.reset();
+				orig = md.g.getAngle();
+		        desired = orig + 180;
 			}
-			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
+			if(md.g.getAngle() <= desired){
+				md.drivePIDToteCenter(0, 0, 1);
+				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
 			} else {
-				md.drive(0, 0, 0);
+				md.drivePIDToteCenter(0, 0, 0);
+				step++;
 			}
+//			if (sonar.getInches() <= 135) {
+//				md.drivePID(1, -.25, 0);
+//				System.out.println("TRYING TO MOVE!!!! "
+//						+ sonar.getInches());
+//			} else {
+//				md.drive(0, 0, 0);
+//			}
 		break;
 		case 8:
 			arduino.writeSequence(2);
+			if(DriverStation.getInstance().getMatchTime() >= 14){
+				md.drivePIDToteCenter(0,0,0);
+				lifter.goHome();
+				wing.latch();
+			} else {
+				md.drivePIDToteCenter(0, -1, 0);
+			}
+			
 		break;
 
 		}	

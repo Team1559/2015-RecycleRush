@@ -86,5 +86,12 @@ public class Wiring{
 	 */
 	public static final int PIXY_HALF_BAND = 3;
 
-	
+	//Kyle's box
+	public static final int BOX_HOME = 5;
+	public static final int BOX_CRUISING = 2;
+	public static final int BOX_LVL1 = 3;
+	public static final int BOX_LVL2 = 4;
+	public static final int BOX_LVL3 = 1;
+	public static final int BOX_EASY_BUTTON = 6;
+	public static final int BOX_OVERRIDE_AXIS = 0;
 }

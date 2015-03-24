@@ -72,7 +72,7 @@ public class Robot extends IterativeRobot {
 		p = new PixyController();
 		pdp = new PowerDistributionPanel();
 		ped = new Pedometer();
-		dbb = new DebounceButton(copilot, 1);
+		dbb = new DebounceButton(copilot, Wiring.BOX_EASY_BUTTON);
 		arduino = new Arduino(4);
 		rampX = new Ramp();
 		rampY = new Ramp();
@@ -221,33 +221,29 @@ public class Robot extends IterativeRobot {
 
 		lifter.run();
 		
-		if (!copilot.getRawButton(Wiring.COPILOT_TRIGGER)) {
+		if (!copilot.getRawButton(Wiring.BOX_EASY_BUTTON)) {
 
-			if (copilot.getRawButton(Wiring.COPILOT_T3)
-					|| copilot.getRawButton(Wiring.COPILOT_T4)) {
+			if (copilot.getRawButton(Wiring.BOX_LVL1)) {
 				if (!pressed) {
 					lifter.move(1);
 				}
 				pressed = true;
-			} else if (copilot.getRawButton(Wiring.COPILOT_RED_LIGHT)) {
+			} else if (copilot.getRawButton(Wiring.BOX_CRUISING)) {
 				if (!pressed) {
 					lifter.cruisingHeight();
 				}
 				pressed = true;
-			} else if (copilot.getRawButton(Wiring.COPILOT_T5)
-					|| copilot.getRawButton(Wiring.COPILOT_T6)) {
+			} else if (copilot.getRawButton(Wiring.BOX_LVL2)) {
 				if (!pressed) {
 					lifter.move(2);
 				}
 				pressed = true;
-			} else if (copilot.getRawButton(Wiring.COPILOT_T7)
-					|| copilot.getRawButton(Wiring.COPILOT_T8)) {
+			} else if (copilot.getRawButton(Wiring.BOX_LVL3)) {
 				if (!pressed) {
 					lifter.move(3);
 				}
 				pressed = true;
-			} else if (copilot.getRawButton(Wiring.COPILOT_T1)
-					|| copilot.getRawButton(Wiring.COPILOT_T2)) {
+			} else if (copilot.getRawButton(Wiring.BOX_HOME)) {
 				if (!pressed) {
 					lifter.goHome();
 				}
@@ -256,7 +252,7 @@ public class Robot extends IterativeRobot {
 				pressed = false;
 			}
 		} else {
-			lifter.set(copilot.getRawAxis(1));
+			lifter.set(copilot.getRawAxis(Wiring.BOX_OVERRIDE_AXIS));
 		}
 	}
 
