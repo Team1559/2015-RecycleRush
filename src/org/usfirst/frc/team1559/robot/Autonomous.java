@@ -113,7 +113,7 @@ public class Autonomous {
 			break;
 		case 2:
 			if (sonar.getInches() <= 135) {
-				md.drivePIDToteCenter(1, -.25, 0);
+				md.drivePID(.75, -.1875, 0);
 				System.out.println("being stupid at "
 						+ sonar.getInches());
 			} else {
@@ -219,7 +219,7 @@ public class Autonomous {
 		break;
 		case 7:
 			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
+				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
@@ -290,7 +290,7 @@ public class Autonomous {
 		break;
 		case 2:
 			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
+				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
@@ -369,7 +369,7 @@ public class Autonomous {
 		break;
 		case 5:
 			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
+				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
@@ -420,7 +420,6 @@ public class Autonomous {
 	 * 
 	 */
 	public void routine4(){
-
 		switch(step){
 		
 		case 0:
@@ -478,7 +477,7 @@ public class Autonomous {
 		break;
 		case 6:
 			if (sonar.getInches() <= 135) {
-				md.drivePID(rampx.rampMotorValue(1), rampy.rampMotorValue(-.25), 0);
+				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
@@ -573,7 +572,7 @@ public class Autonomous {
 		break;
 		case 7:
 			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
+				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
@@ -629,12 +628,13 @@ public class Autonomous {
 		
 		case 0:
 			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
+				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
 			} else {
 				md.drive(0, 0, 0);
 				gather.stopGather();
+				step++;
 			}
 		break;
 		case 1:
@@ -660,7 +660,7 @@ public class Autonomous {
 	 * 
 	 */
 	public void routine7(){
-		
+		arduino.writeSequence(2);
 	}
 		
 	/*

@@ -156,7 +156,7 @@ public class Robot extends IterativeRobot {
 			md.resetGyro();
 		}
 		
-		avgMotorSpeed = ((lf.getRaw() + lr.getRaw() + rf.getRaw() + rr.getRaw()) / 17);
+		avgMotorSpeed = (int) (Math.abs((lf.get()) + Math.abs(lr.get()) + Math.abs(rf.get()) + Math.abs(rr.get())) * 15);
 		arduino.writeElevatorPos(avgMotorSpeed);
 		wingControls();
 		lifterControls();
@@ -224,7 +224,8 @@ public class Robot extends IterativeRobot {
 
 //		System.out.println(auto.getBCDValue());
 		System.out.println(sonar.getInches());
-
+		md.drivePIDToteCenter(rampX.rampMotorValue(pilotXY.getX()), rampY.rampMotorValue(pilotXY.getY()), pilotR.getX());
+		arduino.writeSequence(1);
 	}
 
 	public void lifterControls() {
