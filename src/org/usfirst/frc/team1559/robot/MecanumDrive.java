@@ -265,7 +265,6 @@ public void drivePIDToteCenter(double x, double y, double rotationClockwise){
 	            }
 	        }
 	    }
-	
 
 	/*
 	 * Set each Talon to an arbitrary value...or something preconfigured...or whatever...

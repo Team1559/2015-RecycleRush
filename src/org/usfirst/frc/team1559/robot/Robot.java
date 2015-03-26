@@ -48,6 +48,7 @@ public class Robot extends IterativeRobot {
 	boolean flag;
 	int num;
 	int step;
+	int avgMotorSpeed = 0;
 
 	public void robotInit() {
 					
@@ -142,6 +143,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		arduinoControls();
 		md.resetGyro();
+		arduino.writeSequence(5);
 	}
 
 	public void teleopPeriodic() {
@@ -154,6 +156,8 @@ public class Robot extends IterativeRobot {
 			md.resetGyro();
 		}
 		
+		avgMotorSpeed = ((lf.getRaw() + lr.getRaw() + rf.getRaw() + rr.getRaw()) / 17);
+		arduino.writeElevatorPos(avgMotorSpeed);
 		wingControls();
 		lifterControls();
 		gathererControls();
