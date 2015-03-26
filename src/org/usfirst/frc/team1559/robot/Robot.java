@@ -32,6 +32,7 @@ public class Robot extends IterativeRobot {
 	Ramp rampY;
 	Gatherer gather;
 	DebounceButton dbb;
+	Pincers pincers;
 	
 	//Other Software Components
 	Autonomous auto;
@@ -86,6 +87,7 @@ public class Robot extends IterativeRobot {
 		once = true;
 		flag = true;		
 		mode = -1;
+		pincers = new Pincers();
 	}
 
 	public void disabledInit() {
@@ -154,11 +156,22 @@ public class Robot extends IterativeRobot {
 		wingControls();
 		lifterControls();
 		gathererControls();
+		pincerControls();
 		
 		SmartDashboard.putNumber("SONAR_VALUE", sonar.getInches());
 		SmartDashboard.putBoolean("HAS_TOTE", irSensor.hasTote());
 		SmartDashboard.putDouble("IR VALUE", irSensor.getVoltage());
 
+	}
+	
+	public void pincerControls(){
+		
+		if(pilotR.getRawButton(2)){
+			pincers.rightCan();
+		} else {
+			pincers.dontRightCan();
+		}
+		
 	}
 	
 	public void arduinoControls() {
