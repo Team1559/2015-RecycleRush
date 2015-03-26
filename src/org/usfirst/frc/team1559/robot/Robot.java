@@ -105,8 +105,9 @@ public class Robot extends IterativeRobot {
 		} else {
 			arduino.writeAlliance(0);
 		}
-
+		arduino.writeSequence(1);
 		// mode = autoMode.read();
+		md.resetGyro();
 		mode = 0;
 		num = 0;
 		once = true;
@@ -217,8 +218,8 @@ public class Robot extends IterativeRobot {
 
 	public void testPeriodic() {
 
-		System.out.println("HAS TOTE: " + irSensor.hasTote());
-		System.out.println("IR VOLTAGE: " + irSensor.getVoltage());
+//		System.out.println(auto.getBCDValue());
+		System.out.println(sonar.getInches());
 
 	}
 

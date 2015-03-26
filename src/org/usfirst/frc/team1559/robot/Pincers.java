@@ -18,13 +18,14 @@ public class Pincers {
 		
 		in.set(false);
 		out.set(true);
+		System.out.println("RIGHTING CAN!");
 		
 	}
 	
 	public void dontRightCan(){
 		
-		in.set(false);
-		out.set(true);
+		in.set(true);
+		out.set(false);
 		
 	}
 	

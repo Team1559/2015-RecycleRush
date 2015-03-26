@@ -87,6 +87,7 @@ public class Autonomous {
 	 * =============================
 	 */
 	public void routine0(){
+		System.out.println("MODE 0!");
 		switch (step) {
 		case 0:
 			wing.release();
@@ -112,8 +113,8 @@ public class Autonomous {
 			break;
 		case 2:
 			if (sonar.getInches() <= 135) {
-				md.drivePID(1, -.25, 0);
-				System.out.println("TRYING TO MOVE!!!! "
+				md.drivePIDToteCenter(1, -.25, 0);
+				System.out.println("being stupid at "
 						+ sonar.getInches());
 			} else {
 				step++;
