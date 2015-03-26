@@ -255,7 +255,7 @@ public class Autonomous {
 	}
 	
 	/*
-	 * ADD BACK AWAY CODE
+	 * 
 	 * TESTED WORKING
 	 * ==========ROUTINE 2==========
 	 * 		 ----   |
@@ -271,8 +271,16 @@ public class Autonomous {
 		switch(step){
 		
 		case 0:
-			lifter.move(1);
-			step++;
+			gather.stopGather();
+			if(once){
+				lifter.goHome();
+				once = false;
+			}
+			
+			if(lifter.notMoving && !once){
+				lifter.move(1);
+				step++;	
+			}
 		break;
 		case 1:
 			if(lifter.notMoving){
@@ -315,8 +323,19 @@ public class Autonomous {
 		switch(step){
 		
 		case 0:
-			lifter.move(1);
-			step++;
+//			lifter.move(1);
+//			step++;
+			
+			gather.stopGather();
+			if(once){
+				lifter.goHome();
+				once = false;
+			}
+			
+			if(lifter.notMoving && !once){
+				lifter.move(1);
+				step++;	
+			}
 		break;
 		case 1:
 			if(lifter.notMoving){
@@ -404,8 +423,19 @@ public class Autonomous {
 		switch(step){
 		
 		case 0:
-			lifter.move(2);
-			step++;
+//			lifter.move(2);
+//			step++;
+			
+			gather.stopGather();
+			if(once){
+				lifter.goHome();
+				once = false;
+			}
+			
+			if(lifter.notMoving && !once){
+				lifter.move(2);
+				step++;	
+			}
 		break;
 		case 1:
 			if(lifter.notMoving){
@@ -479,8 +509,16 @@ public class Autonomous {
 		switch(step){
 		
 		case 0:
-			lifter.move(2);
-			step++;
+			gather.stopGather();
+			if(once){
+				lifter.goHome();
+				once = false;
+			}
+			
+			if(lifter.notMoving && !once){
+				lifter.move(2);
+				step++;	
+			}
 		break;
 		case 1:
 			if(lifter.notMoving){
