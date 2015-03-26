@@ -15,8 +15,8 @@ public class Wings {
 //		left = new Servo(3);
 //		right = new Servo(2);
 		
-		up = new Solenoid(2);
-		down = new Solenoid(3);
+		up = new Solenoid(3);
+		down = new Solenoid(2);
 	}
 
 	public void latch() {
