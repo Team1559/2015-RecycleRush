@@ -598,7 +598,7 @@ public class Autonomous {
 	}
 
 	public void driveForward() {
-		md.drivePIDToteCenter(0, -.6, 0);
+		md.drivePIDToteCenter(0, -.55, 0);
 	}
 
 	/*
