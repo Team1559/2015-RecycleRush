@@ -36,7 +36,11 @@ public class Lifter //implements Runnable
 	 * This method is to set the elevator in motion
 	 */
 	public void move(int desiredLevel){ //1 2 or 3
-		targetPosition = (desiredLevel * Wiring.TOTE_HEIGHT);
+		if(desiredLevel == 2) {
+			targetPosition = (desiredLevel * Wiring.TOTE_HEIGHT + 2);
+		} else {
+			targetPosition = (desiredLevel * Wiring.TOTE_HEIGHT);
+		}
 		System.out.println("Trying to MOVE TO " + desiredLevel);
 		if(targetPosition > currentLevel){
 			System.out.println("going up");

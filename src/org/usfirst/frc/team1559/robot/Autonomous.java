@@ -112,7 +112,7 @@ public class Autonomous {
 			}
 			break;
 		case 2:
-			if (sonar.getInches() <= 135) {
+			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
 				System.out.println("being stupid at "
 						+ sonar.getInches());
@@ -218,7 +218,7 @@ public class Autonomous {
 			}
 		break;
 		case 7:
-			if (sonar.getInches() <= 135) {
+			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -289,7 +289,7 @@ public class Autonomous {
 			}
 		break;
 		case 2:
-			if (sonar.getInches() <= 135) {
+			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -368,7 +368,7 @@ public class Autonomous {
 			}
 		break;
 		case 5:
-			if (sonar.getInches() <= 135) {
+			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -476,7 +476,7 @@ public class Autonomous {
 			}
 		break;
 		case 6:
-			if (sonar.getInches() <= 135) {
+			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -571,7 +571,7 @@ public class Autonomous {
 			}
 		break;
 		case 7:
-			if (sonar.getInches() <= 135) {
+			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
@@ -627,7 +627,7 @@ public class Autonomous {
 		switch(step){
 		
 		case 0:
-			if (sonar.getInches() <= 135) {
+			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
 				System.out.println("TRYING TO MOVE!!!! "
 						+ sonar.getInches());
