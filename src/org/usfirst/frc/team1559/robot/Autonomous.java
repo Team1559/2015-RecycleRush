@@ -430,10 +430,12 @@ public class Autonomous {
 			if(once){
 				lifter.goHome();
 				once = false;
+				System.out.println("WENT HOME!");
 			}
 			
 			if(lifter.notMoving && !once){
 				lifter.move(2);
+				System.out.println();
 				step++;	
 			}
 		break;
