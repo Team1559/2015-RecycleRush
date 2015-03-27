@@ -598,7 +598,7 @@ public class Autonomous {
 	}
 
 	public void driveForward() {
-		md.drivePIDToteCenter(0, -.55, 0);
+		md.drivePIDToteCenter(0, -.6, 0);
 	}
 
 	/*
@@ -759,6 +759,7 @@ public class Autonomous {
 
 		case 0: // get can
 			 lifter.liftCan();
+			 step++;
 //			if (once) {
 //				gather.stopGather();
 //				once = false;
