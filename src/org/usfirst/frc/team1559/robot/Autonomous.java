@@ -25,9 +25,11 @@ public class Autonomous {
 	Ramp rampx;
 	Ramp rampy;
 	SonarToteDetector tinySonar;
-	
-	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir, MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p, PixyController pc){
-		
+
+	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir,
+			MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p,
+			PixyController pc) {
+
 		bcd = new BCDSwitch(ports);
 		step = 0;
 		once = true;
@@ -45,48 +47,45 @@ public class Autonomous {
 		rampy = new Ramp();
 		tinySonar = new SonarToteDetector();
 	}
-	
-	
-	public int getBCDValue(){
+
+	public int getBCDValue() {
 		return bcd.read();
 	}
-	
-	public void startAutonomous(){ //decide which method to call!
-		if(getBCDValue() == 0){
+
+	public void startAutonomous() { // decide which method to call!
+		if (getBCDValue() == 0) {
 			routine0();
-		} else if(getBCDValue() == 1){
+		} else if (getBCDValue() == 1) {
 			routine1();
-		} else if(getBCDValue() == 2){
+		} else if (getBCDValue() == 2) {
 			routine2();
-		} else if(getBCDValue() == 3){
+		} else if (getBCDValue() == 3) {
 			routine3();
-		} else if(getBCDValue() == 4){
+		} else if (getBCDValue() == 4) {
 			routine4();
-		} else if(getBCDValue() == 5){
+		} else if (getBCDValue() == 5) {
 			routine5();
-		} else if(getBCDValue() == 6){
+		} else if (getBCDValue() == 6) {
 			routine6();
-		} else if(getBCDValue() == 7){
+		} else if (getBCDValue() == 7) {
 			routine7();
-		} else if(getBCDValue() == 8){
+		} else if (getBCDValue() == 8) {
 			routine8();
-		} else if(getBCDValue() == 9){
+		} else if (getBCDValue() == 9) {
 			routine9();
 		}
 	}
-	
+
 	/*
-	 * TESTED WORKING
-	 * ==========ROUTINE 0==========
+	 * TESTED WORKING ==========ROUTINE 0==========
 	 * 
-	 * Grabs one tote only; Moves into the auto zone. 
+	 * Grabs one tote only; Moves into the auto zone.
 	 * 
-	 * 	(B)[TOTE]  R | *****START LIFTER ABOVE HOME!*****
-	 * 	____________/
+	 * (B)[TOTE] R | *****START LIFTER ABOVE HOME!***** ____________/
 	 * 
 	 * =============================
 	 */
-	public void routine0(){
+	public void routine0() {
 		System.out.println("MODE 0!");
 		switch (step) {
 		case 0:
@@ -114,131 +113,105 @@ public class Autonomous {
 		case 2:
 			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
-				System.out.println("being stupid at "
-						+ sonar.getInches());
+				System.out.println("being stupid at " + sonar.getInches());
 			} else {
 				step++;
 			}
-		break;
+			break;
 		case 3:
 			lifter.goHome();
 			gather.stopGather();
 			step++;
 			counter = 0;
-		break;
+			break;
 		case 4:
 			md.drivePID(0, 0, 0);
-			
-			if(lifter.bottomLimit()){
-				lifter.move(1);
-				step++;
-				counter = 0;
-			}
-		break;
+			break;
 		case 5:
-			wing.latch();
-			if(lifter.notMoving)
-				step++;
-		break;
-		case 6:
-			if(counter <= 35){
-				wing.latch();
-				gather.gatherOut();
-				counter++;
-			} else {
-				step++;
-			}
-			
-		break;
-		case 7:
 			arduino.writeSequence(2);
 			gather.stopGather();
 			wing.release();
-		break;
+			break;
 		}
-		
+
 	}
-	
+
 	/*
-	 * TESTED WORKING!
-	 * ==========ROUTINE 1==========
+	 * TESTED WORKING! ==========ROUTINE 1==========
 	 * 
-	 *  R [TOTE](B)  | Gather and pick up a crate, do a 180, and move into the auto zone.
-	 * 				/   *****START LIFTER ABOVE HOME!*****
-	 * ____________/
+	 * R [TOTE](B) | Gather and pick up a crate, do a 180, and move into the
+	 * auto zone. / *****START LIFTER ABOVE HOME!***** ____________/
 	 * 
 	 * =============================
-	 * 
 	 */
-	public void routine1(){
-		
-		switch(step){
-		
+	public void routine1() {
+
+		switch (step) {
+
 		case 0:
-			if(!irSensor.hasTote()){
+			if (!irSensor.hasTote()) {
 				gather.gatherIn();
 				counter = 0;
 			} else {
-				if(counter <= 15){
+				if (counter <= 15) {
 					counter++;
 				} else {
 					gather.stopGather();
 					step++;
 				}
 			}
-		break;
+			break;
 		case 1:
 			step++;
-		break;
+			break;
 		case 2:
 			lifter.goHome();
 			step++;
-		break;
+			break;
 		case 3:
-			if(lifter.bottomLimit()){
+			if (lifter.bottomLimit()) {
 				step++;
 			}
-		break;
+			break;
 		case 4:
 			lifter.move(1);
 			step++;
-		break;
+			break;
 		case 5:
 			md.g.reset();
-	        orig = md.g.getAngle();
-	        desired = orig + 180;
-	        step++;
-		break;
+			orig = md.g.getAngle();
+			desired = orig + 180;
+			step++;
+			break;
 		case 6:
-			if(md.g.getAngle() <= desired){
+			if (md.g.getAngle() <= desired) {
 				md.drivePIDToteCenter(0, 0, 1);
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
 				step++;
 			}
-		break;
+			break;
 		case 7:
 			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
+				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
 			} else {
 				md.drive(0, 0, 0);
 				step++;
 			}
-		break;
+			break;
 		case 8:
 			lifter.goHome();
 			step++;
-		break;
+			break;
 		case 9:
-			if(lifter.bottomLimit()){
+			if (lifter.bottomLimit()) {
 				counter = 0;
 				step++;
 			}
-		break;
+			break;
 		case 10:
-			if(counter <= 35){
+			if (counter <= 35) {
 				wing.latch();
 				md.drivePIDToteCenter(0, .75, 0);
 				counter++;
@@ -247,150 +220,138 @@ public class Autonomous {
 				counter = 0;
 				md.drivePIDToteCenter(0, 0, 0);
 			}
-		break;
+			break;
 		case 11:
 			arduino.writeSequence(2);
-		break;
+			break;
 		}
-		
+
 	}
-	
+
 	/*
 	 * 
-	 * TESTED WORKING
-	 * ==========ROUTINE 2==========
-	 * 		 ----   |
-	 * [TOTE](B)R   | Grabs the barrel, and moves into the auto Zone, place the barrel inside the robot at the start of the match
-	 *       ----   |
-	 *       		|
-	 * ____________/
+	 * TESTED WORKING ==========ROUTINE 2========== ---- | [TOTE](B)R | Grabs
+	 * the barrel, and moves into the auto Zone, place the barrel inside the
+	 * robot at the start of the match ---- | | ____________/
 	 * =============================
-	 * 
 	 */
-	public void routine2(){
-		
-		switch(step){
-		
+	public void routine2() {
+
+		switch (step) {
+
 		case 0:
 			gather.stopGather();
-			if(once){
+			if (once) {
 				lifter.goHome();
 				once = false;
 			}
-			
-			if(lifter.notMoving && !once){
+
+			if (lifter.notMoving && !once) {
 				lifter.move(1);
-				step++;	
-			}
-		break;
-		case 1:
-			if(lifter.notMoving){
 				step++;
 			}
-		break;
+			break;
+		case 1:
+			if (lifter.notMoving) {
+				step++;
+			}
+			break;
 		case 2:
 			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
+				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
 			} else {
 				step++;
 			}
-		break;
+			break;
 		case 3:
 			lifter.goHome();
 			step++;
-		break;
+			break;
 		case 4:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
 			wing.latch();
-		break;
+			break;
 		}
-		
+
 	}
-	
+
 	/*
-	 * TESTED WORKING!
-	 * ==========ROUTINE 3==========
-	 * ---- 
-	 * R(B)[TOTE]  | Grab the barrel, run into the auto zone after a 180 degree death spiral
-	 * ----		   |
-	 * ___________/
-	 * =============================
-	 * 
+	 * TESTED WORKING! ==========ROUTINE 3========== ---- R(B)[TOTE] | Grab the
+	 * barrel, run into the auto zone after a 180 degree death spiral ---- |
+	 * ___________/ =============================
 	 */
-	public void routine3(){
-		switch(step){
-		
+	public void routine3() {
+		switch (step) {
+
 		case 0:
-//			lifter.move(1);
-//			step++;
-			
+			// lifter.move(1);
+			// step++;
+
 			gather.stopGather();
-			if(once){
+			if (once) {
 				lifter.goHome();
 				once = false;
 			}
-			
-			if(lifter.notMoving && !once){
+
+			if (lifter.notMoving && !once) {
 				lifter.move(1);
-				step++;	
+				step++;
 			}
-		break;
+			break;
 		case 1:
-			if(lifter.notMoving){
+			if (lifter.notMoving) {
 				counter = 0;
 				step++;
 			}
-		break;
+			break;
 		case 2:
-			if(counter <= 50){
+			if (counter <= 50) {
 				md.drivePID(-1, 0, 0);
 				counter++;
 			} else {
 				step++;
 			}
-		break;
-		case 3:			
-                md.g.reset();
-		        orig = md.g.getAngle();
-		        desired = orig + 180;
-		        step++;
-		break;
-		case 4:			
-			if(md.g.getAngle() <= desired){
+			break;
+		case 3:
+			md.g.reset();
+			orig = md.g.getAngle();
+			desired = orig + 180;
+			step++;
+			break;
+		case 4:
+			if (md.g.getAngle() <= desired) {
 				md.drivePIDToteCenter(0, 0, 1);
 				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
 				step++;
 			}
-		break;
+			break;
 		case 5:
 			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
+				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
 			} else {
 				step++;
 				once = true;
 			}
-		break;
+			break;
 		case 6:
-			if(once){
+			if (once) {
 				md.drivePIDToteCenter(0, 0, 0);
 				lifter.goHome();
 				counter = 0;
 				once = false;
-			} 
-			
-			if(lifter.bottomLimit()){
+			}
+
+			if (lifter.bottomLimit()) {
 				step++;
 			}
-		break;
+			break;
 		case 7:
-			if(counter <= 35){
+			if (counter <= 35) {
 				wing.latch();
 				md.drivePIDToteCenter(0, .75, 0);
 				counter++;
@@ -399,54 +360,50 @@ public class Autonomous {
 				counter = 0;
 
 			}
-		break;
+			break;
 		case 8:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
-		break;
+			break;
 		}
 	}
-	
-	/* ADD BACK AWAY CODE
-	 * TESTED WORKING!
-	 * ==========ROUTINE 4==========
-	 * 		 ----
-	 * [TOTE](B)R  | Grab the can, place it on a tote, and grab the stack. 
-	 * 		 ----  | Move into the auto Zone
-	 * ___________/
+
+	/*
+	 * ADD BACK AWAY CODE TESTED WORKING! ==========ROUTINE 4========== ----
+	 * [TOTE](B)R | Grab the can, place it on a tote, and grab the stack. ---- |
+	 * Move into the auto Zone ___________/
 	 * 
 	 * 
 	 * =============================
-	 * 
 	 */
-	public void routine4(){
-		switch(step){
-		
+	public void routine4() {
+		switch (step) {
+
 		case 0:
-//			lifter.move(2);
-//			step++;
-			
+			// lifter.move(2);
+			// step++;
+
 			gather.stopGather();
-			if(once){
+			if (once) {
 				lifter.goHome();
 				once = false;
 				System.out.println("WENT HOME!");
 			}
-			
-			if(lifter.notMoving && !once){
+
+			if (lifter.notMoving && !once) {
 				lifter.move(2);
 				System.out.println();
-				step++;	
+				step++;
 			}
-		break;
+			break;
 		case 1:
-			if(lifter.notMoving){
+			if (lifter.notMoving) {
 				step++;
 				counter = 0;
 			}
-		break;
+			break;
 		case 2:
-			if(counter <= 15){
+			if (counter <= 15) {
 				md.drivePIDToteCenter(0, -.75, 0);
 				counter++;
 			} else {
@@ -454,82 +411,77 @@ public class Autonomous {
 				md.drive(0, rampy.rampMotorValue(0), 0);
 				counter = 0;
 			}
-		break;
+			break;
 		case 3:
-			if(!irSensor.hasTote()){
+			if (!irSensor.hasTote()) {
 				gather.gatherIn();
 			} else {
-				if(counter <= 15){
+				if (counter <= 15) {
 					counter++;
 				} else {
 					step++;
 					gather.stopGather();
 				}
 			}
-		break;
+			break;
 		case 4:
 			lifter.goHome();
 			step++;
-		break;
+			break;
 		case 5:
-			if(lifter.bottomLimit()){
+			if (lifter.bottomLimit()) {
 				lifter.cruisingHeight();
 				step++;
 			}
-		break;
+			break;
 		case 6:
 			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
+				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
 			} else {
 				step++;
 			}
-		break;
+			break;
 		case 7:
 			md.drivePID(rampx.rampMotorValue(0), rampy.rampMotorValue(0), 0);
 			lifter.goHome();
 			wing.release();
 			arduino.writeSequence(2);
-		break;
+			break;
 		}
-		
+
 	}
-	
+
 	/*
-	 * WORKS - FIRST TRY!!!!!! CODY IS THE BEST 5=EVER!!1!
-	 * ==========ROUTINE 5==========
-	 *  ----
-	 *  R(B)[TOTE]   | Grab the can, place it on a tote, move into the auto zone with the stack
-	 *  ----        /                   *****DOES A 180!*****
-	 *   __________/
-	 *   
-	 * =============================
+	 * WORKS - FIRST TRY!!!!!! CODY IS THE BEST 5=EVER!!1! ==========ROUTINE
+	 * 5========== ---- R(B)[TOTE] | Grab the can, place it on a tote, move into
+	 * the auto zone with the stack ---- / *****DOES A 180!***** __________/
 	 * 
+	 * =============================
 	 */
-	public void routine5(){
-		switch(step){
-		
+	public void routine5() {
+		switch (step) {
+
 		case 0:
 			gather.stopGather();
-			if(once){
+			if (once) {
 				lifter.goHome();
 				once = false;
 			}
-			
-			if(lifter.notMoving && !once){
+
+			if (lifter.notMoving && !once) {
 				lifter.move(2);
-				step++;	
+				step++;
 			}
-		break;
+			break;
 		case 1:
-			if(lifter.notMoving){
+			if (lifter.notMoving) {
 				step++;
 				counter = 0;
 			}
-		break;
+			break;
 		case 2:
-			if(counter <= 15){
+			if (counter <= 15) {
 				md.drivePIDToteCenter(0, -.75, 0);
 				counter++;
 			} else {
@@ -537,221 +489,215 @@ public class Autonomous {
 				md.drive(0, 0, 0);
 				counter = 0;
 			}
-		break;
+			break;
 		case 3:
-			if(!irSensor.hasTote()){
+			if (!irSensor.hasTote()) {
 				gather.gatherIn();
 			} else {
-				if(counter <= 15){
+				if (counter <= 15) {
 					counter++;
 				} else {
 					step++;
 					gather.stopGather();
 				}
 			}
-		break;
+			break;
 		case 4:
 			lifter.goHome();
 			step++;
-		break;
+			break;
 		case 5:
-			if(lifter.bottomLimit()){
+			if (lifter.bottomLimit()) {
 				lifter.cruisingHeight();
 				step++;
 				md.g.reset();
 				orig = md.g.getAngle();
-		        desired = orig + 180;
+				desired = orig + 180;
 			}
-		break;
+			break;
 		case 6:
-			if(md.g.getAngle() <= desired){
+			if (md.g.getAngle() <= desired) {
 				md.drivePIDToteCenter(0, 0, 1);
 				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
 				step++;
 			}
-		break;
+			break;
 		case 7:
 			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
+				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
 			} else {
 				step++;
 				once = true;
 			}
-		break;
+			break;
 		case 8:
-			if(once){
+			if (once) {
 				lifter.goHome();
 				counter = 0;
 				once = false;
-			} 
-			
-			if(lifter.bottomLimit()){
+			}
+
+			if (lifter.bottomLimit()) {
 				step++;
 			}
-			
-		break;
+
+			break;
 		case 9:
-			if(counter <= 35){
+			if (counter <= 35) {
 				wing.latch();
 				md.drivePIDToteCenter(0, .75, 0);
 				counter++;
 			} else {
 				step++;
 				counter = 0;
-				
+
 			}
-		break;
+			break;
 		case 10:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
-		break;
-		
+			break;
+
 		}
 	}
-	
+
 	/*
-	 * TESTED WORKING
-	 * ==========ROUTINE 6==========
+	 * TESTED WORKING ==========ROUTINE 6==========
 	 * 
-	 * This mode simply moves the robot into the auto zone, there is no interaction with field pieces
-	 * 			R	   | **The robot can be placed anywhere such that the sonar faces the wall. It will move to be ~135" from it
-	 * _______________/																								(Auto Zone)
+	 * This mode simply moves the robot into the auto zone, there is no
+	 * interaction with field pieces R | **The robot can be placed anywhere such
+	 * that the sonar faces the wall. It will move to be ~135" from it
+	 * _______________/ (Auto Zone)
 	 * 
 	 * =============================
-	 * 
 	 */
-	public void routine6(){
-		
-		switch(step){
-		
+	public void routine6() {
+
+		switch (step) {
+
 		case 0:
 			if (sonar.getInches() <= 155) {
 				md.drivePID(.75, -.1875, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
+				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
 			} else {
 				md.drive(0, 0, 0);
 				gather.stopGather();
 				step++;
 			}
-		break;
+			break;
 		case 1:
 			arduino.writeSequence(2);
 			lifter.goHome();
-		break;
-		
+			break;
+
 		}
-		
+
 	}
-	
-	public void driveForward(){
+
+	public void driveForward() {
 		md.drivePIDToteCenter(0, -.55, 0);
 	}
-	
+
 	/*
-	 *
+	 * 
 	 * ==========ROUTINE 7==========
 	 * 
 	 * n8
 	 * 
 	 * =============================
-	 * 
 	 */
-	public void routine7(){
+	public void routine7() {
 		arduino.writeSequence(2);
 	}
-		
+
 	/*
-	 *
+	 * 
 	 * ==========ROUTINE 8==========
 	 * 
 	 * Strictly timing
 	 * 
 	 * =============================
-	 * 
 	 */
-	public void routine8(){
+	public void routine8() {
 		gather.runMotorsIn();
-		switch(step){
-		
-		case 0: //get can
-//			lifter.liftCan();
-			if(once){
+		switch (step) {
+
+		case 0: // get can
+			// lifter.liftCan();
+			if (once) {
 				gather.stopGather();
 				once = false;
 			}
 			wing.latch();
 			if (sonar.getInches() <= 38) {
 				md.drivePID(1, -.25, 0);
-				System.out.println("TRYING TO MOVE!!!! "
-						+ sonar.getInches());
+				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
 			} else {
 				md.drive(0, 0, 0);
 				step++;
 			}
-			
-		break;
+
+			break;
 		case 1:
-			if(lifter.notMoving){
+			if (lifter.notMoving) {
 				driveForward();
 				wing.latch();
 				step++;
 			}
-		break;
-		case 2: 
-			
+			break;
+		case 2:
+
 			driveForward();
-			if(irSensor.hasTote()){
+			if (irSensor.hasTote()) {
 				lifter.goHome();
 				wing.release();
 				step++;
 			} else {
 				wing.latch();
 			}
-		break;
+			break;
 		case 3:
 			driveForward();
-			if(lifter.bottomLimit()){
+			if (lifter.bottomLimit()) {
 				lifter.move(1);
 				step++;
 				counter = 0;
 			}
-		break;
+			break;
 		case 4:
 			driveForward();
-			if(counter <= 200){
+			if (counter <= 200) {
 				counter++;
 			} else {
 				gather.gatherIn();
 			}
-			if(lifter.notMoving && irSensor.hasTote()){
+			if (lifter.notMoving && irSensor.hasTote()) {
 				gather.stopGather();
 				lifter.goHome();
 				step++;
 			}
-		break;
+			break;
 		case 5:
 			driveForward();
-			if(lifter.bottomLimit()){
+			if (lifter.bottomLimit()) {
 				lifter.move(1);
 				step++;
 				counter = 0;
 			}
-		break;
+			break;
 		case 6:
-			if(counter <= 200){
+			if (counter <= 200) {
 				counter++;
 			} else {
 				gather.gatherIn();
 			}
-			if(lifter.notMoving && irSensor.hasTote()){
+			if (lifter.notMoving && irSensor.hasTote()) {
 				gather.stopGather();
 				lifter.goHome();
-				if(lifter.bottomLimit()){
+				if (lifter.bottomLimit()) {
 					step++;
 					once = true;
 				}
@@ -759,57 +705,148 @@ public class Autonomous {
 			} else {
 				driveForward();
 			}
-		break;
+			break;
 		case 7:
-			if(once){
+			if (once) {
 				lifter.cruisingHeight();
 				once = false;
 				md.g.reset();
 				orig = md.g.getAngle();
-		        desired = orig + 180;
+				desired = orig + 180;
 			}
-			if(md.g.getAngle() <= desired){
+			if (md.g.getAngle() <= desired) {
 				md.drivePIDToteCenter(0, 0, 1);
 				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
 				step++;
 			}
-//			if (sonar.getInches() <= 135) {
-//				md.drivePID(1, -.25, 0);
-//				System.out.println("TRYING TO MOVE!!!! "
-//						+ sonar.getInches());
-//			} else {
-//				md.drive(0, 0, 0);
-//			}
-		break;
+			// if (sonar.getInches() <= 135) {
+			// md.drivePID(1, -.25, 0);
+			// System.out.println("TRYING TO MOVE!!!! "
+			// + sonar.getInches());
+			// } else {
+			// md.drive(0, 0, 0);
+			// }
+			break;
 		case 8:
 			arduino.writeSequence(2);
-			if(DriverStation.getInstance().getMatchTime() >= 14){
-				md.drivePIDToteCenter(0,0,0);
+			if (DriverStation.getInstance().getMatchTime() >= 14) {
+				md.drivePIDToteCenter(0, 0, 0);
 				lifter.goHome();
 				wing.latch();
 			} else {
 				md.drivePIDToteCenter(0, -1, 0);
 			}
-			
-		break;
 
-		}	
+			break;
+
+		}
 	}
-	
+
 	/*
-	 *
+	 * 
 	 * ==========ROUTINE 9==========
 	 * 
-	 * Dud	  
+	 * 2-tote stack
 	 * 
 	 * =============================
-	 * 
 	 */
-	public void routine9(){
-		
-		
+	public void routine9() {
+
+		gather.runMotorsIn();
+		switch (step) {
+
+		case 0: // get can
+			 lifter.liftCan();
+//			if (once) {
+//				gather.stopGather();
+//				once = false;
+//			}
+//			wing.latch();
+//			if (sonar.getInches() <= 38) {
+//				md.drivePID(1, -.25, 0);
+//				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
+//			} else {
+//				md.drive(0, 0, 0);
+//				step++;
+//			}
+
+			break;
+		case 1:
+			if (lifter.notMoving) {
+				driveForward();
+				wing.latch();
+				step++;
+			}
+			break;
+		case 2:
+
+			driveForward();
+			if (irSensor.hasTote()) {
+				lifter.goHome();
+				wing.release();
+				step++;
+			} else {
+				wing.latch();
+			}
+			break;
+		case 3:
+			driveForward();
+			if (lifter.bottomLimit()) {
+				lifter.move(1);
+				step++;
+				counter = 0;
+			}
+			break;
+		case 4:
+			driveForward();
+			if (counter <= 200) {
+				counter++;
+			} else {
+				gather.gatherIn();
+			}
+			if (lifter.notMoving && irSensor.hasTote()) {
+				gather.stopGather();
+				lifter.goHome();
+				step++;
+			}
+			break;
+		case 5:
+			driveForward();
+			if (lifter.bottomLimit()) {
+				step++;
+				counter = 0;
+			}
+			break;
+		case 6:
+			if (once) {
+				lifter.cruisingHeight();
+				once = false;
+				md.g.reset();
+//				orig = md.g.getAngle();
+//				desired = orig + 180;
+			}
+//			if (md.g.getAngle() <= desired) {
+//				md.drivePIDToteCenter(0, 0, 1);
+//				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
+//			} else {
+//				md.drivePIDToteCenter(0, 0, 0);
+//				step++;
+//			}
+			 if (sonar.getInches() <= 155) {
+			 md.drivePID(.75, -.1875, 0);
+			 System.out.println("TRYING TO MOVE!!!! "
+			 + sonar.getInches());
+			 } else {
+			 md.drive(0, 0, 0);
+			 step++;
+			 }
+			break;
+		case 7:
+			arduino.writeSequence(2);
+		break;
+		}
 
 	}
 }
