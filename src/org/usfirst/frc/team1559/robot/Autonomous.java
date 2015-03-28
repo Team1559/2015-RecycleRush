@@ -243,6 +243,7 @@ public class Autonomous {
 		case 0:
 			gather.stopGather();
 			if (once) {
+				wing.release();
 				lifter.goHome();
 				once = false;
 			}
@@ -618,7 +619,9 @@ public class Autonomous {
 	 * 
 	 * ==========ROUTINE 8==========
 	 * 
-	 * Strictly timing
+	 * REQURIES PEDOMETERS
+	 * 
+	 * 3-tote stack
 	 * 
 	 * =============================
 	 */
@@ -749,105 +752,23 @@ public class Autonomous {
 	 * 
 	 * ==========ROUTINE 9==========
 	 * 
-	 * 2-tote stack
+	 * 3-tote stack 
 	 * 
 	 * =============================
 	 */
 	public void routine9() {
-
-		gather.runMotorsIn();
-		switch (step) {
-
-		case 0: // get can
-			 lifter.liftCan();
-			 step++;
-//			if (once) {
-//				gather.stopGather();
-//				once = false;
-//			}
-//			wing.latch();
-//			if (sonar.getInches() <= 38) {
-//				md.drivePID(1, -.25, 0);
-//				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
-//			} else {
-//				md.drive(0, 0, 0);
-//				step++;
-//			}
-
-			break;
-		case 1:
-			if (lifter.notMoving) {
-				driveForward();
-				wing.latch();
-				step++;
-			}
-			break;
-		case 2:
-
-			driveForward();
-			if (irSensor.hasTote()) {
-				lifter.goHome();
-				wing.release();
-				step++;
-			} else {
-				wing.latch();
-			}
-			break;
-		case 3:
-			driveForward();
-			if (lifter.bottomLimit()) {
-				lifter.move(1);
-				step++;
-				counter = 0;
-			}
-			break;
-		case 4:
-			driveForward();
-			if (counter <= 200) {
-				counter++;
-			} else {
-				gather.gatherIn();
-			}
-			if (lifter.notMoving && irSensor.hasTote()) {
-				gather.stopGather();
-				lifter.goHome();
-				step++;
-			}
-			break;
-		case 5:
-			driveForward();
-			if (lifter.bottomLimit()) {
-				step++;
-				counter = 0;
-			}
-			break;
-		case 6:
-			if (once) {
-				lifter.cruisingHeight();
-				once = false;
-				md.g.reset();
-//				orig = md.g.getAngle();
-//				desired = orig + 180;
-			}
-//			if (md.g.getAngle() <= desired) {
-//				md.drivePIDToteCenter(0, 0, 1);
-//				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
-//			} else {
-//				md.drivePIDToteCenter(0, 0, 0);
-//				step++;
-//			}
-			 if (sonar.getInches() <= 155) {
-			 md.drivePID(.75, -.1875, 0);
-			 System.out.println("TRYING TO MOVE!!!! "
-			 + sonar.getInches());
-			 } else {
-			 md.drive(0, 0, 0);
-			 step++;
-			 }
-			break;
-		case 7:
-			arduino.writeSequence(2);
+		
+		switch(step){
+		
+		case 0:
+			gather.stopGather();
+			lifter.goHome();
+			step++;
 		break;
+		case 1:
+			
+		break;
+		
 		}
 
 	}

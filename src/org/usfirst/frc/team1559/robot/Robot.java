@@ -155,12 +155,12 @@ public class Robot extends IterativeRobot {
 			md.resetGyro();
 		}
 		
-		avgMotorSpeed = (int) (Math.abs((lf.get()) + Math.abs(lr.get()) + Math.abs(rf.get()) + Math.abs(rr.get())) * 15);
+		avgMotorSpeed = (int) (Math.abs((lf.get()) + Math.abs(lr.get()) + Math.abs(rf.get()) + Math.abs(rr.get())) * 15/68.5);
 		arduino.writeElevatorPos(avgMotorSpeed);
 		wingControls();
 		lifterControls();
 		gathererControls();
-		pincerControls();
+//		pincerControls();
 		
 		SmartDashboard.putNumber("SONAR_VALUE", sonar.getInches());
 		SmartDashboard.putBoolean("HAS_TOTE", irSensor.hasTote());
@@ -168,15 +168,15 @@ public class Robot extends IterativeRobot {
 
 	}
 	
-	public void pincerControls(){
-		
-		if(pilotR.getRawButton(2)){
-			pincers.rightCan();
-		} else {
-			pincers.dontRightCan();
-		}
-		
-	}
+//	public void pincerControls(){
+//		
+//		if(pilotR.getRawButton(2)){
+//			pincers.rightCan();
+//		} else {
+//			pincers.dontRightCan();
+//		}
+//		
+//	}
 	
 	public void arduinoControls() {
 
@@ -200,6 +200,8 @@ public class Robot extends IterativeRobot {
 				gather.rotateRight();
 			} else if (pilotXY.getRawButton(Wiring.PILOT_ROTATE_LEFT)) {
 				gather.rotateLeft();
+			} else if(pilotR.getRawButton(2)){
+				gather.solenoidsIn();
 			} else {
 				gather.stopGather();
 			}

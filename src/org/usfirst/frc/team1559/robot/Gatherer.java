@@ -38,6 +38,13 @@ public class Gatherer {
 		
 	}
 	
+	public void solenoidsIn(){
+		
+		in.set(true);
+		out.set(false);
+		
+	}
+	
 	public void stopGather(){
 		
 		rightGather.set(0);
