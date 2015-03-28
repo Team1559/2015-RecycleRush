@@ -600,7 +600,11 @@ public class Autonomous {
 	}
 
 	public void driveForward() {
-		md.drivePIDToteCenter(0, -.55, 0);
+		md.drivePIDToteCenter(0, -.65, 0);
+	}
+	
+	public void driveForward(double speed){ //should be negative for forward
+		md.drivePIDToteCenter(0, -speed, 0);
 	}
 
 	/*
@@ -761,6 +765,7 @@ public class Autonomous {
 		switch(step){
 		
 		case 0:
+			wing.release();
 			gather.stopGather();
 			lifter.goHome();
 			step++;
@@ -773,74 +778,86 @@ public class Autonomous {
 			}
 		break;
 		case 2:
-			driveForward();
+			driveForward(.75);
 			
 			if(counter >= 100){
 				gather.gatherIn();
+				step++;
 			} else {
 				counter++;
-			}
+			}			
 			
+		break;
+		case 3:
+			driveForward(.55);
 			if(lifter.notMoving && irSensor.hasTote()){
 				gather.stopGather();
 				lifter.goHome();
-				step++;
-			}
-		break;
-		case 3:
-			driveForward();
-			
-			if(lifter.bottomLimit()){
-				lifter.move(1);
 				step++;
 			}
 		break;
 		case 4:
-			driveForward();
+			driveForward(.55);
 			
-			if(counter >= 100){
+			if(lifter.bottomLimit()){
+				lifter.move(1);
+				step++;
+				counter = 0;
+			}
+		break;
+		case 5:
+			driveForward(.55);
+			
+			if(counter >= 120){
 				gather.gatherIn();
+				step++;
 			} else {
 				counter++;
 			}
 			
+		break;
+		case 6:
+			driveForward(.45);
 			if(lifter.notMoving && irSensor.hasTote()){
 				gather.stopGather();
 				lifter.goHome();
 				step++;
 			}
 		break;
-		case 5:
-			driveForward();
+		case 7:
+			driveForward(.45);
 			if(lifter.bottomLimit()){
-				lifter.cruisingHeight();
+//				lifter.cruisingHeight();
 				step++;
 				md.resetGyro();
 				orig = md.g.getAngle();
 				desired = orig + 90;
 			}
 		break;
-		case 6:
+		case 8:
 			if (md.g.getAngle() <= desired) {
 				md.drivePIDToteCenter(0, 0, 1);
 				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
 				step++;
+				counter = 0;
 			}
 		break;
-		case 7:
-			if(DriverStation.getInstance().getMatchTime() <= 13){
-				md.drivePIDToteCenter(0, 1, 0);
+		case 9:
+			if(counter <= 110) {
+				md.drivePIDToteCenter(0, -1, 0);
+				counter++;
 			} else {
-				gather.stopGather();
-				lifter.goHome();
+				md.drivePIDToteCenter(0, 0, 0);
+//				gather.stopGather();
+//				lifter.goHome();
 				step++;
 				arduino.writeSequence(2);
 				wing.latch();
 			}
 		break;
-		case 8:
+		case 10:
 			md.drivePIDToteCenter(0, 0, 0);
 			wing.latch();
 		break;
