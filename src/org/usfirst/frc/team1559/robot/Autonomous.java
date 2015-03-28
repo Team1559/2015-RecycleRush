@@ -126,6 +126,7 @@ public class Autonomous {
 			break;
 		case 4:
 			md.drivePID(0, 0, 0);
+			step++;
 			break;
 		case 5:
 			arduino.writeSequence(2);
