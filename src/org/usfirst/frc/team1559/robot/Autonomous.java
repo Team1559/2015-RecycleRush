@@ -766,7 +766,83 @@ public class Autonomous {
 			step++;
 		break;
 		case 1:
+			if(lifter.bottomLimit()){
+				step++;
+				lifter.move(1);
+				counter = 0;
+			}
+		break;
+		case 2:
+			driveForward();
 			
+			if(counter >= 100){
+				gather.gatherIn();
+			} else {
+				counter++;
+			}
+			
+			if(lifter.notMoving && irSensor.hasTote()){
+				gather.stopGather();
+				lifter.goHome();
+				step++;
+			}
+		break;
+		case 3:
+			driveForward();
+			
+			if(lifter.bottomLimit()){
+				lifter.move(1);
+				step++;
+			}
+		break;
+		case 4:
+			driveForward();
+			
+			if(counter >= 100){
+				gather.gatherIn();
+			} else {
+				counter++;
+			}
+			
+			if(lifter.notMoving && irSensor.hasTote()){
+				gather.stopGather();
+				lifter.goHome();
+				step++;
+			}
+		break;
+		case 5:
+			driveForward();
+			if(lifter.bottomLimit()){
+				lifter.cruisingHeight();
+				step++;
+				md.resetGyro();
+				orig = md.g.getAngle();
+				desired = orig + 90;
+			}
+		break;
+		case 6:
+			if (md.g.getAngle() <= desired) {
+				md.drivePIDToteCenter(0, 0, 1);
+				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
+			} else {
+				md.drivePIDToteCenter(0, 0, 0);
+				step++;
+			}
+		break;
+		case 7:
+			if(DriverStation.getInstance().getMatchTime() <= 13){
+				md.drivePIDToteCenter(0, 1, 0);
+			} else {
+				gather.stopGather();
+				lifter.goHome();
+				step++;
+				arduino.writeSequence(2);
+				wing.latch();
+			}
+		break;
+		case 8:
+			md.drivePIDToteCenter(0, 0, 0);
+			wing.latch();
 		break;
 		
 		}
