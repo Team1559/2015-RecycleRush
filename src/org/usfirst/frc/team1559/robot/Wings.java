@@ -19,14 +19,14 @@ public class Wings {
 		down = new Solenoid(2);
 	}
 
-	public void latch() {
+	public void up() {
 //		left.setAngle(0);
 //		right.setAngle(105);
 		up.set(false);
 		down.set(true);
 	}
 
-	public void release() {
+	public void down() {
 //		left.setAngle(60);
 //		right.setAngle(35);
 		up.set(true);

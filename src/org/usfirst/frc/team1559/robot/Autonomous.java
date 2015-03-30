@@ -25,6 +25,13 @@ public class Autonomous {
 	Ramp rampx;
 	Ramp rampy;
 	SonarToteDetector tinySonar;
+	Pedometer pe; //not physical education
+	
+	/* MAGIC CONSTANTS FOR ROUTINE 9*/
+	final int firstGather = 52;
+	final int secondGather = 104;
+	final int autoZone = 96;
+	final int backupDist = 3;
 
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir,
 			MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p,
@@ -89,7 +96,7 @@ public class Autonomous {
 		System.out.println("MODE 0!");
 		switch (step) {
 		case 0:
-			wing.release();
+			wing.down();
 			if (irSensor.hasTote()) {
 				step++;
 			} else {
@@ -131,7 +138,7 @@ public class Autonomous {
 		case 5:
 			arduino.writeSequence(2);
 			gather.stopGather();
-			wing.release();
+			wing.down();
 			break;
 		}
 
@@ -213,7 +220,7 @@ public class Autonomous {
 			break;
 		case 10:
 			if (counter <= 35) {
-				wing.latch();
+				wing.up();
 				md.drivePIDToteCenter(0, .75, 0);
 				counter++;
 			} else {
@@ -243,7 +250,7 @@ public class Autonomous {
 		case 0:
 			gather.stopGather();
 			if (once) {
-				wing.release();
+				wing.down();
 				lifter.goHome();
 				once = false;
 			}
@@ -273,7 +280,7 @@ public class Autonomous {
 		case 4:
 			md.drivePID(0, 0, 0);
 			arduino.writeSequence(2);
-			wing.latch();
+			wing.up();
 			break;
 		}
 
@@ -354,7 +361,7 @@ public class Autonomous {
 			break;
 		case 7:
 			if (counter <= 35) {
-				wing.latch();
+				wing.up();
 				md.drivePIDToteCenter(0, .75, 0);
 				counter++;
 			} else {
@@ -447,7 +454,7 @@ public class Autonomous {
 		case 7:
 			md.drivePID(rampx.rampMotorValue(0), rampy.rampMotorValue(0), 0);
 			lifter.goHome();
-			wing.release();
+			wing.down();
 			arduino.writeSequence(2);
 			break;
 		}
@@ -549,7 +556,7 @@ public class Autonomous {
 			break;
 		case 9:
 			if (counter <= 35) {
-				wing.latch();
+				wing.up();
 				md.drivePIDToteCenter(0, .75, 0);
 				counter++;
 			} else {
@@ -625,147 +632,18 @@ public class Autonomous {
 	 * 
 	 * REQURIES PEDOMETERS
 	 * 
-	 * 3-tote stack
+	 * 3-tote stack left turn
+	 * 
+	 * requires 2 other robits to do da dirty [t]werk
 	 * 
 	 * =============================
 	 */
-	public void routine8() {
-		gather.runMotorsIn();
-		switch (step) {
-
-		case 0: // get can
-			// lifter.liftCan();
-			if (once) {
-				gather.stopGather();
-				once = false;
-			}
-			wing.latch();
-			if (sonar.getInches() <= 38) {
-				md.drivePID(1, -.25, 0);
-				System.out.println("TRYING TO MOVE!!!! " + sonar.getInches());
-			} else {
-				md.drive(0, 0, 0);
-				step++;
-			}
-
-			break;
-		case 1:
-			if (lifter.notMoving) {
-				driveForward();
-				wing.latch();
-				step++;
-			}
-			break;
-		case 2:
-
-			driveForward();
-			if (irSensor.hasTote()) {
-				lifter.goHome();
-				wing.release();
-				step++;
-			} else {
-				wing.latch();
-			}
-			break;
-		case 3:
-			driveForward();
-			if (lifter.bottomLimit()) {
-				lifter.move(1);
-				step++;
-				counter = 0;
-			}
-			break;
-		case 4:
-			driveForward();
-			if (counter <= 200) {
-				counter++;
-			} else {
-				gather.gatherIn();
-			}
-			if (lifter.notMoving && irSensor.hasTote()) {
-				gather.stopGather();
-				lifter.goHome();
-				step++;
-			}
-			break;
-		case 5:
-			driveForward();
-			if (lifter.bottomLimit()) {
-				lifter.move(1);
-				step++;
-				counter = 0;
-			}
-			break;
-		case 6:
-			if (counter <= 200) {
-				counter++;
-			} else {
-				gather.gatherIn();
-			}
-			if (lifter.notMoving && irSensor.hasTote()) {
-				gather.stopGather();
-				lifter.goHome();
-				if (lifter.bottomLimit()) {
-					step++;
-					once = true;
-				}
-				md.drivePIDToteCenter(0, 0, 0);
-			} else {
-				driveForward();
-			}
-			break;
-		case 7:
-			if (once) {
-				lifter.cruisingHeight();
-				once = false;
-				md.g.reset();
-				orig = md.g.getAngle();
-				desired = orig + 180;
-			}
-			if (md.g.getAngle() <= desired) {
-				md.drivePIDToteCenter(0, 0, 1);
-				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
-			} else {
-				md.drivePIDToteCenter(0, 0, 0);
-				step++;
-			}
-			// if (sonar.getInches() <= 135) {
-			// md.drivePID(1, -.25, 0);
-			// System.out.println("TRYING TO MOVE!!!! "
-			// + sonar.getInches());
-			// } else {
-			// md.drive(0, 0, 0);
-			// }
-			break;
-		case 8:
-			arduino.writeSequence(2);
-			if (DriverStation.getInstance().getMatchTime() >= 14) {
-				md.drivePIDToteCenter(0, 0, 0);
-				lifter.goHome();
-				wing.latch();
-			} else {
-				md.drivePIDToteCenter(0, -1, 0);
-			}
-
-			break;
-
-		}
-	}
-
-	/*
-	 * 
-	 * ==========ROUTINE 9==========
-	 * 
-	 * 3-tote stack 
-	 * 
-	 * =============================
-	 */
-	public void routine9() {
+public void routine8() {
 		
 		switch(step){
 		
 		case 0:
-			wing.release();
+			wing.down(); //fixed wing names, thanks John *sarcasm*
 			gather.stopGather();
 			lifter.goHome();
 			step++;
@@ -774,22 +652,22 @@ public class Autonomous {
 			if(lifter.bottomLimit()){
 				step++;
 				lifter.move(1);
-				counter = 0;
+//				counter = 0;
 			}
 		break;
 		case 2:
+			pe.reset();//*tips pedometer* m'distance
 			driveForward(.75);
 			
-			if(counter >= 100){
+			if(pe.getY() >= firstGather){ 
 				gather.gatherIn();
 				step++;
-			} else {
-				counter++;
 			}			
 			
 		break;
 		case 3:
 			driveForward(.55);
+			
 			if(lifter.notMoving && irSensor.hasTote()){
 				gather.stopGather();
 				lifter.goHome();
@@ -802,37 +680,37 @@ public class Autonomous {
 			if(lifter.bottomLimit()){
 				lifter.move(1);
 				step++;
-				counter = 0;
+//				counter = 0;
 			}
 		break;
 		case 5:
+			pe.reset();
 			driveForward(.55);
 			
-			if(counter >= 120){
+			if(pe.getY() >= secondGather){ 
 				gather.gatherIn();
 				step++;
-			} else {
-				counter++;
 			}
 			
 		break;
 		case 6:
-			driveForward(.45);
-			if(lifter.notMoving && irSensor.hasTote()){
-				gather.stopGather();
-				lifter.goHome();
+			driveForward(.55);
+			if(/*lifter.notMoving && */irSensor.hasTote()){
+				gather.stopMotors();
+				gather.solenoidsIn();
+//				lifter.goHome();
 				step++;
 			}
 		break;
 		case 7:
-			driveForward(.45);
-			if(lifter.bottomLimit()){
+			driveForward(.55);
+//			if(lifter.bottomLimit()){
 //				lifter.cruisingHeight();
 				step++;
 				md.resetGyro();
 				orig = md.g.getAngle();
-				desired = orig + 90;
-			}
+				desired = orig - 90;
+//			}
 		break;
 		case 8:
 			if (md.g.getAngle() <= desired) {
@@ -841,25 +719,153 @@ public class Autonomous {
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
 				step++;
-				counter = 0;
+//				counter = 0;
 			}
 		break;
 		case 9:
-			if(counter <= 110) {
+			if(pe.getY() >= autoZone) {
 				md.drivePIDToteCenter(0, -1, 0);
-				counter++;
+//				counter++;
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
-//				gather.stopGather();
+				gather.stopGather();
 //				lifter.goHome();
 				step++;
 				arduino.writeSequence(2);
-				wing.latch();
+				wing.up();
+				pe.reset();
 			}
 		break;
 		case 10:
-			md.drivePIDToteCenter(0, 0, 0);
-			wing.latch();
+			if (Math.abs(pe.getY()) >=  backupDist){
+			md.drivePIDToteCenter(0, .2, 0);// only go a couple inches *couple is a technical term* Change the y-value to 1 for a wheelie fun time
+			wing.up();
+			}
+			else{
+				md.drivePIDToteCenter(0, 0, 0);
+			}
+		break;
+		
+		}
+
+	}
+
+	/*
+	 * 
+	 * ==========ROUTINE 9==========
+	 * 
+	 * 3-tote stack right turn 
+	 * 
+	 * requires 2 other robits to move the bins
+	 * 
+	 * =============================
+	 */
+	public void routine9() {
+		
+		switch(step){
+		
+		case 0:
+			wing.down(); //fixed wing names, thanks John *sarcasm*
+			gather.stopGather();
+			lifter.goHome();
+			step++;
+		break;
+		case 1:
+			if(lifter.bottomLimit()){
+				step++;
+				lifter.move(1);
+//				counter = 0;
+			}
+		break;
+		case 2:
+			pe.reset();//*tips pedometer* m'distance
+			driveForward(.75);
+			
+			if(pe.getY() >= firstGather){ 
+				gather.gatherIn();
+				step++;
+			}			
+			
+		break;
+		case 3:
+			driveForward(.55);
+			
+			if(lifter.notMoving && irSensor.hasTote()){
+				gather.stopGather();
+				lifter.goHome();
+				step++;
+			}
+		break;
+		case 4:
+			driveForward(.55);
+			
+			if(lifter.bottomLimit()){
+				lifter.move(1);
+				step++;
+//				counter = 0;
+			}
+		break;
+		case 5:
+			pe.reset();
+			driveForward(.55);
+			
+			if(pe.getY() >= secondGather){ 
+				gather.gatherIn();
+				step++;
+			}
+			
+		break;
+		case 6:
+			driveForward(.55);
+			if(/*lifter.notMoving && */irSensor.hasTote()){
+				gather.stopMotors();
+				gather.solenoidsIn();
+//				lifter.goHome();
+				step++;
+			}
+		break;
+		case 7:
+			driveForward(.55);
+//			if(lifter.bottomLimit()){
+//				lifter.cruisingHeight();
+				step++;
+				md.resetGyro();
+				orig = md.g.getAngle();
+				desired = orig + 90;
+//			}
+		break;
+		case 8:
+			if (md.g.getAngle() <= desired) {
+				md.drivePIDToteCenter(0, 0, 1);
+				SmartDashboard.putNumber("Gyro Angle", md.g.getAngle());
+			} else {
+				md.drivePIDToteCenter(0, 0, 0);
+				step++;
+//				counter = 0;
+			}
+		break;
+		case 9:
+			if(pe.getY() >= autoZone) {
+				md.drivePIDToteCenter(0, -1, 0);
+//				counter++;
+			} else {
+				md.drivePIDToteCenter(0, 0, 0);
+				gather.stopGather();
+//				lifter.goHome();
+				step++;
+				arduino.writeSequence(2);
+				wing.up();
+				pe.reset();
+			}
+		break;
+		case 10:
+			if (Math.abs(pe.getY()) >=  backupDist){
+			md.drivePIDToteCenter(0, .2, 0);// only go a couple inches *couple is a technical term* Change the y-value to 1 for a wheelie fun time
+			wing.up();
+			}
+			else{
+				md.drivePIDToteCenter(0, 0, 0);
+			}
 		break;
 		
 		}

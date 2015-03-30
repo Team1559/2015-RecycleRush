@@ -214,9 +214,9 @@ public class Robot extends IterativeRobot {
 	public void wingControls() {
 
 		if (pilotR.getRawButton(Wiring.WINGS_BUT)) {
-			wing.latch();
+			wing.up();
 		} else {
-			wing.release();
+			wing.down();
 		}
 
 	}

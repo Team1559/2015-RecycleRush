@@ -38,6 +38,11 @@ public class Gatherer {
 		
 	}
 	
+	public void stopMotors(){// was originally stopMootors
+		rightGather.set(0);
+		leftGather.set(0);
+	}
+	
 	public void solenoidsIn(){
 		
 		in.set(true);
