@@ -165,6 +165,7 @@ public class Lifter //implements Runnable
 			SmartDashboard.putNumber("ENCODER VALUE", getEncoderPosition());
 			SmartDashboard.putNumber("TARGET", targetPosition);
 			SmartDashboard.putNumber("HOME POSITION", homePosition);
+			SmartDashboard.putBoolean("Is Home", bottomLimit());
 			//check to see when the values are correct, so we can stop checking iteratively
 			if(!notMoving){
 			

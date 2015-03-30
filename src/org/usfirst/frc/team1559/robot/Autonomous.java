@@ -737,8 +737,8 @@ public void routine8() {
 			}
 		break;
 		case 10:
-			if (Math.abs(pe.getY()) >=  backupDist){
-			md.drivePIDToteCenter(0, .2, 0);// only go a couple inches *couple is a technical term* Change the y-value to 1 for a wheelie fun time
+			if (pe.getY() <=  backupDist){
+			md.drivePIDToteCenter(0, .2, 0);//Change the y-value to 1 for a wheelie fun time
 			wing.up();
 			}
 			else{
