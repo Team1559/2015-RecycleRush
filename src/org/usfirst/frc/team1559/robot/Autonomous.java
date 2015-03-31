@@ -29,7 +29,7 @@ public class Autonomous {
 	
 	/* MAGIC CONSTANTS FOR ROUTINE 9*/
 	final int firstGather = 52;
-	final int secondGather = 104;
+	final int secondGather = 52;
 	final int autoZone = 96;
 	final int backupDist = 3;
 
@@ -774,11 +774,11 @@ public void routine8() {
 			if(lifter.bottomLimit()){
 				step++;
 				lifter.move(1);
+				pe.reset();//*tips pedometer* m'distance
 //				counter = 0;
 			}
 		break;
 		case 2:
-			pe.reset();//*tips pedometer* m'distance
 			driveForward(.75);
 			
 			if(pe.getY() >= firstGather){ 
@@ -794,6 +794,7 @@ public void routine8() {
 				gather.stopGather();
 				lifter.goHome();
 				step++;
+				pe.reset();
 			}
 		break;
 		case 4:
@@ -806,7 +807,6 @@ public void routine8() {
 			}
 		break;
 		case 5:
-			pe.reset();
 			driveForward(.55);
 			
 			if(pe.getY() >= secondGather){ 
@@ -841,11 +841,12 @@ public void routine8() {
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
 				step++;
+				pe.reset();
 //				counter = 0;
 			}
 		break;
 		case 9:
-			if(pe.getY() >= autoZone) {
+			if(pe.getY() <= autoZone) {
 				md.drivePIDToteCenter(0, -1, 0);
 //				counter++;
 			} else {
