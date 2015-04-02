@@ -70,10 +70,10 @@ public class Wiring{
 		public static final double GATHER_ROTATE_IN_SPEED = .6;
 
 		//Pedometer Ports
-		public static final int ENCODER_xA = 0;
-		public static final int ENCODER_xB = 1;
-		public static final int ENCODER_yA = 2;
-		public static final int ENCODER_yB = 3;
+		public static final int ENCODER_yA = 0;
+		public static final int ENCODER_yB = 1;
+		public static final int ENCODER_xA = 2;
+		public static final int ENCODER_xB = 3;
 	
 	/*
 	 * Other stuff

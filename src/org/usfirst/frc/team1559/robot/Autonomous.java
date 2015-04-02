@@ -25,7 +25,7 @@ public class Autonomous {
 	Ramp rampx;
 	Ramp rampy;
 	SonarToteDetector tinySonar;
-	Pedometer pe; //not physical education
+	Pedometer pe;
 	
 	/* MAGIC CONSTANTS FOR ROUTINE 9*/
 	final int firstGather = 70;
@@ -35,7 +35,7 @@ public class Autonomous {
 
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir,
 			MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p,
-			PixyController pc) {
+			PixyController pc, Pedometer ped) {
 
 		bcd = new BCDSwitch(ports);
 		step = 0;
@@ -53,6 +53,7 @@ public class Autonomous {
 		rampx = new Ramp();
 		rampy = new Ramp();
 		tinySonar = new SonarToteDetector();
+		pe = ped;
 	}
 
 	public int getBCDValue() {
@@ -729,7 +730,7 @@ public void routine8() {
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
 				gather.stopGather();
-//				lifter.goHome();
+				lifter.goHome();
 				step++;
 				arduino.writeSequence(2);
 				wing.up();
@@ -738,7 +739,7 @@ public void routine8() {
 		break;
 		case 10:
 			if (pe.getY() <=  backupDist){
-			md.drivePIDToteCenter(0, .2, 0);//Change the y-value to 1 for a wheelie fun time
+			md.drivePIDToteCenter(0, .3, 0);//Change the y-value to 1 for a wheelie fun time
 			wing.up();
 			}
 			else{
@@ -842,6 +843,7 @@ public void routine8() {
 				md.drivePIDToteCenter(0, 0, 0);
 				step++;
 				pe.reset();
+				once = true;
 //				counter = 0;
 			}
 		break;
@@ -851,24 +853,41 @@ public void routine8() {
 //				counter++;
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
-				gather.stopGather();
-//				lifter.goHome();
-				step++;
-				arduino.writeSequence(2);
-				wing.up();
-				pe.reset();
+				
+				if(once){
+					
+					gather.stopGather();
+					lifter.cruisingHeight();
+					once = false;
+					
+				}
+				
+				if(lifter.notMoving){
+					step++;
+					wing.up();
+					pe.reset();
+				}
 			}
 		break;
 		case 10:
-			if (pe.getY() <=  backupDist){
-			md.drivePIDToteCenter(0, .2, 0);//Change the y-value to 1 for a wheelie fun time
 			wing.up();
-			}
-			else{
-				md.drivePIDToteCenter(0, 0, 0);
-			}
+			gather.stopGather();
+			lifter.move(3);
+			step++;
 		break;
-		
+		case 11:
+			if (pe.getY() <=  backupDist){
+				md.drivePIDToteCenter(0, .4, 0);//Change the y-value to 1 for a wheelie fun time
+				wing.up();
+				}
+				else{
+					md.drivePIDToteCenter(0, 0, 0);
+					step++;
+				}
+		break;
+		case 12:
+			arduino.writeSequence(2);
+		break;
 		}
 
 	}

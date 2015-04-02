@@ -186,6 +186,9 @@ public class Lifter //implements Runnable
 			if(bottomLimit()){
 				setHome();
 				System.out.println("Set home");
+				SmartDashboard.putBoolean("HOME", true);
+			} else {
+				SmartDashboard.putBoolean("HOME", false);
 			}
 //		}
 	}
