@@ -662,6 +662,7 @@ public void routine8() {
 			if(pe.getY() >= firstGather){ 
 				gather.gatherIn();
 				step++;
+				pe.reset();
 			}			
 			
 		break;
@@ -684,7 +685,6 @@ public void routine8() {
 			}
 		break;
 		case 5:
-			pe.reset();
 			driveForward(.55);
 			
 			if(pe.getY() >= secondGather){ 
@@ -695,7 +695,7 @@ public void routine8() {
 		break;
 		case 6:
 			driveForward(.55);
-			if(/*lifter.notMoving && */irSensor.hasTote()){
+			if(lifter.notMoving && irSensor.hasTote()){
 				gather.stopMotors();
 				gather.solenoidsIn();
 //				lifter.goHome();
@@ -723,7 +723,7 @@ public void routine8() {
 			}
 		break;
 		case 9:
-			if(pe.getY() >= autoZone) {
+			if(pe.getY() <= autoZone) {
 				md.drivePIDToteCenter(0, -1, 0);
 //				counter++;
 			} else {
@@ -784,6 +784,7 @@ public void routine8() {
 			if(pe.getY() >= firstGather){ 
 				gather.gatherIn();
 				step++;
+				pe.reset();
 			}			
 			
 		break;
@@ -794,7 +795,6 @@ public void routine8() {
 				gather.stopGather();
 				lifter.goHome();
 				step++;
-				pe.reset();
 			}
 		break;
 		case 4:
@@ -817,7 +817,7 @@ public void routine8() {
 		break;
 		case 6:
 			driveForward(.55);
-			if(/*lifter.notMoving && */irSensor.hasTote()){
+			if(lifter.notMoving && irSensor.hasTote()){
 				gather.stopMotors();
 				gather.solenoidsIn();
 //				lifter.goHome();
