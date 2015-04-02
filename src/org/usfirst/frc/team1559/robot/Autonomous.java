@@ -28,9 +28,9 @@ public class Autonomous {
 	Pedometer pe;
 	
 	/* MAGIC CONSTANTS FOR ROUTINE 9*/
-	final int firstGather = 70;
+	final int firstGather = 66;
 	final int secondGather = 81;
-	final int autoZone = 124;
+	final int autoZone = 118;
 	final int backupDist = 3;
 
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir,
@@ -766,6 +766,7 @@ public void routine8() {
 		switch(step){
 		
 		case 0:
+			Timer.delay(.5);
 			wing.down(); //fixed wing names, thanks John *sarcasm*
 			gather.stopGather();
 			lifter.goHome();
@@ -844,23 +845,22 @@ public void routine8() {
 				step++;
 				pe.reset();
 				once = true;
+				gather.stopGather();
+				lifter.goHome();
 //				counter = 0;
 			}
 		break;
 		case 9:
 			if(pe.getY() <= autoZone) {
 				md.drivePIDToteCenter(0, -1, 0);
+				if(lifter.bottomLimit() && once){
+					wing.up();
+					lifter.move(3);
+					once = false;
+				}
 //				counter++;
 			} else {
 				md.drivePIDToteCenter(0, 0, 0);
-				
-				if(once){
-					
-					gather.stopGather();
-					lifter.cruisingHeight();
-					once = false;
-					
-				}
 				
 				if(lifter.notMoving){
 					step++;
