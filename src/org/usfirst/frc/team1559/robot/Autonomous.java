@@ -634,7 +634,7 @@ public class Autonomous {
 	 * 
 	 * 3-tote stack left turn
 	 * 
-	 * requires 2 other robits to do da dirty [t]werk
+	 * requires 2 other robits to do da dirty werk
 	 * 
 	 * =============================
 	 */
