@@ -28,9 +28,9 @@ public class Autonomous {
 	Pedometer pe; //not physical education
 	
 	/* MAGIC CONSTANTS FOR ROUTINE 9*/
-	final int firstGather = 52;
-	final int secondGather = 52;
-	final int autoZone = 96;
+	final int firstGather = 70;
+	final int secondGather = 81;
+	final int autoZone = 124;
 	final int backupDist = 3;
 
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir,
