@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
 	Pincers pincers;
 	String message;
 	int iterations;
-	boolean smokyTheBear;
+	boolean smokeyTheBear;
 	
 	//Other Software Components
 	Autonomous auto;
@@ -85,7 +85,7 @@ public class Robot extends IterativeRobot {
 		
 		message = "Smoking is a dirty habit!!!";
 		iterations = 0;
-		smokyTheBear = false;
+		smokeyTheBear = false;
 		
 		//Other software things
 		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor, sonar, arduino, md, pixy, p, ped);
@@ -174,9 +174,9 @@ public class Robot extends IterativeRobot {
 		
 		//lets Jeremy know when he's smoking...light 'em up!
 		if(pdp.getCurrent(4) > 5){
-			smokyTheBear = true;
+			smokeyTheBear = true;
 		} else {
-			smokyTheBear = false;
+			smokeyTheBear = false;
 		}
 		
 		iterations++;
@@ -199,7 +199,7 @@ public class Robot extends IterativeRobot {
 			iterations = 0;
 		}
 		
-		if(smokyTheBear && (iterations %10 == 0)){
+		if(smokeyTheBear && (iterations %10 == 0)){
 			SmartDashboard.putString("!", message);
 		} else {
 			SmartDashboard.putString("!", "");
