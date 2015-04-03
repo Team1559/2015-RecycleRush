@@ -33,6 +33,9 @@ public class Robot extends IterativeRobot {
 	Gatherer gather;
 	DebounceButton dbb;
 	Pincers pincers;
+	String message;
+	int iterations;
+	boolean smokyTheBear;
 	
 	//Other Software Components
 	Autonomous auto;
@@ -49,6 +52,7 @@ public class Robot extends IterativeRobot {
 	int num;
 	int step;
 	int avgMotorSpeed = 0;
+	
 
 	public void robotInit() {
 					
@@ -78,6 +82,10 @@ public class Robot extends IterativeRobot {
 		arduino = new Arduino(4);
 		rampX = new Ramp();
 		rampY = new Ramp();
+		
+		message = "Smoking is a dirty habit!!!";
+		iterations = 0;
+		smokyTheBear = false;
 		
 		//Other software things
 		auto = new Autonomous(Wiring.BCD_PORTS, gather, wing, lifter, irSensor, sonar, arduino, md, pixy, p, ped);
@@ -147,8 +155,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-//		md.drivePIDToteCenter(pilotXY.getX(),
-//				pilotXY.getY(), pilotR.getX());
+
 		md.drivePIDToteCenter(rampX.rampMotorValue(pilotXY.getX()), rampY.rampMotorValue(pilotXY.getY()), pilotR.getX());
 		
 		if (pilotXY.getRawButton(Wiring.RESET_GYRO_BUT)) {
@@ -162,12 +169,18 @@ public class Robot extends IterativeRobot {
 		gathererControls();
 //		pincerControls();
 		
-		SmartDashboard.putNumber("PEDX", ped.getX());
-		SmartDashboard.putNumber("PEDY", ped.getY());
-		
-		SmartDashboard.putNumber("SONAR_VALUE", sonar.getInches());
+		//Also prints if the lifter is home...this happens in Gatherer
 		SmartDashboard.putBoolean("HAS_TOTE", irSensor.hasTote());
-		SmartDashboard.putDouble("IR VALUE", irSensor.getVoltage());
+		
+		//lets Jeremy know when he's smoking...light 'em up!
+		if(pdp.getCurrent(4) > 5){
+			smokyTheBear = true;
+		} else {
+			smokyTheBear = false;
+		}
+		
+		iterations++;
+		overcurrentProtection();
 
 	}
 	
@@ -180,6 +193,18 @@ public class Robot extends IterativeRobot {
 //		}
 //		
 //	}
+	
+	public void overcurrentProtection(){
+		if(iterations == 999){
+			iterations = 0;
+		}
+		
+		if(smokyTheBear && (iterations %10 == 0)){
+			SmartDashboard.putString("!", message);
+		} else {
+			SmartDashboard.putString("!", "");
+		}
+	}
 	
 	public void arduinoControls() {
 
