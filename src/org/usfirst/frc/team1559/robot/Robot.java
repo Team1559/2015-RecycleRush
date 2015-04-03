@@ -162,7 +162,7 @@ public class Robot extends IterativeRobot {
 			md.resetGyro();
 		}
 		
-		avgMotorSpeed = (int) (Math.abs((lf.get()) + Math.abs(lr.get()) + Math.abs(rf.get()) + Math.abs(rr.get())) * 15/68.5);
+		avgMotorSpeed = (int) (Math.abs((lf.get()) + Math.abs(lr.get()) + Math.abs(rf.get()) + Math.abs(rr.get())) * 15/.685);
 		arduino.writeElevatorPos(avgMotorSpeed);
 		wingControls();
 		lifterControls();

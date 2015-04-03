@@ -30,7 +30,7 @@ public class Autonomous {
 	/* MAGIC CONSTANTS FOR ROUTINE 9*/
 	final int firstGather = 66;
 	final int secondGather = 81;
-	final int autoZone = 118;
+	final int autoZone = 106;
 	final int backupDist = 3;
 
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir,
@@ -877,7 +877,7 @@ public void routine8() {
 		break;
 		case 11:
 			if (pe.getY() <=  backupDist){
-				md.drivePIDToteCenter(0, .4, 0);//Change the y-value to 1 for a wheelie fun time
+				md.drivePIDToteCenter(0, .5, 0);//Change the y-value to 1 for a wheelie fun time
 				wing.up();
 				}
 				else{
