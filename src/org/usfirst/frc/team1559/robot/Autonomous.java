@@ -30,8 +30,8 @@ public class Autonomous {
 	/* MAGIC CONSTANTS FOR ROUTINE 9*/
 	final int firstGather = 66;
 	final int secondGather = 81;
-	final int autoZone = 106;
-	final int backupDist = 3;
+	final int autoZone = 100;
+	final int backupDist = 6;
 
 	public Autonomous(int[] ports, Gatherer g, Wings w, Lifter l, IRSensor ir,
 			MaxSonar sonar, Arduino arduino, MecanumDrive md, Pixy p,
