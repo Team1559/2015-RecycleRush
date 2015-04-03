@@ -52,6 +52,7 @@ public class Robot extends IterativeRobot {
 	int num;
 	int step;
 	int avgMotorSpeed = 0;
+	boolean lifterKilled;
 	
 
 	public void robotInit() {
@@ -82,6 +83,7 @@ public class Robot extends IterativeRobot {
 		arduino = new Arduino(4);
 		rampX = new Ramp();
 		rampY = new Ramp();
+		lifterKilled = false;
 		
 		message = "Smoking is a dirty habit!!!";
 		iterations = 0;
@@ -261,7 +263,12 @@ public class Robot extends IterativeRobot {
 		 * DON'T PLAY WITH THIS!!!! IT COULD GET DANGEROUS IF YOU DO!!
 		 */
 		
+		SmartDashboard.putBoolean("LIFTER DEAD", lifterKilled);
 		
+		//SETS THE LIFTER KILLED thing
+		if(copilot.getRawButton(Wiring.BOX_HOME) && copilot.getRawButton(Wiring.BOX_CRUISING) && copilot.getRawButton(Wiring.BOX_LVL1)){
+			lifterKilled = !lifterKilled;
+		}
 		
 		if (dbb.getRelease()) {
 			lifter.stop();
@@ -269,39 +276,45 @@ public class Robot extends IterativeRobot {
 
 		lifter.run();
 		
-		if (!copilot.getRawButton(Wiring.BOX_EASY_BUTTON)) {
+		if(!lifterKilled){
+			if (!copilot.getRawButton(Wiring.BOX_EASY_BUTTON)) {
 
-			if (copilot.getRawButton(Wiring.BOX_LVL1)) {
-				if (!pressed) {
-					lifter.move(1);
+				if (copilot.getRawButton(Wiring.BOX_LVL1)) {
+					if (!pressed) {
+						lifter.move(1);
+					}
+					pressed = true;
+				} else if (copilot.getRawButton(Wiring.BOX_CRUISING)) {
+					if (!pressed) {
+						lifter.cruisingHeight();
+					}
+					pressed = true;
+				} else if (copilot.getRawButton(Wiring.BOX_LVL2)) {
+					if (!pressed) {
+						lifter.move(2);
+					}
+					pressed = true;
+				} else if (copilot.getRawButton(Wiring.BOX_LVL3)) {
+					if (!pressed) {
+						lifter.move(3);
+					}
+					pressed = true;
+				} else if (copilot.getRawButton(Wiring.BOX_HOME)) {
+					if (!pressed) {
+						lifter.goHome();
+					}
+					pressed = true;
+				} else {
+					pressed = false;
 				}
-				pressed = true;
-			} else if (copilot.getRawButton(Wiring.BOX_CRUISING)) {
-				if (!pressed) {
-					lifter.cruisingHeight();
-				}
-				pressed = true;
-			} else if (copilot.getRawButton(Wiring.BOX_LVL2)) {
-				if (!pressed) {
-					lifter.move(2);
-				}
-				pressed = true;
-			} else if (copilot.getRawButton(Wiring.BOX_LVL3)) {
-				if (!pressed) {
-					lifter.move(3);
-				}
-				pressed = true;
-			} else if (copilot.getRawButton(Wiring.BOX_HOME)) {
-				if (!pressed) {
-					lifter.goHome();
-				}
-				pressed = true;
 			} else {
-				pressed = false;
+				lifter.set(copilot.getRawAxis(Wiring.BOX_OVERRIDE_AXIS));
 			}
 		} else {
 			lifter.set(copilot.getRawAxis(Wiring.BOX_OVERRIDE_AXIS));
 		}
+		
+		
 	}
 
 }
