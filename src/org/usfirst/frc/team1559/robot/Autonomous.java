@@ -766,6 +766,7 @@ public void routine8() {
 		switch(step){
 		
 		case 0:
+			gather.solenoidsIn();
 			Timer.delay(.5);
 			wing.down(); //fixed wing names, thanks John *sarcasm*
 			gather.stopGather();
@@ -860,19 +861,17 @@ public void routine8() {
 				}
 //				counter++;
 			} else {
+				wing.up();
 				md.drivePIDToteCenter(0, 0, 0);
-				
-				if(lifter.notMoving){
-					step++;
-					wing.up();
-					pe.reset();
-				}
+				pe.reset();
+				step++;	
 			}
+
 		break;
 		case 10:
 			wing.up();
 			gather.stopGather();
-			lifter.move(3);
+			arduino.writeSequence(2);
 			step++;
 		break;
 		case 11:
