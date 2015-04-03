@@ -64,7 +64,7 @@ public class Wiring{
 		public static final double GATHERER_HEIGHT = 25; 
 		public static final int GATHER_ARMS_IN = 0;
 		public static final int GATHER_ARMS_OUT = 1;
-		public static final double GATHER_IN_SPEED = .8;
+		public static final double GATHER_IN_SPEED = .6;
 		public static final double GATHER_OUT_SPEED = .5;
 		public static final double GATHER_ROTATE_OUT_SPEED = .25;
 		public static final double GATHER_ROTATE_IN_SPEED = .6;

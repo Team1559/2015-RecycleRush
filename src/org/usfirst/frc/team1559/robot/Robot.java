@@ -171,15 +171,16 @@ public class Robot extends IterativeRobot {
 		
 		//Also prints if the lifter is home...this happens in Gatherer
 		SmartDashboard.putBoolean("HAS_TOTE", irSensor.hasTote());
-		
+
 		//lets Jeremy know when he's smoking...light 'em up!
-		if(pdp.getCurrent(4) > 5){
+		
+		if((pdp.getCurrent(3) > 25) || (pdp.getCurrent(12) > 25)){
 			smokeyTheBear = true;
 		} else {
 			smokeyTheBear = false;
 		}
 		
-		iterations++;
+		
 		overcurrentProtection();
 
 	}
@@ -195,11 +196,8 @@ public class Robot extends IterativeRobot {
 //	}
 	
 	public void overcurrentProtection(){
-		if(iterations == 999){
-			iterations = 0;
-		}
 		
-		if(smokeyTheBear && (iterations %10 == 0)){
+		if(smokeyTheBear){
 			SmartDashboard.putString("!", message);
 		} else {
 			SmartDashboard.putString("!", "");
