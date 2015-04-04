@@ -624,7 +624,25 @@ public class Autonomous {
 	 * =============================
 	 */
 	public void routine7() {
-		arduino.writeSequence(2);
+		switch(step){
+		
+		case 0:
+			md.drivePIDToteCenter(0, 0, 0);
+			gather.stopGather();
+			lifter.goHome();
+			step++;
+		break;
+		case 1:
+			if(lifter.bottomLimit()){
+				lifter.move(1);
+				step++;
+			}
+		break;
+		case 2:
+			arduino.writeSequence(2);
+		break;
+		
+		}
 	}
 
 	/*
