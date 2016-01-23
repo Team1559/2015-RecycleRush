@@ -7,7 +7,7 @@ public class Wiring{
 	public static final int JOYSTICK_1 = 0;
 	public static final int JOYSTICK_2 = 1;
 	
-	public static final int GATHER_IN_BUT = 2;
+	public static final int GATHER_IN_BUT = 1;
 	public static final int GATHER_OUT_BUT = 3;
 	public static final int WINGS_BUT = 3;
 	public static final int RESET_GYRO_BUT = 6;

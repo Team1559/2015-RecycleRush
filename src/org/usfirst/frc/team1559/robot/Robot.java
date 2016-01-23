@@ -158,7 +158,8 @@ public class Robot extends IterativeRobot {
 
 	public void teleopPeriodic() {
 
-		md.drivePIDToteCenter(rampX.rampMotorValue(pilotXY.getX()), rampY.rampMotorValue(pilotXY.getY()), pilotR.getX());
+//		md.drivePIDToteCenter(rampX.rampMotorValue(pilotXY.getX()), rampY.rampMotorValue(pilotXY.getY()), pilotR.getX());
+		md.drivePIDToteCenter(pilotXY.getX(), pilotXY.getY(), pilotR.getX());
 		
 		if (pilotXY.getRawButton(Wiring.RESET_GYRO_BUT)) {
 			md.resetGyro();
